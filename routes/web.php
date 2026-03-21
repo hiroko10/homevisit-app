@@ -13,6 +13,10 @@ Route::resource('clients', ClientController::class);
 Route::get('/clients/{client}/visits/create', [VisitController::class, 'create']);
 Route::post('/clients/{client}/visits', [VisitController::class, 'store']);
 
+Route::get('/visits/{visit}/edit', [VisitController::class, 'edit']);
+Route::put('/visits/{visit}', [VisitController::class, 'update']);
+Route::delete('/visits/{visit}', [VisitController::class, 'destroy']);
+
 
 Route::get('/', function () {
     return view('welcome');

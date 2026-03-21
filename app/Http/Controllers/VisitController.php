@@ -21,4 +21,26 @@ class VisitController extends Controller
 
         return redirect()->route('clients.show', $client);
     }
+
+    //画面編集
+    public function edit(Visit $visit){
+        return view('visits.edit', compact('visit'));
+    }
+    //更新処理
+    public function update(Request $request, Visit $visit){
+        $visit->update([
+            'visited_at' => $request->visited_at,
+            'content' => $request->content,
+            'memo' => $request->memo,
+        ]);
+
+        return redirect()->route('clients.show', $visit->client);
+    }
+
+    //削除
+    public function destroy(Visit $visit){
+        $client = $visit->client; //リダイレクト用
+        $visit->delete();
+        return redirect()->route('clients.show', $client);
+    }
 }

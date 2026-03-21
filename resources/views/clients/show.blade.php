@@ -18,7 +18,17 @@
         日時：{{ $visit->visited_at }}<br>
         内容：{{ $visit->content }}
     </div>
+
+    <a href="/visits/{{ $visit->id }}/edit">編集</a>
+
+    <form method="POST" action="/visits/{{ $visit->id }}">
+        @csrf
+        @method('DELETE')
+        <button type="submit">削除</button>
+    </form>
+
 @endforeach
+
 
 
 <a href="/clients">一覧に戻る</a>
