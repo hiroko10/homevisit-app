@@ -5,7 +5,7 @@
 </div>
 
 <div>
-    メモ：{{ $client->memo }}
+    特徴メモ：{{ $client->memo }}
 </div>
 
 <a href="/clients/{{ $client->id }}/visits/create">+訪問履歴を追加</a>
@@ -21,7 +21,7 @@
 
     <a href="/visits/{{ $visit->id }}/edit">編集</a>
 
-    <form method="POST" action="/visits/{{ $visit->id }}">
+    <form method="POST" action="/visits/{{ $visit->id }}" method="POST" onsubmit="return confirm('本当に削除しますか？')">
         @csrf
         @method('DELETE')
         <button type="submit">削除</button>

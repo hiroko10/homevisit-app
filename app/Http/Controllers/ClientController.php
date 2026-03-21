@@ -71,6 +71,9 @@ class ClientController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $client = Client::findOrFail($id);
+        $client->delete();
+
+        return redirect('/clients')->with('message', '削除しました');
     }
 }
