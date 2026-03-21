@@ -3,8 +3,16 @@
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\VisitController;
+
+
+
 
 Route::resource('clients', ClientController::class);
+
+Route::get('/clients/{client}/visits/create', [VisitController::class, 'create']);
+Route::post('/clients/{client}/visits', [VisitController::class, 'store']);
+
 
 Route::get('/', function () {
     return view('welcome');

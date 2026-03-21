@@ -13,6 +13,7 @@ class ClientController extends Controller
     public function index()
     {
         $clients = Client::all();
+        // dd($clients);
         return view('clients.index', compact('clients'));
     }
 
@@ -29,6 +30,8 @@ class ClientController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
+
         Client::create([
             'name' => $request->name,
             'memo' => $request->memo,
@@ -42,7 +45,9 @@ class ClientController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $client = Client::with('visits')->findOrFail($id);
+
+        return view('clients.show', compact('client'));
     }
 
     /**
