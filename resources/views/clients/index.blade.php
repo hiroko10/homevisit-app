@@ -1,3 +1,8 @@
+<head>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
+
+
 <h1>訪問一覧</h1>
 
 <a href="/clients/create">新規登録</a><br><br>

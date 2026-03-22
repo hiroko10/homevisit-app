@@ -7,6 +7,12 @@ use Illuminate\Http\Request;
 
 class ClientController extends Controller
 {
+    public function apiIndex(){
+        $clients = Client::all();
+        return response()->json($clients);
+    }
+
+
     /**
      * Display a listing of the resource.
      */
