@@ -1,19 +1,22 @@
 <h1>個人ページ</h1>
 
-<div>
-    名前：{{ $client->name }}
+<div id="client-info">
+    <div>名前：<span id="client-name">読み込み中...</span></div>
+    <div>特徴メモ：<span id="client-memo">読み込み中...</span></div>
 </div>
 
-<div>
-    特徴メモ：{{ $client->memo }}
-</div>
+<hr>
 
-<a href="/clients/{{ $client->id }}/visits/create">+訪問履歴を追加</a>
+<div id="add-visit-link"></div>
+
+{{-- <a href="/clients/{{ $client->id }}/visits/create">+訪問履歴を追加</a> --}}
 
 
 <h2>訪問履歴</h2>
+<div id="visit-list">履歴を読み込み中...</div>
 
-@foreach ($client->visits as $visit)
+
+{{-- @foreach ($client->visits as $visit)
     <div>
         日時：{{ $visit->visited_at }}<br>
         内容：{{ $visit->content }}
@@ -27,8 +30,12 @@
         <button type="submit">削除</button>
     </form>
 
-@endforeach
+@endforeach --}}
 
-
+<br>
 
 <a href="/clients">一覧に戻る</a>
+
+<script>
+    const clientId = window.location.pathname.split('/').pop();
+</script>

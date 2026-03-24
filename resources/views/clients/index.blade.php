@@ -17,16 +17,3 @@
     <p style="color: red;">{{ session('message') }}</p>
 @endif
 
-@foreach ($clients as $client) 
-    <div>
-        <a href="/clients/{{ $client->id }}">
-        {{ $client->name }}
-        </a>
-    </div>
-
-    <form action="/clients/{{ $client->id }}" method="POST" onsubmit="return confirm('本当に削除しますか？')">
-        @csrf
-        @method('DELETE')
-        <button type="submit">削除</button>
-    </form>
-@endforeach

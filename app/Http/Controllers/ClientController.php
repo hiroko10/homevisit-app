@@ -49,11 +49,11 @@ class ClientController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function apiShow($id)
     {
         $client = Client::with('visits')->findOrFail($id);
 
-        return view('clients.show', compact('client'));
+        return response()->json($client);
     }
 
     /**
@@ -75,11 +75,11 @@ class ClientController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function apiDestroy($id)
     {
-        $client = Client::findOrFail($id);
+        $client = Client::findOrFail($id); //IDを元にclientを削除
         $client->delete();
 
-        return redirect('/clients')->with('message', '削除しました');
+        return response()->json(['message', '削除しました']); //削除成功したことをJSONで返す
     }
 }
