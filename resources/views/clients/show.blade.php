@@ -38,4 +38,5 @@
 
 <script>
     const clientId = window.location.pathname.split('/').pop();
+    console.log("取得したID：", clientId);
 </script>

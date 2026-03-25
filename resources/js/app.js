@@ -54,7 +54,7 @@ async function getClients(){
 
 
 // --- 詳細ページ用 ---
-async function getClients(){
+async function getClientDetail(id){
     try {
         const response = await axios.get(`/api/clients/${id}`);
         const client = response.data;
@@ -110,7 +110,6 @@ window.deleteClient = async (id) => {
     }
     }
 
-
 window.deleteVisit = async (id) => {
     if (!confirm('この履歴を削除しますか？')) return;
     try {
@@ -125,11 +124,11 @@ window.deleteVisit = async (id) => {
     }
 }
 
+
 // --- 実行処理（URLや条件に応じて動かす） ---
 
-// 1. 一覧ページなら一覧を取得
-const clientListContainer = document.getElementById('client-list');
-if (clientListContainer) {
+// 1. 一覧ページのHTML要素がある時のみ一覧を取得
+if (document.getElementById('client-list')){
     getClients();
 }
 

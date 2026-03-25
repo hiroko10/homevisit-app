@@ -49,6 +49,11 @@ class ClientController extends Controller
     /**
      * Display the specified resource.
      */
+    public function show(){
+        return view('clients.show');
+    }
+
+
     public function apiShow($id)
     {
         $client = Client::with('visits')->findOrFail($id);
