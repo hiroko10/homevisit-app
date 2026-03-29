@@ -38,9 +38,18 @@ class VisitController extends Controller
     }
 
     //削除
-    public function destroy(Visit $visit){
-        $client = $visit->client; //リダイレクト用
-        $visit->delete();
-        return redirect()->route('clients.show', $client);
+    public function destroy($id)
+    {
+        try {
+            // IDで検索（見つからなければ404を出す）
+            $visit = Visit::findOrFail($id);
+            $visit->delete();
+
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            // エラーの内容をJSONで返して、ブラウザで確認できるようにする
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
+
 }

@@ -29,12 +29,12 @@ async function getClients() {
                 <a href="/clients/${client.id}" style="margin-right: auto; text-decoration: none; color: #333; font-weight: bold;">
                     ${client.name}
                 </a>
-                <button type="button" onclick="deleteClient(${client.id})" 
-                style="background-color: #ff4d4f; 
-                color: white; 
-                border: none; 
-                padding: 5px 10px; 
-                border-radius: 4px; 
+                <button type="button" onclick="deleteClient(${client.id})"
+                style="background-color: #ff4d4f;
+                color: white;
+                border: none;
+                padding: 5px 10px;
+                border-radius: 4px;
                 cursor: pointer;">
                 削除
                 </button>
@@ -49,6 +49,7 @@ async function getClients() {
 }
 
 // --- 詳細ページ用 ---
+
 async function getClientDetail(id) {
     try {
         const response = await axios.get(`/api/clients/${id}`);
@@ -56,8 +57,7 @@ async function getClientDetail(id) {
 
         //名前とメモ
         document.getElementById("client-name").innerText = client.name;
-        document.getElementById("client-memo").innerText =
-            client.memo || "なし";
+        document.getElementById("client-memo").innerText = client.memo || "なし";
 
         //訪問履歴追加リンク
         const addLinkContainer = document.getElementById("add-visit-link");
@@ -93,6 +93,9 @@ async function getClientDetail(id) {
     }
 }
 
+
+
+
 // ---削除(グローバル関数に定義でどこからでも呼べる)---
 window.deleteClient = async (id) => {
     if (!confirm("本当に削除しますか？")) return;
@@ -105,61 +108,48 @@ window.deleteClient = async (id) => {
     }
 };
 
+
 window.deleteVisit = async (id) => {
     if (!confirm("この履歴を削除しますか？")) return;
     try {
-        //訪問履歴削除のAPI
         await axios.delete(`/api/visits/${id}`);
         alert("削除しました");
 
+        // いま見ているページのURLから、クライアントIDを抜き出す
         const clientId = window.location.pathname.split("/").pop();
+
+        // データを再取得して、画面を最新にする
         getClientDetail(clientId);
     } catch (error) {
         console.error("削除失敗", error);
     }
 };
 
-// --- 実行処理（URLや条件に応じて動かす） ---
 
-// // 1. 一覧ページのHTML要素がある時のみ一覧を取得
-// if (document.getElementById('client-list')){
-//     getClients();
-// }
 
-// // 2. 詳細ページ（clientIdが定義されている場合）なら詳細を取得
-// if (typeof clientId !== 'undefined') {
-//     getClientDetail(clientId);
-// }
 
-// // 2. 実行部分を「HTMLの読み込み完了後」に指定する
-// document.addEventListener('DOMContentLoaded', () => {
-//     // URLから直接IDを取得する（Bladeの変数に頼らない方法）
-//     const path = window.location.pathname; // 例: "/clients/9"
-//     const match = path.match(/\/clients\/(\d+)/); // 数字の部分を抽出
+// HTMLの読み込み終了後、URLの中身を確認しJS実行(詳細ページか一覧ページかを自動判定)
+document.addEventListener('DOMContentLoaded', () => {
+    const path = window.location.pathname;
 
-//     if (match) {
-//         const id = match[1];
-//         console.log("JS側で詳細ページと判定しました。ID:", id);
-//         getClientDetail(id); // ここで関数を呼ぶ！
-//     } else if (document.getElementById('client-list')) {
-//         console.log("一覧ページと判定しました");
-//         getClients();
-//     }
-// });
+    // --- 1. 詳細ページの判定 ---
+    const detailMatch = path.match(/\/clients\/(\d+)/);
+    if (detailMatch) {
+        const id = detailMatch[1];
+        console.log("詳細ページを表示します。ID:", id);
+        return getClientDetail(id); // 実行して終了
+    }
 
-// 1. まず一覧用の判定
-const listContainer = document.getElementById("client-list");
-if (listContainer) {
-    console.log("一覧ページと判定しました");
-    getClients();
-}
+    // --- 2. 一覧ページの判定 ---
+    const isIndexPage = document.getElementById('client-list');
+    if (isIndexPage) {
+        console.log("一覧ページを表示します。");
+        return getClients(); // 実行して終了
+    }
 
-// 2. 詳細ページ用の判定（URLからIDを直接取る）
-const path = window.location.pathname;
-const match = path.match(/\/clients\/(\d+)$/); // 文末が /clients/数字 かチェック
+    // --- 3. それ以外 ---
+    console.log("このページでは専用のJS処理はありません:", path);
+});
 
-if (match) {
-    const id = match[1];
-    console.log("詳細ページと判定しました。ID:", id);
-    getClientDetail(id);
-}
+
+
