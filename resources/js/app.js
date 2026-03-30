@@ -149,12 +149,51 @@ window.addVisit = async () => {
         document.getElementById('new-visit-at').value = "";
         document.getElementById('new-visit-content').value = "";
 
-        // ★重要：再描画してリストを更新する
+        // 重要：再描画してリストを更新
         getClientDetail(clientId); 
         
     } catch (error) {
         console.error("追加失敗:", error);
         alert("保存に失敗しました。");
+    }
+};
+
+
+// 新規登録
+
+window.addClient = async () => {
+    // 1. 入力値を取得
+    const lastName = document.getElementById('new-client-last-name').value;
+    const firstName = document.getElementById('new-client-first-name').value;
+    const memo = document.getElementById('new-client-memo').value;
+
+    // 名前がない場合は止める
+    if (!lastName || !firstName) {
+        alert("姓名どちらも入力してください");
+        return;
+    }
+
+    try {
+        // 2. APIにPOSTリクエストを送る（入力データをオブジェクト形式で渡す）
+        await axios.post('/api/clients', {
+            last_name: lastName,
+            first_name: firstName,
+            memo: memo
+        });
+
+        alert("クライアントを登録しました！");
+
+        // 3. 入力欄をクリア
+        document.getElementById('new-client-last-name').value = "";
+        document.getElementById('new-client-first-name').value = "";
+        document.getElementById('new-client-memo').value = "";
+
+        // 4. 一覧を最新の状態にする（すでに定義されているgetClientsを呼ぶ）
+        getClients();
+
+    } catch (error) {
+        console.error("登録失敗:", error);
+        alert("登録に失敗しました。");
     }
 };
 

@@ -46,6 +46,24 @@ class ClientController extends Controller
         return redirect('/clients');
     }
 
+    // ClientController.php
+
+    public function apiStore(Request $request)
+    {
+        // バリデーション
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'memo' => 'nullable|string',
+        ]);
+
+        // 保存
+        $client = Client::create($validated);
+
+        // JSONで結果を返す
+        return response()->json($client, 201);
+    }
+
+
     /**
      * Display the specified resource.
      */
