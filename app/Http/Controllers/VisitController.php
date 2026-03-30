@@ -11,16 +11,29 @@ class VisitController extends Controller
     public function create(Client $client){
         return view('visits.create', compact('client'));
     }
-    public function store(Request $request, Client $client){
-        Visit::create([
-            'client_id' => $client->id,
-            'visited_at' => $request->visited_at,
-            'content' => $request->content,
-            // 'memo' => $request->memo,
-        ]);
 
-        return redirect()->route('clients.show', $client);
+    public function store(Request $request){
+    // 1. バリデーション
+    // $request->client_id は、app.jsの axios.post で送っている名前と一致
+    $validated = $request->validate([
+        'client_id'  => 'required|exists:clients,id',
+        'visited_at' => 'required',
+        'content'    => 'required',
+    ]);
+
+    // 2. 保存
+    // URLからではなく、$requestの中からIDを取り出して保存します
+    $visit = Visit::create([
+        'client_id'  => $request->client_id,
+        'visited_at' => $request->visited_at,
+        'content'    => $request->content,
+    ]);
+
+    // 3. APIへの返事（JSON形式）
+    return response()->json($visit, 201);
     }
+
+
 
     //画面編集
     public function edit(Visit $visit){

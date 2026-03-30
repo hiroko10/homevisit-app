@@ -59,10 +59,6 @@ async function getClientDetail(id) {
         document.getElementById("client-name").innerText = client.name;
         document.getElementById("client-memo").innerText = client.memo || "なし";
 
-        //訪問履歴追加リンク
-        const addLinkContainer = document.getElementById("add-visit-link");
-        addLinkContainer.innerHTML = `<a href="/clients/${client.id}/visits/create" style="color: blue; text-decoration: underline;">+訪問履歴を追加</a>`;
-
         //訪問履歴リスト組み立て
         const visitList = document.getElementById("visit-list");
         visitList.innerHTML = "";
@@ -124,6 +120,44 @@ window.deleteVisit = async (id) => {
         console.error("削除失敗", error);
     }
 };
+
+
+
+// --- 履歴の追加 ---
+window.addVisit = async () => {
+    const visitedAt = document.getElementById('new-visit-at').value;
+    const content = document.getElementById('new-visit-content').value;
+    
+    // URLからIDを取得
+    const clientId = window.location.pathname.split('/').pop();
+
+    if (!visitedAt || !content) {
+        alert("日時と内容を入力してください");
+        return;
+    }
+
+    try {
+        await axios.post('/api/visits', {
+            client_id: clientId,
+            visited_at: visitedAt,
+            content: content
+        });
+
+        alert("追加しました！");
+
+        // 入力欄を空にする
+        document.getElementById('new-visit-at').value = "";
+        document.getElementById('new-visit-content').value = "";
+
+        // ★重要：再描画してリストを更新する
+        getClientDetail(clientId); 
+        
+    } catch (error) {
+        console.error("追加失敗:", error);
+        alert("保存に失敗しました。");
+    }
+};
+
 
 
 
