@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('clients', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('last_name')->comment('姓');
+            $table->string('first_name')->comment('名');
             $table->text('memo')->nullable();
             $table->timestamps();
         });

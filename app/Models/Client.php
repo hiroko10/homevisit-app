@@ -9,7 +9,7 @@ class Client extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['name', 'memo'];
+    protected $fillable = ['last_name', 'first_name', 'memo'];
 
     public function visits(){
     return $this->hasMany(Visit::class);

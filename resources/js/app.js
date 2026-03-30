@@ -27,7 +27,7 @@ async function getClients() {
             // 名前とボタンをセット
             div.innerHTML = `
                 <a href="/clients/${client.id}" style="margin-right: auto; text-decoration: none; color: #333; font-weight: bold;">
-                    ${client.name}
+                    ${client.last_name} ${client.first_name}
                 </a>
                 <button type="button" onclick="deleteClient(${client.id})"
                 style="background-color: #ff4d4f;
@@ -56,7 +56,7 @@ async function getClientDetail(id) {
         const client = response.data;
 
         //名前とメモ
-        document.getElementById("client-name").innerText = client.name;
+        document.getElementById("client-name").innerText = `${client.last_name} ${client.first_name}`;
         document.getElementById("client-memo").innerText = client.memo || "なし";
 
         //訪問履歴リスト組み立て
@@ -143,7 +143,7 @@ window.addVisit = async () => {
             content: content
         });
 
-        alert("追加しました！");
+        alert("訪問履歴を追加しました！");
 
         // 入力欄を空にする
         document.getElementById('new-visit-at').value = "";
@@ -180,8 +180,7 @@ window.addClient = async () => {
             first_name: firstName,
             memo: memo
         });
-
-        alert("クライアントを登録しました！");
+        alert("新規登録しました！");
 
         // 3. 入力欄をクリア
         document.getElementById('new-client-last-name').value = "";
