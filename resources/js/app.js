@@ -165,6 +165,8 @@ window.addClient = async () => {
     // 1. 入力値を取得
     const lastName = document.getElementById('new-client-last-name').value;
     const firstName = document.getElementById('new-client-first-name').value;
+    const lastNameKana = document.getElementById('new-client-last-name-kana').value;
+    const firstNameKana = document.getElementById('new-client-first-name-kana').value;
     const memo = document.getElementById('new-client-memo').value;
 
     // 名前がない場合は止める
@@ -178,6 +180,8 @@ window.addClient = async () => {
         await axios.post('/api/clients', {
             last_name: lastName,
             first_name: firstName,
+            last_name_kana: lastNameKana,
+            first_name_kana: firstNameKana,
             memo: memo
         });
         alert("新規登録しました！");
@@ -195,6 +199,20 @@ window.addClient = async () => {
         alert("登録に失敗しました。");
     }
 };
+
+
+
+// ふりがな自動入力
+
+// 画面が読み込まれたら実行
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. 「姓」の自動入力設定
+    // AutoKana.bind( "漢字を入れる場所のID", "ひらがなが出る場所のID" )
+    const autokanaLastName = AutoKana.bind('#new-client-last-name', '#new-client-last-kana');
+
+    // 2. 「名」の自動入力設定
+    const autokanaFirstName = AutoKana.bind('#new-client-first-name', '#new-client-first-kana');
+});
 
 
 

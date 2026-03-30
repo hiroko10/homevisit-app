@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('last_name')->comment('姓');
             $table->string('first_name')->comment('名');
+            $table->string('last_name_kana')->comment('姓（ふりがな）');
+            $table->string('first_name_kana')->comment('名（ふりがな）');
             $table->text('memo')->nullable();
             $table->timestamps();
         });
