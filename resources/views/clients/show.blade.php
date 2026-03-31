@@ -2,7 +2,9 @@
 
 <h1>個人ページ</h1>
 
-<div id="client-info">
+<div id="client-info" style="background: #fff; padding: 20px; border-radius: 8px; border: 1px solid #eee;">
+    <div style="font-size: 0.8rem; color: #888;" id="client-kana">読み込み中...</div>
+    <div style="font-size: 1.5rem; font-weight: bold; margin-bottom: 10px;">
     <div>名前：<span id="client-name">読み込み中...</span></div>
     <div>特徴メモ：<span id="client-memo">読み込み中...</span></div>
 </div>

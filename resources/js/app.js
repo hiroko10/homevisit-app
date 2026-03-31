@@ -26,17 +26,17 @@ async function getClients() {
 
             // 名前とボタンをセット
             div.innerHTML = `
-                <a href="/clients/${client.id}" style="margin-right: auto; text-decoration: none; color: #333; font-weight: bold;">
-                    ${client.last_name} ${client.first_name}
-                </a>
+                <div style="display: flex; flex-direction: column;">
+                    <span style="font-size: 0.7rem; color: #666; margin-bottom: -2px;">
+                        ${client.last_name_kana} ${client.first_name_kana}
+                    </span>
+                    <a href="/clients/${client.id}" style="margin-right: auto; text-decoration: none; color: #333; font-weight: bold;">
+                        ${client.last_name} ${client.first_name}
+                    </a>
+                </div>
                 <button type="button" onclick="deleteClient(${client.id})"
-                style="background-color: #ff4d4f;
-                color: white;
-                border: none;
-                padding: 5px 10px;
-                border-radius: 4px;
-                cursor: pointer;">
-                削除
+                    style="background-color: #ff4d4f; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">
+                    削除
                 </button>
                 `;
             listContainer.appendChild(div);
@@ -55,6 +55,8 @@ async function getClientDetail(id) {
         const response = await axios.get(`/api/clients/${id}`);
         const client = response.data;
 
+        // ふりがなをセット
+        document.getElementById("client-kana").innerText = `${client.last_name_kana} ${client.first_name_kana}`;
         //名前とメモ
         document.getElementById("client-name").innerText = `${client.last_name} ${client.first_name}`;
         document.getElementById("client-memo").innerText = client.memo || "なし";

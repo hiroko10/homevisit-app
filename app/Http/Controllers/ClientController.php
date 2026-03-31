@@ -9,7 +9,7 @@ class ClientController extends Controller
 {
     public function apiIndex(){
         $clients = Client::all();
-        return response()->json($clients);
+        return response()->json(Client::all());
     }
 
 
