@@ -54,6 +54,8 @@ class ClientController extends Controller
         $validated = $request->validate([
             'last_name' => 'required|string|max:255',
             'first_name' => 'required|string|max:255',
+            'last_name_kana' => 'required|string|max:255',
+            'first_name_kana' => 'required|string|max:255',
             'memo' => 'nullable|string',
         ]);
 

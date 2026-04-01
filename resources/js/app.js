@@ -206,15 +206,39 @@ window.addClient = async () => {
 
 // ふりがな自動入力
 
-// 画面が読み込まれたら実行
-document.addEventListener('DOMContentLoaded', () => {
-    // 1. 「姓」の自動入力設定
-    // AutoKana.bind( "漢字を入れる場所のID", "ひらがなが出る場所のID" )
-    const autokanaLastName = AutoKana.bind('#new-client-last-name', '#new-client-last-kana');
+let isAutoKanaInitialized = false;
 
-    // 2. 「名」の自動入力設定
-    const autokanaFirstName = AutoKana.bind('#new-client-first-name', '#new-client-first-kana');
+document.addEventListener('DOMContentLoaded', () => {
+    // 道具が届くのを待つ
+    const initAutoKana = () => {
+        // すでに初期化済みなら何もしない（多重起動防止）
+        if (isAutoKanaInitialized) return;
+
+        if (typeof window.AutoKana !== 'undefined') {
+            // 1. 姓のセット
+            window.AutoKana.bind('#new-client-last-name', '#new-client-last-name-kana');
+            
+            // 2. 名のセット
+            window.AutoKana.bind('#new-client-first-name', '#new-client-first-name-kana');
+            
+            isAutoKanaInitialized = true; // 初期化完了フラグを立てる
+            console.log("AutoKanaの連動に成功しました（単一起動）");
+        } else {
+            setTimeout(initAutoKana, 100);
+        }
+    };
+
+    initAutoKana();
 });
+
+
+// document.addEventListener('DOMContentLoaded', () => {
+//     // 1. 姓のセット
+//     AutoKana.bind('#new-client-last-name', '#new-client-last-name-kana');
+    
+//     // 2. 名のセット
+//     AutoKana.bind('#new-client-first-name', '#new-client-first-name-kana');
+// });
 
 
 
