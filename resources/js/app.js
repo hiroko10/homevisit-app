@@ -63,23 +63,48 @@ async function getClientDetail(id) {
 
         //訪問履歴リスト組み立て
         const visitList = document.getElementById("visit-list");
-        visitList.innerHTML = "";
+        visitList.innerHTML = ""; //ループの前に中身を空にする
 
         if (client.visits && client.visits.length > 0) {
-            client.visits.forEach((visit) => {
+            client.visits.forEach((visit) => { //ループ開始
+
+                const formattedDate = visit.visited_at ? visit.visited_at.replace(' ', 'T') : '';
+
                 const visitDiv = document.createElement("div");
                 visitDiv.style.border = "1px solid #eee";
                 visitDiv.style.padding = "10px";
                 visitDiv.style.marginBottom = "10px";
                 visitDiv.style.borderRadius = "5px";
 
+                //訪問履歴編集->show.blade.phpへ
                 visitDiv.innerHTML = `
-                    <div style="font-size: 0.9em; color:#666;">日時：${visit.visited_at}</div>
-                    <div style="margin: 5px 0">内容：${visit.content}</div>
-                    <div style ="display:flex; gap: 10px;">
-                        <a href="/visits/${visit.id}/edit" style="font-size: 0.8em">編集</a>
-                        <button onclick="deleteVisit(${visit.id})" style="font-size:0.8em; color: red; cursor: pointer; border: none; background: none; padding: 0;">削除</button>
-                    </div>
+                    <div id="visit-row-${visit.id}">
+                            
+                            <div class="view-mode">
+                                <div style="font-size: 0.9em; color:#666;">日時：<span class="v-date">${visit.visited_at}</span></div>
+                                <div style="margin: 5px 0">内容：<span class="v-content">${visit.content}</span></div>
+                                <div style="display:flex; gap: 10px;">
+                                    <button onclick="enableEdit(${visit.id})" style="font-size: 0.8em; color: #007bff; cursor: pointer; border: none; background: none; padding: 0;">編集</button>
+                                    <button onclick="deleteVisit(${visit.id})" style="font-size:0.8em; color: red; cursor: pointer; border: none; background: none; padding: 0;">削除</button>
+                                </div>
+                            </div>
+
+                            <div class="edit-mode" style="display: none; margin-top: 5px;">
+                                <div style="margin-bottom: 8px;">
+                                    <label style="font-size: 0.8em; color: #666;">日時の編集：</label><br>
+                                    <input type="datetime-local" id="edit-at-${visit.id}" value="${formattedDate}" style="width: 100%; border-radius: 4px; border: 1px solid #ccc; padding: 5px;">
+                                </div>
+                                <div style="margin-bottom: 8px;">
+                                    <label style="font-size: 0.8em; color: #666;">内容の編集：</label><br>
+                                    <textarea id="edit-content-${visit.id}" rows="3" style="width: 100%; border-radius: 4px; border: 1px solid #ccc; padding: 5px;">${visit.content}</textarea>
+                                </div>
+                                <div style="text-align: right; gap: 10px; display: flex; justify-content: flex-end;">
+                                    <button onclick="updateVisit(${visit.id})" style="background: #28a745; color: white; border: none; padding: 5px 15px; border-radius: 4px; cursor: pointer; font-size: 0.8em;">保存</button>
+                                    <button onclick="cancelEdit(${visit.id})" style="background: #6c757d; color: white; border: none; padding: 5px 15px; border-radius: 4px; cursor: pointer; font-size: 0.8em;">キャンセル</button>
+                                </div>
+                            </div>
+
+                        </div>
                     `;
                 visitList.appendChild(visitDiv);
             });
@@ -204,41 +229,50 @@ window.addClient = async () => {
 
 
 
-// ふりがな自動入力
+// --- 編集モードの切り替え制御 ---
 
-let isAutoKanaInitialized = false;
+window.enableEdit = function(id) {
+    const container = document.getElementById(`visit-row-${id}`);
+    container.querySelector('.view-mode').style.display = 'none';
+    container.querySelector('.edit-mode').style.display = 'block';
+};
 
-document.addEventListener('DOMContentLoaded', () => {
-    // 道具が届くのを待つ
-    const initAutoKana = () => {
-        // すでに初期化済みなら何もしない（多重起動防止）
-        if (isAutoKanaInitialized) return;
-
-        if (typeof window.AutoKana !== 'undefined') {
-            // 1. 姓のセット
-            window.AutoKana.bind('#new-client-last-name', '#new-client-last-name-kana');
-            
-            // 2. 名のセット
-            window.AutoKana.bind('#new-client-first-name', '#new-client-first-name-kana');
-            
-            isAutoKanaInitialized = true; // 初期化完了フラグを立てる
-            console.log("AutoKanaの連動に成功しました（単一起動）");
-        } else {
-            setTimeout(initAutoKana, 100);
-        }
-    };
-
-    initAutoKana();
-});
+window.cancelEdit = function(id) {
+    const container = document.getElementById(`visit-row-${id}`);
+    container.querySelector('.view-mode').style.display = 'block';
+    container.querySelector('.edit-mode').style.display = 'none';
+};
 
 
-// document.addEventListener('DOMContentLoaded', () => {
-//     // 1. 姓のセット
-//     AutoKana.bind('#new-client-last-name', '#new-client-last-name-kana');
-    
-//     // 2. 名のセット
-//     AutoKana.bind('#new-client-first-name', '#new-client-first-name-kana');
-// });
+
+// --- 履歴の更新（保存） ---
+window.updateVisit = async (id) => {
+    const newDate = document.getElementById(`edit-at-${id}`).value;
+    const newContent = document.getElementById(`edit-content-${id}`).value;
+
+    if (!newDate || !newContent) {
+        alert("日時と内容を入力してください");
+        return;
+    }
+
+    try {
+        // PUTメソッドでサーバーの api/visits/{id} にデータを送る
+        await axios.put(`/api/visits/${id}`, {
+            visited_at: newDate,
+            content: newContent
+        });
+
+        alert("更新しました！");
+
+        // 成功したら、URLからクライアントIDを取得して詳細画面を再描画する
+        const clientId = window.location.pathname.split("/").pop();
+        getClientDetail(clientId);
+
+    } catch (error) {
+        console.error("更新失敗:", error);
+        alert("更新に失敗しました。");
+    }
+};
 
 
 

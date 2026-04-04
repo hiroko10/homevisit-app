@@ -11,6 +11,8 @@ Route::get('/clients/{id}', [ClientController::class, 'apiShow']); //特定IDの
 Route::post('/visits', [VisitController::class, 'store']); //履歴追加登録
 Route::post('/clients', [ClientController::class, 'apiStore']); //新規登録
 
+Route::put('/visits/{id}', [VisitController::class, 'update']); //訪問履歴の更新
+
 Route::delete('/clients/{id}', [ClientController::class, 'apiDestroy']); //削除用ルート(個人)
 Route::delete('/visits/{visit}', [VisitController::class, 'Destroy']); //削除用ルート(履歴)
 

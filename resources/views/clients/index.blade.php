@@ -1,6 +1,4 @@
 <head>
-    <script src="https://unpkg.com/vanilla-autokana@1.1.0/dist/autokana.js"></script>
-
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 

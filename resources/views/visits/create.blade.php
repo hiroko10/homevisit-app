@@ -9,8 +9,5 @@
     <label>内容</label><br>
     <textarea name="content" id="" cols="30" rows="10"></textarea><br><br>
 
-    {{-- <label>メモ</label><br>
-    <textarea name="" id="" cols="30" rows="10"></textarea><br><br> --}}
-
     <button type="submit">登録</button>
 </form>

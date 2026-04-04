@@ -39,16 +39,26 @@ class VisitController extends Controller
     public function edit(Visit $visit){
         return view('visits.edit', compact('visit'));
     }
-    //更新処理
-    public function update(Request $request, Visit $visit){
-        $visit->update([
-            'visited_at' => $request->visited_at,
-            'content' => $request->content,
-            'memo' => $request->memo,
-        ]);
 
-        return redirect()->route('clients.show', $visit->client);
+    //更新処理
+    public function update(Request $request, $id)
+    {
+    // 1. 該当する履歴を探す
+    $visit = Visit::findOrFail($id);
+
+    // 2. バリデーション（入力チェック）
+    $validated = $request->validate([
+        'visited_at' => 'required',
+        'content'    => 'required|string',
+    ]);
+
+    // 3. データを更新して保存
+    $visit->update($validated);
+
+    // 4. モダンにJSONで「成功したよ」と返す
+    return response()->json($visit);
     }
+
 
     //削除
     public function destroy($id)
