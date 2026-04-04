@@ -100,14 +100,13 @@ class ClientController extends Controller
     $validated = $request->validate([
         'last_name' => 'required|string',
         'first_name' => 'required|string',
-        // 他のバリデーション...
     ]);
 
     $client->update($validated);
 
     return response()->json($client);
     }
-    
+
     /**
      * Remove the specified resource from storage.
      */

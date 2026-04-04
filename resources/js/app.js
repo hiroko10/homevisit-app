@@ -229,6 +229,9 @@ window.addVisit = async () => {
         document.getElementById('new-visit-at').value = "";
         document.getElementById('new-visit-content').value = "";
 
+        // 保存が成功したらフォームを閉じてボタンを出す
+        cancelAddVisit();
+
         // 重要：再描画してリストを更新
         getClientDetail(clientId); 
         
@@ -331,6 +334,25 @@ window.updateClientInfo = async () => {
     }
 };
 
+
+
+// --- 訪問履歴追加フォームの表示制御 ---
+
+window.enableAddVisit = () => {
+    // ボタンを隠して、フォームを表示する
+    document.getElementById('show-add-visit-btn').style.display = 'none';// ボタンを隠す
+    document.getElementById('add-visit-container').style.display = 'block';// フォームを出す
+};
+
+window.cancelAddVisit = () => {
+    // フォームを隠して、ボタンを再表示
+    document.getElementById('show-add-visit-btn').style.display = 'block';// ボタンを出す
+    document.getElementById('add-visit-container').style.display = 'none';// フォームを隠す
+
+    // 入力欄をクリア
+    document.getElementById('new-visit-at').value = "";
+    document.getElementById('new-visit-content').value = "";
+};
 
 
 
