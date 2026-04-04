@@ -93,11 +93,21 @@ class ClientController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id) 
     {
-        //
-    }
+    $client = Client::findOrFail($id);
+    
+    $validated = $request->validate([
+        'last_name' => 'required|string',
+        'first_name' => 'required|string',
+        // 他のバリデーション...
+    ]);
 
+    $client->update($validated);
+
+    return response()->json($client);
+    }
+    
     /**
      * Remove the specified resource from storage.
      */

@@ -55,11 +55,17 @@ async function getClientDetail(id) {
         const response = await axios.get(`/api/clients/${id}`);
         const client = response.data;
 
-        // ふりがなをセット
+        // ふりがな,名前,メモをセット（表示用）
         document.getElementById("client-kana").innerText = `${client.last_name_kana} ${client.first_name_kana}`;
-        //名前とメモ
         document.getElementById("client-name").innerText = `${client.last_name} ${client.first_name}`;
         document.getElementById("client-memo").innerText = client.memo || "なし";
+
+        //編集用の入力欄に現在の値をセット（編集用）
+        document.getElementById('edit-client-last-name').value = client.last_name;
+        document.getElementById('edit-client-first-name').value = client.first_name;
+        document.getElementById('edit-client-last-name-kana').value = client.last_name_kana;
+        document.getElementById('edit-client-first-name-kana').value = client.first_name_kana;
+        document.getElementById('edit-client-memo').value = client.memo || "";
 
         //訪問履歴リスト組み立て
         const visitList = document.getElementById("visit-list");
@@ -150,43 +156,7 @@ window.deleteVisit = async (id) => {
 
 
 
-// --- 履歴の追加 ---
-window.addVisit = async () => {
-    const visitedAt = document.getElementById('new-visit-at').value;
-    const content = document.getElementById('new-visit-content').value;
-    
-    // URLからIDを取得
-    const clientId = window.location.pathname.split('/').pop();
-
-    if (!visitedAt || !content) {
-        alert("日時と内容を入力してください");
-        return;
-    }
-
-    try {
-        await axios.post('/api/visits', {
-            client_id: clientId,
-            visited_at: visitedAt,
-            content: content
-        });
-
-        alert("訪問履歴を追加しました！");
-
-        // 入力欄を空にする
-        document.getElementById('new-visit-at').value = "";
-        document.getElementById('new-visit-content').value = "";
-
-        // 重要：再描画してリストを更新
-        getClientDetail(clientId); 
-        
-    } catch (error) {
-        console.error("追加失敗:", error);
-        alert("保存に失敗しました。");
-    }
-};
-
-
-// 新規登録
+// 新規登録(訪問一覧ページ)
 
 window.addClient = async () => {
     // 1. 入力値を取得
@@ -229,7 +199,50 @@ window.addClient = async () => {
 
 
 
-// --- 編集モードの切り替え制御 ---
+
+
+// 訪問履歴(個人ページ)
+
+// --- 訪問履歴の追加 ---
+window.addVisit = async () => {
+    const visitedAt = document.getElementById('new-visit-at').value;
+    const content = document.getElementById('new-visit-content').value;
+    
+    // URLからIDを取得
+    const clientId = window.location.pathname.split('/').pop();
+
+    if (!visitedAt || !content) {
+        alert("日時と内容を入力してください");
+        return;
+    }
+
+    try {
+        await axios.post('/api/visits', {
+            client_id: clientId,
+            visited_at: visitedAt,
+            content: content
+        });
+
+        alert("訪問履歴を追加しました！");
+
+        // 入力欄を空にする
+        document.getElementById('new-visit-at').value = "";
+        document.getElementById('new-visit-content').value = "";
+
+        // 重要：再描画してリストを更新
+        getClientDetail(clientId); 
+        
+    } catch (error) {
+        console.error("追加失敗:", error);
+        alert("保存に失敗しました。");
+    }
+};
+
+
+
+
+
+// --- 訪問履歴編集モードの切り替え制御 ---
 
 window.enableEdit = function(id) {
     const container = document.getElementById(`visit-row-${id}`);
@@ -245,7 +258,7 @@ window.cancelEdit = function(id) {
 
 
 
-// --- 履歴の更新（保存） ---
+// --- 訪問履歴の更新（保存） ---
 window.updateVisit = async (id) => {
     const newDate = document.getElementById(`edit-at-${id}`).value;
     const newContent = document.getElementById(`edit-content-${id}`).value;
@@ -268,6 +281,50 @@ window.updateVisit = async (id) => {
         const clientId = window.location.pathname.split("/").pop();
         getClientDetail(clientId);
 
+    } catch (error) {
+        console.error("更新失敗:", error);
+        alert("更新に失敗しました。");
+    }
+};
+
+
+// 個人ページの姓名・特徴メモの編集用
+// 1. 表示/非表示の切り替え
+window.enableClientEdit = () => {
+    document.getElementById('client-view-mode').style.display = 'none';
+    document.getElementById('client-edit-mode').style.display = 'block';
+};
+
+window.cancelClientEdit = () => {
+    document.getElementById('client-view-mode').style.display = 'block';
+    document.getElementById('client-edit-mode').style.display = 'none';
+};
+
+// 2. データの更新処理（保存ボタン）
+window.updateClientInfo = async () => {
+    // 現在のページURLからIDを取得（例: /clients/8 -> 8）
+    const id = window.location.pathname.split('/').pop();
+
+    // 入力欄から最新の値を取得
+    const data = {
+        last_name: document.getElementById('edit-client-last-name').value,
+        first_name: document.getElementById('edit-client-first-name').value,
+        last_name_kana: document.getElementById('edit-client-last-name-kana').value,
+        first_name_kana: document.getElementById('edit-client-first-name-kana').value,
+        memo: document.getElementById('edit-client-memo').value,
+    };
+
+    try {
+        // PUTリクエストを送信
+        await axios.put(`/api/clients/${id}`, data);
+        
+        alert("基本情報を更新しました！");
+        
+        // データを再取得して表示を最新にする
+        getClientDetail(id); 
+        
+        // 通常モードに戻す
+        cancelClientEdit();
     } catch (error) {
         console.error("更新失敗:", error);
         alert("更新に失敗しました。");
