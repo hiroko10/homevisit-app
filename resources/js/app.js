@@ -1,6 +1,6 @@
 import axios from "axios";
 
-// --- 一覧ページ用 ---
+// --- 訪問一覧ページ用 ---
 window.getClients = async (page = 1) => { //引数に page を追加（初期値は1）
     try {
         // URLの末尾にページ番号をくっつける
@@ -22,6 +22,7 @@ window.getClients = async (page = 1) => { //引数に page を追加（初期値
             // 行全体のスタイル
             div.style.display = "flex";
             div.style.alignItems = "center";
+            div.style.justifyContent = "space-between";
             div.style.marginBottom = "10px";
             div.style.padding = "10px";
             div.style.borderBottom = "1px solid #eee";
@@ -45,7 +46,7 @@ window.getClients = async (page = 1) => { //引数に page を追加（初期値
             listContainer.appendChild(div);
         });
         renderPagination(pagination);
-        
+
         console.log("画面の組み立てが完了しました");
     } catch (error) {
         console.log("データの取得に失敗しました", error);
@@ -54,11 +55,19 @@ window.getClients = async (page = 1) => { //引数に page を追加（初期値
 
 // --- 詳細ページ用 ---
 
-async function getClientDetail(id) {
+window.getClientDetail = async (id, page = 1) => {
     try {
-        const response = await axios.get(`/api/clients/${id}`);
-        const client = response.data;
+        //1.基本情報（名前・メモ）を取得
+        const clientResponse = await axios.get(`/api/clients/${id}`);
+        const client = clientResponse.data; // ここで「client」を定義
 
+        //2.訪問履歴（10件分）を取得
+        const visitResponse = await axios.get(`/api/visits?client_id=${id}&page=${page}`);
+
+        const visits = visitResponse.data.data; // 履歴の配列
+        const pagination = visitResponse.data;  // ページネーション情報
+
+        // --- 顧客情報のセット ---
         // ふりがな,名前,メモをセット（表示用）
         document.getElementById("client-kana").innerText = `${client.last_name_kana} ${client.first_name_kana}`;
         document.getElementById("client-name").innerText = `${client.last_name} ${client.first_name}`;
@@ -71,13 +80,12 @@ async function getClientDetail(id) {
         document.getElementById('edit-client-first-name-kana').value = client.first_name_kana;
         document.getElementById('edit-client-memo').value = client.memo || "";
 
-        //訪問履歴リスト組み立て
+        // --- 3. 訪問履歴リストの組み立て ---
         const visitList = document.getElementById("visit-list");
         visitList.innerHTML = ""; //ループの前に中身を空にする
 
-        if (client.visits && client.visits.length > 0) {
-            client.visits.forEach((visit) => { //ループ開始
-
+        if (visits && visits.length > 0) {
+            visits.forEach((visit) => { //ループ開始
                 const formattedDate = visit.visited_at ? visit.visited_at.replace(' ', 'T') : '';
 
                 const visitDiv = document.createElement("div");
@@ -118,6 +126,7 @@ async function getClientDetail(id) {
                     `;
                 visitList.appendChild(visitDiv);
             });
+            renderVisitPagination(pagination, id); //ページネーションボタン表示
         } else {
             visitList.innerHTML = "訪問履歴はまだありません";
         }
@@ -430,6 +439,52 @@ window.renderPagination = (data) => {
 };
 
 
+
+
+
+// 訪問履歴専用のページネーションボタン生成
+window.renderVisitPagination = (data, clientId) => {
+    const container = document.getElementById("visit-pagination-container");
+    if (!container) return;
+
+    container.innerHTML = ""; 
+    // --- スタイル設定 ---
+    container.style.marginTop = "20px";
+    container.style.display = "flex";
+    container.style.gap = "10px";
+    container.style.justifyContent = "center";
+    container.style.alignItems = "center";
+
+    if (data.prev_page_url) {
+        const prevBtn = document.createElement("button");
+        prevBtn.innerText = "前へ";
+        prevBtn.style.padding = "5px 15px";
+        prevBtn.style.cursor = "pointer";
+        // クリック時に getClientDetail を呼ぶ
+        prevBtn.onclick = () => getClientDetail(clientId, data.current_page - 1);
+        container.appendChild(prevBtn);
+    }
+
+    const pageInfo = document.createElement("span");
+    pageInfo.innerText = `${data.current_page} / ${data.last_page}`;
+    container.appendChild(pageInfo);
+
+    if (data.next_page_url) {
+        const nextBtn = document.createElement("button");
+        nextBtn.innerText = "次へ";
+        nextBtn.style.padding = "5px 15px";
+        nextBtn.style.cursor = "pointer";
+        // クリック時に getClientDetail を呼ぶ
+        nextBtn.onclick = () => getClientDetail(clientId, data.current_page + 1);
+        container.appendChild(nextBtn);
+    }
+};
+
+
+
+
+
+
 // HTMLの読み込み終了後、URLの中身を確認しJS実行(詳細ページか一覧ページかを自動判定)
 document.addEventListener('DOMContentLoaded', () => {
     const path = window.location.pathname;
@@ -439,7 +494,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (detailMatch) {
         const id = detailMatch[1];
         console.log("詳細ページを表示します。ID:", id);
-        return getClientDetail(id); // 実行して終了
+        return window.getClientDetail(id, 1); // 実行して終了
     }
 
     // --- 2. 一覧ページの判定 ---

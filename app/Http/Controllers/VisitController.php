@@ -8,6 +8,19 @@ use Illuminate\Http\Request;
 
 class VisitController extends Controller
 {
+    public function index(Request $request)
+    {
+        // JSの axios.get(`/api/visits?client_id=${id}...`) から ID を受け取る
+        $clientId = $request->query('client_id');
+
+        // その顧客の履歴を、10件ずつページネーションして取得
+        $visits = Visit::where('client_id', $clientId)
+                    ->orderBy('visited_at', 'desc')
+                    ->paginate(10);
+
+        return response()->json($visits);
+    }
+
     public function create(Client $client){
         return view('visits.create', compact('client'));
     }

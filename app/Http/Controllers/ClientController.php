@@ -76,7 +76,7 @@ class ClientController extends Controller
 
     public function apiShow($id)
     {
-        $client = Client::with('visits')->findOrFail($id);
+        $client = Client::findOrFail($id);
 
         return response()->json($client);
     }
