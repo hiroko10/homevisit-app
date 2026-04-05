@@ -38,7 +38,7 @@
 
 <div id="client-list">読み込み中...</div>
 
-
+<div id="pagination-container"></div>
 
 
 @if (session('message'))

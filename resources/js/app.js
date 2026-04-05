@@ -1,10 +1,13 @@
 import axios from "axios";
 
 // --- 一覧ページ用 ---
-async function getClients() {
+window.getClients = async (page = 1) => { //引数に page を追加（初期値は1）
     try {
-        const response = await axios.get("/api/clients");
-        const clients = response.data; //データ配列
+        // URLの末尾にページ番号をくっつける
+        const response = await axios.get(`/api/clients?page=${page}`);
+        console.log("受け取ったデータ", response.data);
+        const clients = response.data.data; //paginateを使うと response.data.data が配列に
+        const pagination = response.data; // ページネーション情報全体を保存
 
         //1 HTML側の箱を取得
         const listContainer = document.getElementById("client-list");
@@ -41,7 +44,8 @@ async function getClients() {
                 `;
             listContainer.appendChild(div);
         });
-
+        renderPagination(pagination);
+        
         console.log("画面の組み立てが完了しました");
     } catch (error) {
         console.log("データの取得に失敗しました", error);
@@ -382,6 +386,48 @@ window.cancelAddVisit = () => {
 };
 
 
+
+// ページネーション
+
+// resources/js/app.js の一番下に追加
+
+window.renderPagination = (data) => {
+    const container = document.getElementById("pagination-container");
+    if (!container) return; // 箱がなければ終了
+
+    container.innerHTML = ""; // 前のボタンを一旦消す
+    container.style.marginTop = "20px";
+    container.style.display = "flex";
+    container.style.gap = "10px";
+    container.style.justifyContent = "center";
+    container.style.alignItems = "center";
+
+    // --- 「前へ」ボタン ---
+    if (data.prev_page_url) {
+        const prevBtn = document.createElement("button");
+        prevBtn.innerText = "前へ";
+        prevBtn.style.padding = "5px 15px";
+        prevBtn.style.cursor = "pointer";
+        prevBtn.onclick = () => getClients(data.current_page - 1); // 1つ前のページを読み直す
+        container.appendChild(prevBtn);
+    }
+
+    // --- 現在のページ情報 ---
+    const pageInfo = document.createElement("span");
+    pageInfo.innerText = `${data.current_page} / ${data.last_page}`;
+    pageInfo.style.fontWeight = "bold";
+    container.appendChild(pageInfo);
+
+    // --- 「次へ」ボタン ---
+    if (data.next_page_url) {
+        const nextBtn = document.createElement("button");
+        nextBtn.innerText = "次へ";
+        nextBtn.style.padding = "5px 15px";
+        nextBtn.style.cursor = "pointer";
+        nextBtn.onclick = () => getClients(data.current_page + 1); // 1つ次のページを読み直す
+        container.appendChild(nextBtn);
+    }
+};
 
 
 // HTMLの読み込み終了後、URLの中身を確認しJS実行(詳細ページか一覧ページかを自動判定)

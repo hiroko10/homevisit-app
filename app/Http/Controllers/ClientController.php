@@ -7,20 +7,19 @@ use Illuminate\Http\Request;
 
 class ClientController extends Controller
 {
+    // axios(JS)から呼ばれるデータ専用窓口
     public function apiIndex(){
-        $clients = Client::all();
-        return response()->json(Client::all());
+        $clients = Client::paginate(10);
+        return response()->json($clients);
     }
 
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resource. ブラウザで/clientsへアクセス時に呼ばれる
      */
     public function index()
     {
-        $clients = Client::all();
-        // dd($clients);
-        return view('clients.index', compact('clients'));
+        return view('clients.index');
     }
 
     /**

@@ -18,6 +18,10 @@ Route::put('/visits/{visit}', [VisitController::class, 'update']);
 Route::delete('/visits/{visit}', [VisitController::class, 'destroy']);
 
 
+Route::get('/clients', function () {
+    return view('clients.index'); // index.blade.php を表示する
+});
+
 Route::get('/', function () {
     return view('welcome');
 });
