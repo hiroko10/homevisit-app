@@ -95,10 +95,13 @@ class ClientController extends Controller
     public function update(Request $request, $id) 
     {
     $client = Client::findOrFail($id);
-    
+        // dd($request->all());
     $validated = $request->validate([
         'last_name' => 'required|string',
         'first_name' => 'required|string',
+        'last_name_kana' => 'nullable',
+        'first_name_kana' => 'nullable',
+        'memo' => 'nullable',
     ]);
 
     $client->update($validated);
