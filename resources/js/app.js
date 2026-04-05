@@ -188,6 +188,9 @@ window.addClient = async () => {
         document.getElementById('new-client-first-name').value = "";
         document.getElementById('new-client-memo').value = "";
 
+        // 保存に成功したら、フォームを閉じてボタン表示に戻す
+        cancelAddClientForm();
+
         // 4. 一覧を最新の状態にする（すでに定義されているgetClientsを呼ぶ）
         getClients();
 
@@ -333,6 +336,30 @@ window.updateClientInfo = async () => {
         alert("更新に失敗しました。");
     }
 };
+
+
+
+
+// --- 新規顧客登録フォームの表示制御 ---
+
+window.enableAddClientForm = () => {
+    document.getElementById('show-add-client-btn').style.display = 'none'; // ボタンを隠す
+    document.getElementById('add-client-container').style.display = 'block'; // フォームを出す
+};
+
+window.cancelAddClientForm = () => {
+    document.getElementById('show-add-client-btn').style.display = 'block'; // ボタンを出す
+    document.getElementById('add-client-container').style.display = 'none'; // フォームを隠す
+    
+    // 入力欄をクリア
+    document.getElementById('new-client-last-name').value = "";
+    document.getElementById('new-client-first-name').value = "";
+    document.getElementById('new-client-last-name-kana').value = "";
+    document.getElementById('new-client-first-name-kana').value = "";
+    document.getElementById('new-client-memo').value = "";
+};
+
+
 
 
 

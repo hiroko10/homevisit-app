@@ -22,7 +22,7 @@ class VisitController extends Controller
     ]);
 
     // 2. 保存
-    // URLからではなく、$requestの中からIDを取り出して保存します
+    // URLからではなく、$requestの中からIDを取り出して保存
     $visit = Visit::create([
         'client_id'  => $request->client_id,
         'visited_at' => $request->visited_at,
@@ -55,7 +55,7 @@ class VisitController extends Controller
     // 3. データを更新して保存
     $visit->update($validated);
 
-    // 4. モダンにJSONで「成功したよ」と返す
+    // 4. JSONで「成功」と返す
     return response()->json($visit);
     }
 
