@@ -6,10 +6,12 @@
 
     <h1>訪問一覧</h1>
 
-    <button id="show-add-client-btn" onclick="enableAddClientForm()" style="margin-bottom: 20px; background: #57b8ce; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold;">
+    <div style="display: flex; justify-content: flex-end; margin-bottom: 20px;">
+        <button id="show-add-client-btn" onclick="enableAddClientForm()" style="margin-bottom: 20px; background: #57b8ce; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold;">
         ＋ 新規登録
-    </button>
-
+        </button>
+    </div>
+    
     <div id="add-client-container" style="display: none; background: #fbfeff; padding: 20px; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 30px;">
         <h3>新規登録</h3>
         

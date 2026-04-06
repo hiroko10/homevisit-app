@@ -1,4 +1,5 @@
 @vite(['resources/css/app.css', 'resources/js/app.js'])
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 <div class="container">
 
@@ -9,10 +10,13 @@
         <div id="client-view-mode">
             <div style="font-size: 0.8rem; color: #888;" id="client-kana"></div>
             <div style="font-size: 1.5rem; font-weight: bold; margin-bottom: 10px;">
-                名前：<span id="client-name"></span>
+                <span id="client-name"></span>
             </div>
-            <div>特徴メモ：<span id="client-memo"></span></div>
-            <button onclick="enableClientEdit()" style="margin-top:10px; font-size:0.8rem; color: blue">✏️基本情報を編集</button>
+            <div>特徴：<span id="client-memo"></span></div>
+            <button onclick="enableClientEdit()" style="margin-top:10px; font-size:0.8rem; color: rgb(50, 159, 255); background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 5px;">
+                <i class="fa-solid fa-pen-to-square"></i>
+                基本情報を編集
+            </button>
         </div>
 
         {{-- 個人名の編集 --}}
@@ -24,12 +28,12 @@
             <label>名前：</label><br>
             <input type="text" id="edit-client-last-name" placeholder="姓" style="font-size:1.2rem; font-weight:bold; border-radius: 8px;">
             <input type="text" id="edit-client-first-name" placeholder="名" style="font-size:1.2rem; font-weight:bold; border-radius: 8px;"><br>
-            <label>特徴メモ：</label><br>
+            <label>特徴：</label><br>
             <textarea id="edit-client-memo" style="width:100%; margin-top:10px; border-radius: 8px;"></textarea>
             
             <div style="margin-top:10px;">
-                <button onclick="updateClientInfo()" style="background:#28a745; color:white; border-radius: 8px;">保存</button>
-                <button onclick="cancelClientEdit()" style="background:#6c757d; color:white; border-radius: 8px;">キャンセル</button>
+                <button type="button" onclick="updateClientInfo()" style="background: #28a745; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer;">保存</button>
+                <button type="button" onclick="cancelClientEdit()" style="background: #6c757d; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer;">キャンセル</button>
             </div>
         </div>
     </div>
@@ -39,9 +43,11 @@
 
     {{-- 個人ページ内での訪問履歴の追加 --}}
     {{-- フォーム表示のボタン --}}
-    <button id="show-add-visit-btn" onclick="enableAddVisit()" style="margin-bottom: 20px; background: #57b8ce; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer;">
-    ＋新しい訪問履歴を追加する
-    </button>
+    <div style="display: flex; justify-content: flex-end; margin-bottom: 20px;">
+        <button id="show-add-visit-btn" onclick="enableAddVisit()" style="margin-bottom: 20px; background: #57b8ce; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer;">
+        ＋新規訪問履歴を追加
+        </button>
+    </div>
 
     <div id="add-visit-container" style="display:none; background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
         <h3>訪問履歴の追加</h3>
