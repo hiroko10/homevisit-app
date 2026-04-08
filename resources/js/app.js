@@ -3,8 +3,10 @@ import axios from "axios";
 // --- 訪問一覧ページ用 ---
 window.getClients = async (page = 1) => { //引数に page を追加（初期値は1）
     try {
+        const keyword = document.getElementById("search-keyword")?.value || "";
+
         // URLの末尾にページ番号をくっつける
-        const response = await axios.get(`/api/clients?page=${page}`);
+        const response = await axios.get(`/api/clients?page=${page}&keyword=${encodeURIComponent(keyword)}`);
         console.log("受け取ったデータ", response.data);
         const clients = response.data.data; //paginateを使うと response.data.data が配列に
         const pagination = response.data; // ページネーション情報全体を保存

@@ -6,16 +6,25 @@
 
     <h1>訪問一覧</h1>
 
+    {{-- +新規登録ボタン --}}
     <div style="display: flex; justify-content: flex-end; margin-bottom: 20px;">
         <button id="show-add-client-btn" onclick="enableAddClientForm()" style="margin-bottom: 20px; background: #57b8ce; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold;">
         ＋ 新規登録
         </button>
     </div>
-    
+
+    {{-- +新規登録ボタン内 --}}
     <div id="add-client-container" style="display: none; background: #fbfeff; padding: 20px; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 30px;">
         <h3>新規登録</h3>
-        
-        
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+
+            <button id="show-add-client-btn" onclick="enableAddClientForm()" style="...">
+            新規顧客を登録する
+            </button>
+        </div>
+
+
         <div style="margin-bottom: 10px;">
             <label>氏名：</label><br>
             <input type="text" id="new-client-last-name" placeholder="姓" style="border-radius: 4px">
@@ -36,6 +45,21 @@
             <button type="button" onclick="cancelAddClientForm()" style="background: #6c757d; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer;">キャンセル</button>
         </div>
     </div>
+
+
+    {{-- 検索 --}}
+    <div style="display: flex; justify-content: space-between; align-items: center; gap: 20px;">
+        <div style="position: relative; flex: 1; display: flex; gap: 5px;">
+            <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #aaa;"></i>
+
+            <input type="text" id="search-keyword" placeholder="名前やフリガナで検索" style="width: 100%; flex: 1; padding: 8px; border-radius: 8px; border: 1px solid #ccc;">
+            <button onclick="getClients(1)" type="button" style="background: #6c757d; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer;">
+                 検索
+            </button>
+        </div>
+    </div>
+
+
 
     <hr>
 

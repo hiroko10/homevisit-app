@@ -7,20 +7,49 @@ use Illuminate\Http\Request;
 
 class ClientController extends Controller
 {
-    // axios(JS)から呼ばれるデータ専用窓口
-    public function apiIndex(){
-        $clients = Client::paginate(10);
+    // // axios(JS)から呼ばれるデータ専用窓口
+    // public function apiIndex(){
+    //     $clients = Client::paginate(10);
+    //     return response()->json($clients);
+    // }
+
+
+    /**
+     * Display a listing of the resource.
+     * ブラウザで/clientsの画面へアクセス時にweb.phpから呼ばれる
+     */
+    public function index(){
+        return view('clients.index');
+    }
+
+
+    // JSからアクセスしたときにapi.phpから呼ばれる「データ」を返す
+    public function apiIndex(Request $request)
+    {
+        $keyword = $request->query('keyword');
+
+        // クエリビルダを開始
+        $query = Client::query();
+
+        // もしキーワードがあれば絞り込み
+        if (!empty($keyword)) {
+            $query->where(function($q) use ($keyword) {
+                $q->where('last_name', 'like', "%{$keyword}%")
+                ->orWhere('first_name', 'like', "%{$keyword}%")
+                ->orWhere('last_name_kana', 'like', "%{$keyword}%")
+                ->orWhere('first_name_kana', 'like', "%{$keyword}%");
+            });
+        }
+
+        // 最後にページネーションを実行
+        $clients = $query->orderBy('last_name_kana', 'asc')->paginate(10);
+
         return response()->json($clients);
     }
 
 
-    /**
-     * Display a listing of the resource. ブラウザで/clientsへアクセス時に呼ばれる
-     */
-    public function index()
-    {
-        return view('clients.index');
-    }
+
+
 
     /**
      * Show the form for creating a new resource.
