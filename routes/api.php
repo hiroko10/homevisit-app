@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('clients', [ClientController::class, 'apiIndex']); //一覧取得ルート(取得)
 Route::get('/clients/{id}', [ClientController::class, 'apiShow']); //特定IDのデータを返すルート(取得)
+Route::get('/clients/{id}/activities/search', [ClientController::class, 'apiSearchActivities']); //個人ページの訪問履歴検索ルート
 Route::get('/visits', [VisitController::class, 'index']);
 
 Route::post('/visits', [VisitController::class, 'store']); //履歴追加登録(登録)

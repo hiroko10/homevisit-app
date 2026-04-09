@@ -10,13 +10,21 @@ class VisitController extends Controller
 {
     public function index(Request $request)
     {
-        // JSの axios.get(`/api/visits?client_id=${id}...`) から ID を受け取る
+        // JSの axios.get(`/api/visits?client_id=${id}...`) から IDとkeywordを受け取る
         $clientId = $request->query('client_id');
+        $keyword = $request->query('keyword');
 
-        // その顧客の履歴を、10件ずつページネーションして取得
-        $visits = Visit::where('client_id', $clientId)
-                    ->orderBy('visited_at', 'desc')
-                    ->paginate(10);
+        // その顧客の履歴というベースのクエリ作成
+        $query = Visit::where('client_id', $clientId);
+
+        // キーワードがある場合のみ、絞り込み条件を追加
+        if (!empty($keyword)) {
+            $query->where('content', 'like', "%{$keyword}%");
+        }
+
+        // 並び替えとページネーションを実行して、結果を取得
+        $visits = $query->orderBy('visited_at', 'desc')
+                        ->paginate(10);
 
         return response()->json($visits);
     }

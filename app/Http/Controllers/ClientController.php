@@ -7,13 +7,6 @@ use Illuminate\Http\Request;
 
 class ClientController extends Controller
 {
-    // // axios(JS)から呼ばれるデータ専用窓口
-    // public function apiIndex(){
-    //     $clients = Client::paginate(10);
-    //     return response()->json($clients);
-    // }
-
-
     /**
      * Display a listing of the resource.
      * ブラウザで/clientsの画面へアクセス時にweb.phpから呼ばれる
@@ -49,6 +42,26 @@ class ClientController extends Controller
 
 
 
+    // 特定のクライアント内の訪問履歴を検索するAPI
+    public function apiSearchActivities(Request $request, $id)
+    {
+    $keyword = $request->query('keyword');
+
+    // まずそのクライアントが存在するか確認し、紐づく活動記録のクエリを開始
+    $client = Client::findOrFail($id);
+    $query = $client->activities(); // Clientモデルにactivitiesリレーションがある前提
+
+    if (!empty($keyword)) {
+        $query->where('content', 'like', "%{$keyword}%");
+    }
+
+    $results = $query->orderBy('created_at', 'desc')->get();
+
+    return response()->json($results);
+    }
+
+
+
 
 
     /**
@@ -74,7 +87,6 @@ class ClientController extends Controller
         return redirect('/clients');
     }
 
-    // ClientController.php
 
     public function apiStore(Request $request)
     {

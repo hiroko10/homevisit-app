@@ -59,12 +59,15 @@ window.getClients = async (page = 1) => { //引数に page を追加（初期値
 
 window.getClientDetail = async (id, page = 1) => {
     try {
+        // 検索窓(input)からキーワードを取得
+        const keyword = document.getElementById("visit-search")?.value || "";
+
         //1.基本情報（名前・メモ）を取得
         const clientResponse = await axios.get(`/api/clients/${id}`);
         const client = clientResponse.data; // ここで「client」を定義
 
         //2.訪問履歴（10件分）を取得
-        const visitResponse = await axios.get(`/api/visits?client_id=${id}&page=${page}`);
+        const visitResponse = await axios.get(`/api/visits?client_id=${id}&page=${page}&keyword=${encodeURIComponent(keyword)}`);
 
         const visits = visitResponse.data.data; // 履歴の配列
         const pagination = visitResponse.data;  // ページネーション情報
@@ -399,8 +402,6 @@ window.cancelAddVisit = () => {
 
 
 // ページネーション
-
-// resources/js/app.js の一番下に追加
 
 window.renderPagination = (data) => {
     const container = document.getElementById("pagination-container");

@@ -68,6 +68,19 @@
     </div>
 
 
+    {{-- 検索入力欄 --}}
+    <div style="margin-bottom: 20px; display: flex; gap: 8px; width: 100%;">
+        <input type="text" id="visit-search" placeholder="訪問内容を検索..."
+            style="padding: 10px; border: 1px solid #ccc; border-radius: 4px; flex: 1; font-size: 1rem; outline: none;">
+
+        <button onclick="getClientDetail(window.location.pathname.split('/').pop())"
+            style="padding: 8px 15px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; white-space: nowrap; font-weight: bold;">
+            検索
+        </button>
+    </div>
+
+
+
     {{-- 訪問履歴 --}}
     <h2>訪問履歴</h2>
     <div id="visit-list">履歴を読み込み中...</div>
