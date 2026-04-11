@@ -61,8 +61,24 @@
 
 
 
+
+    {{-- JSで使うため（画面非表示） --}}
+    <template id="client-template">
+        <div class="client-row">
+            <div class="client-info">
+                <span class="client-kana"></span>
+                <a href="" class="client-link">
+                    <span class="client-name"></span>
+                </a>
+            </div>
+            <button type="button" class="client-delete-btn">削除</button>
+        </div>
+    </template>
+
+
     <hr>
 
+    {{-- 実際にリストが表示 --}}
     <div id="client-list">読み込み中...</div>
 
     <div id="pagination-container"></div>

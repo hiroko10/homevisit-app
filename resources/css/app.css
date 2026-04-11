@@ -19,3 +19,118 @@ body {
     background-color: #ffffff;
     min-height: 100vh;
 }
+
+/* 訪問一覧 */
+.client-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-bottom: 1px solid #d6d4d4;
+    margin-bottom: 15px;
+}
+.client-info {
+    display: flex;
+    flex-direction: column;
+}
+.client-kana {
+    font-size: 0.7rem;
+    color: #666;
+    margin-bottom: -2px;
+}
+.client-name {
+    color: #333;
+    font-weight: bold;
+}
+.client-delete-btn {
+    background-color: #ff4d4f;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+
+
+
+/* 訪問履歴(詳細ページ) */
+.visit-item {
+    border: 1px solid #eee;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.v-meta {
+    font-size: 0.9em; color: #666;
+}
+.v-body {
+    margin: 5px 0;
+}
+
+/* ボタン */
+.v-actions button {
+    font-size: 0.8em;
+    cursor: pointer;
+    border: none;
+    background: none;
+    padding: 0;
+    margin-right: 10px;
+}
+.edit-btn {
+    color: #007bff;
+}
+.visit-delete-btn {
+    color: rgb(255, 0, 0);
+}
+
+/* 個人ページ - 編集フォームの中身 */
+.edit-group {
+    margin-bottom: 8px;
+}
+.edit-group label {
+    font-size: 0.8em; color: #666;
+}
+.edit-group input, .edit-group textarea {
+    width: 100%;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    padding: 5px;
+}
+
+/* 個人ページ - 保存・キャンセルボタン */
+.edit-actions {
+    text-align: right;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+.save-btn {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 5px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.cancel-btn {
+    background: #6c757d;
+    color: white;
+    border: none;
+    padding: 5px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+
+
+
+
+
+/* 編集モード切り替え制御 */
+.edit-mode { display: none; } /* 基本非表示 */
+
+.is-editing .view-mode { display: none; } /*.is-editingがあれば表示を隠す*/
+.is-editing .edit-mode { display: block; } /*.is-editingがあれば編集モードを出す*/

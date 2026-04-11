@@ -81,6 +81,43 @@
 
 
 
+    {{-- JSで使用 --}}
+    <template id="visit-template">
+        <div class="visit-item">
+            <div class="visit-row">
+                {{-- 表示モード --}}
+                <div class="view-mode">
+                    <div class="v-meta">日時：<span class="v-date"></span></div>
+                    <div class="v-body">内容：<span class="v-content"></span></div>
+                    <div class="v-actions">
+                        <button type="button" class="edit-btn">編集</button>
+                        <button type="button" class="visit-delete-btn">削除</button>
+                    </div>
+                </div>
+
+                {{-- 編集モード（最初はCSSで隠れる） --}}
+                <div class="edit-mode">
+                    <div class="edit-group">
+                        <label>日時の編集：</label>
+                        <input type="datetime-local" class="edit-at">
+                    </div>
+                    <div class="edit-group">
+                        <label>内容の編集：</label>
+                        <textarea class="edit-content" rows="3"></textarea>
+                    </div>
+                    <div class="edit-actions">
+                        <button type="button" class="save-btn">保存</button>
+                        <button type="button" class="cancel-btn">キャンセル</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+
+
+
+
     {{-- 訪問履歴 --}}
     <h2>訪問履歴</h2>
     <div id="visit-list">履歴を読み込み中...</div>
