@@ -41,82 +41,102 @@ window.getClients = async (page = 1) => { //引数に page を追加（初期値
     }
 }
 
+
+
 // --- 詳細ページ用 ---
 
 window.getClientDetail = async (id, page = 1) => {
     try {
-        // 検索窓(input)からキーワードを取得
         const keyword = document.getElementById("visit-search")?.value || "";
 
-        //1.基本情報（名前・メモ）を取得
-        const clientResponse = await axios.get(`/api/clients/${id}`);
-        const client = clientResponse.data; // ここで「client」を定義
+        // ① データ取得
+        const client = await fetchClient(id);
+        const visitData = await fetchVisits(id, page, keyword);
 
-        //2.訪問履歴（10件分）を取得
-        const visitResponse = await axios.get(`/api/visits?client_id=${id}&page=${page}&keyword=${encodeURIComponent(keyword)}`);
+        // ② 顧客情報表示
+        displayClientInfo(client);
 
-        const visits = visitResponse.data.data; // 履歴の配列
-        const pagination = visitResponse.data;  // ページネーション情報
+        // ③ 訪問履歴リスト表示
+        displayVisitList(visitData.data, id);
 
-        // --- 顧客情報のセット ---
-        // ふりがな,名前,メモをセット（表示用）
-        document.getElementById("client-kana").innerText = `${client.last_name_kana} ${client.first_name_kana}`;
-        document.getElementById("client-name").innerText = `${client.last_name} ${client.first_name}`;
-        document.getElementById("client-memo").innerText = client.memo || "なし";
+        // ④ ページネーション表示
+        renderVisitPagination(visitData, id);
 
-        //編集用の入力欄に現在の値をセット（編集用）
-        document.getElementById('edit-client-last-name').value = client.last_name;
-        document.getElementById('edit-client-first-name').value = client.first_name;
-        document.getElementById('edit-client-last-name-kana').value = client.last_name_kana;
-        document.getElementById('edit-client-first-name-kana').value = client.first_name_kana;
-        document.getElementById('edit-client-memo').value = client.memo || "";
-
-        // --- 3. 訪問履歴リストの組み立て ---
-        const visitList = document.getElementById("visit-list");
-        visitList.innerHTML = ""; //ループの前に中身を空にする
-
-        if (visits && visits.length > 0) {
-            visits.forEach((visit) => { //ループ開始
-                // -1. templateコピー
-                const template = document.getElementById("visit-template").content.cloneNode(true);
-
-                // -2. 一番外側の要素を取得し、編集モード切り替え用のIDをつける
-                const row = template.querySelector(".visit-row");
-                row.id = `visit-row-${visit.id}`;
-
-                // -3. 表示用のデータを流し込む
-                template.querySelector(".v-date").innerText = visit.visited_at;
-                template.querySelector(".v-content").innerText = visit.content;
-
-                // -4. 編集用の入力欄(input/textarea)に現在の値をセットする
-                const formattedDate = visit.visited_at ? visit.visited_at.replace(' ', 'T') : '';
-                const editAtInput = template.querySelector(".edit-at");
-                const editContentInput = template.querySelector(".edit-content");
-
-                // -あとでupdateVisitで値を取得しやすいようにIDも振っておく
-                editAtInput.id = `edit-at-${visit.id}`;
-                editAtInput.value = formattedDate;
-
-                editContentInput.id = `edit-content-${visit.id}`;
-                editContentInput.value = visit.content;
-
-                // -5. 各ボタンに動作（関数）を割り当て
-                template.querySelector(".edit-btn").onclick = () => enableEdit(visit.id);
-                template.querySelector(".visit-delete-btn").onclick = () => deleteVisit(visit.id);
-                template.querySelector(".save-btn").onclick = () => updateVisit(visit.id);
-                template.querySelector(".cancel-btn").onclick = () => cancelEdit(visit.id);
-
-                // -6. 完成したものをリストに追加
-                visitList.appendChild(template);
-            });
-            renderVisitPagination(pagination, id); //ページネーションボタン表示
-        } else {
-            visitList.innerHTML = "訪問履歴はまだありません";
-        }
     } catch (error) {
         console.error("詳細データの取得に失敗しました", error);
     }
 }
+
+
+
+// ① データ取得
+const fetchClient = async (id) => {
+    const response = await axios.get(`/api/clients/${id}`);
+    return response.data;
+};
+
+const fetchVisits = async (id, page, keyword) => {
+    const response = await axios.get(`/api/visits?client_id=${id}&page=${page}&keyword=${encodeURIComponent(keyword)}`);
+    return response.data;
+};
+
+
+
+// ② 顧客情報表示
+const displayClientInfo = (client) => {
+    // 表示用
+    document.getElementById("client-kana").innerText = `${client.last_name_kana} ${client.first_name_kana}`;
+    document.getElementById("client-name").innerText = `${client.last_name} ${client.first_name}`;
+    document.getElementById("client-memo").innerText = client.memo || "なし";
+
+    // 編集用入力欄
+    document.getElementById('edit-client-last-name').value = client.last_name;
+    document.getElementById('edit-client-first-name').value = client.first_name;
+    document.getElementById('edit-client-last-name-kana').value = client.last_name_kana;
+    document.getElementById('edit-client-first-name-kana').value = client.first_name_kana;
+    document.getElementById('edit-client-memo').value = client.memo || "";
+};
+
+
+
+// ③ 訪問履歴リスト表示
+const displayVisitList = (visits, clientId) => {
+    const visitList = document.getElementById("visit-list");
+    visitList.innerHTML = "";
+
+    if (!visits || visits.length === 0) {
+        visitList.innerHTML = "訪問履歴はまだありません";
+        return;
+    }
+
+    visits.forEach((visit) => {
+        const template = document.getElementById("visit-template").content.cloneNode(true);
+        const row = template.querySelector(".visit-row");
+        row.id = `visit-row-${visit.id}`;
+
+        // データの流し込み
+        template.querySelector(".v-date").innerText = visit.visited_at;
+        template.querySelector(".v-content").innerText = visit.content;
+
+        // 編集フォームの準備
+        const formattedDate = visit.visited_at ? visit.visited_at.replace(' ', 'T') : '';
+        const editAt = template.querySelector(".edit-at");
+        const editContent = template.querySelector(".edit-content");
+
+        editAt.id = `edit-at-${visit.id}`;
+        editAt.value = formattedDate;
+        editContent.id = `edit-content-${visit.id}`;
+        editContent.value = visit.content;
+
+        // ボタンの動作割り当て
+        template.querySelector(".edit-btn").onclick = () => enableEdit(visit.id);
+        template.querySelector(".visit-delete-btn").onclick = () => deleteVisit(visit.id);
+        template.querySelector(".save-btn").onclick = () => updateVisit(visit.id);
+        template.querySelector(".cancel-btn").onclick = () => cancelEdit(visit.id);
+
+        visitList.appendChild(template);
+    });
+};
 
 
 
