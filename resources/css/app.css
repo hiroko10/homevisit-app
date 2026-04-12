@@ -23,35 +23,74 @@ body {
 /* 訪問一覧 */
 .client-row {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    align-items: center; /* 上下中央揃え */
+    padding: 15px;
+    border-bottom: 1px solid #eee;
     margin-bottom: 10px;
-    padding: 10px;
-    border-bottom: 1px solid #d6d4d4;
-    margin-bottom: 15px;
+    background: #fff;
+    border-radius: 8px;
 }
+
+/* 顔写真 */
+.client-avatar {
+    width: 45px;
+    height: 45px;
+    background-color: #f0f0f0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ccc;
+    flex-shrink: 0;
+}
+
+/* お気に入り */
+.fav-btn {
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 1.4rem;
+    margin: 0 15px; 
+    color: #ccc;
+    transition: transform 0.2s;
+}
+.fav-btn:hover {
+    transform: scale(1.1);
+}
+
+/* 名前 */
 .client-info {
     display: flex;
     flex-direction: column;
+    flex-grow: 1;
 }
+
+.client-link {
+    text-decoration: none;
+}
+
 .client-kana {
-    font-size: 0.7rem;
-    color: #666;
-    margin-bottom: -2px;
+    font-size: 0.75rem;
+    color: #999;
 }
+
 .client-name {
+    font-size: 1.1rem;
     color: #333;
     font-weight: bold;
 }
+
+/* 削除ボタン */
 .client-delete-btn {
     background-color: #ff4d4f;
     color: white;
     border: none;
-    padding: 5px 10px;
-    border-radius: 4px;
+    padding: 6px 12px;
+    border-radius: 6px;
     cursor: pointer;
+    font-size: 0.85rem;
+    margin-left: 10px;
 }
-
 
 
 

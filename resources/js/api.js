@@ -21,3 +21,12 @@ export const fetchClients = async (page, keyword) => {
     const response = await axios.get(`/api/clients?page=${page}&keyword=${encodeURIComponent(keyword)}`);
     return response.data;
 };
+
+// お気に入り
+export const toggleClientFavorite = async (id, isFavorite) => {
+    // PUTリクエストでサーバーの値を更新する
+    const response = await axios.put(`/api/clients/${id}/favorite`, {
+        is_favorite: isFavorite
+    });
+    return response.data;
+};

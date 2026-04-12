@@ -28,6 +28,16 @@ export const displayClientList = (clients) => {
 
     clients.forEach((client) => {
         const template = document.getElementById("client-template").content.cloneNode(true);
+        const favBtn = template.querySelector(".fav-btn"); 
+        if (favBtn) {
+            // お気に入り状態(1/0)によって見た目を切り替える
+            favBtn.innerText = client.is_favorite ? "★" : "☆";
+            // 星の色
+            favBtn.style.color = client.is_favorite ? "#ffca28" : "#ccc";
+            // クリック時に app.js の関数を動かす
+            favBtn.onclick = () => window.handleToggleFavorite(client.id, client.is_favorite);
+        }
+
         template.querySelector(".client-kana").innerText = `${client.last_name_kana} ${client.first_name_kana}`;
         template.querySelector(".client-name").innerText = `${client.last_name} ${client.first_name}`;
         template.querySelector(".client-link").href = `/clients/${client.id}`;

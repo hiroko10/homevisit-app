@@ -1,7 +1,7 @@
 // ===============メイン指示===============
 import axios from "axios";
 
-import { fetchClient, fetchVisits, fetchClients } from "./api";
+import { fetchClient, fetchVisits, fetchClients, toggleClientFavorite } from "./api";
 import { displayClientInfo, displayVisitList, getCurrentClientId, displayClientList } from "./ui";
 
 
@@ -18,6 +18,19 @@ window.getClients = async (page = 1) => {  //引数に page を追加（初期�
     }
 }
 
+// --お気に入り--
+window.handleToggleFavorite = async (id, currentStatus) => {
+    try {
+        // 現在のステータスを反転させてサーバーに送る (trueならfalse、falseならtrue)
+        await toggleClientFavorite(id, !currentStatus);
+
+        // 保存できたら一覧を再取得して、星の表示を最新にする
+        getClients(); 
+    } catch (error) {
+        console.error("お気に入り更新失敗", error);
+        alert("お気に入りの更新に失敗しました");
+    }
+};
 
 
 // --- 詳細ページ用 ---

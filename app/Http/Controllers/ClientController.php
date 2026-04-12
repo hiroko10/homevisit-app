@@ -160,4 +160,25 @@ class ClientController extends Controller
 
         return response()->json(['message', '削除しました']); //削除成功したことをJSONで返す
     }
+
+
+
+    public function toggleFavorite(Request $request, Client $client)
+    {
+        // JavaScriptから送られてきた boolean (true/false) を受け取る
+        $isFavorite = $request->input('is_favorite');
+
+        // DBを更新
+        $client->update([
+            'is_favorite' => $isFavorite
+        ]);
+
+        // 結果をJSON形式で返す
+        return response()->json([
+            'success' => true,
+            'is_favorite' => $client->is_favorite
+        ]);
+    }
+
+
 }
