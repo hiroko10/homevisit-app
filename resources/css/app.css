@@ -52,7 +52,8 @@ body {
     font-size: 1.4rem;
     margin: 0 15px; 
     color: #ccc;
-    transition: transform 0.2s;
+    transition: transform 0.01s;
+    padding: 18px 6px 0 0;
 }
 .fav-btn:hover {
     transform: scale(1.1);

@@ -1,5 +1,7 @@
 // 画面表示用(display)
 
+import axios from "axios";
+
 // ===============共通ツール===============
 
 // --クライアントIDを取得--
@@ -11,6 +13,14 @@ export const displayClientInfo = (client) => {
     document.getElementById("client-kana").innerText = `${client.last_name_kana} ${client.first_name_kana}`;
     document.getElementById("client-name").innerText = `${client.last_name} ${client.first_name}`;
     document.getElementById("client-memo").innerText = client.memo || "なし";
+
+    // 詳細ページのお気に入りボタン制御
+    const favBtn = document.getElementById("detail-fav-btn");
+    if (favBtn) {
+        favBtn.innerText = client.is_favorite ? "★" : "☆";
+        favBtn.style.color = client.is_favorite ? "#ffca28" : "#ccc";
+        favBtn.onclick = () => window.handleToggleFavorite(client.id, client.is_favorite);
+    }
 
     // 編集用入力欄
     document.getElementById('edit-client-last-name').value = client.last_name;
@@ -40,7 +50,7 @@ export const displayClientList = (clients) => {
 
         template.querySelector(".client-kana").innerText = `${client.last_name_kana} ${client.first_name_kana}`;
         template.querySelector(".client-name").innerText = `${client.last_name} ${client.first_name}`;
-        template.querySelector(".client-link").href = `/clients/${client.id}`;
+        template.querySelector(".client-link").href = `/clients/${client.id}?from_page=${currentPage}`;
         template.querySelector(".client-delete-btn").onclick = () => deleteClient(client.id);
         listContainer.appendChild(template);
     });

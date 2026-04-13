@@ -6,7 +6,11 @@ import { displayClientInfo, displayVisitList, getCurrentClientId, displayClientL
 
 
 // --- 訪問一覧ページ用 ---
-window.getClients = async (page = 1) => {  //引数に page を追加（初期値は1）
+let currentPage = 1;
+
+window.getClients = async (page = 1) => {  //デフォルトを１ページにする
+    currentPage = page;
+
     try {
         const keyword = document.getElementById("search-keyword")?.value || "";
         const pagination = await fetchClients(page, keyword);
@@ -21,11 +25,19 @@ window.getClients = async (page = 1) => {  //引数に page を追加（初期�
 // --お気に入り--
 window.handleToggleFavorite = async (id, currentStatus) => {
     try {
-        // 現在のステータスを反転させてサーバーに送る (trueならfalse、falseならtrue)
-        await toggleClientFavorite(id, !currentStatus);
+        // サーバー側のデータ更新：現在のステータスを反転させてサーバーに送る (trueならfalse、falseならtrue)
+         await toggleClientFavorite(id, !currentStatus);
 
-        // 保存できたら一覧を再取得して、星の表示を最新にする
-        getClients(); 
+         // 画面を書き換える
+        if (document.getElementById("client-list")) {
+            // --- 訪問一覧ページにいる場合 ---
+            getClients(currentPage);
+        } else if (document.getElementById("detail-fav-btn")) {
+            // --- 詳細ページにいる場合 ---
+            // displayClientInfoを直接呼ぶのではなく、すでにapp.jsにある詳細情報を取得して表示する関数を呼び直す
+            getClientDetail(id);
+        }
+
     } catch (error) {
         console.error("お気に入り更新失敗", error);
         alert("お気に入りの更新に失敗しました");

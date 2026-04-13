@@ -9,8 +9,11 @@
         {{-- 個人名の表示 --}}
         <div id="client-view-mode">
             <div style="font-size: 0.8rem; color: #888;" id="client-kana"></div>
-            <div style="font-size: 1.5rem; font-weight: bold; margin-bottom: 10px;">
+            <div style="font-size: 1.5rem; font-weight: bold; margin-bottom: 10px; display: flex; align-items: center; gap: 10px;">
                 <span id="client-name"></span>
+                <button type="button" id="detail-fav-btn" style="border:none; background:none; cursor:pointer; font-size:1.5rem; line-height:1; color:#ccc; padding:0;">
+                    ☆
+                </button>
             </div>
             <div>特徴：<span id="client-memo"></span></div>
             <button onclick="enableClientEdit()" style="margin-top:10px; font-size:0.8rem; color: rgb(50, 159, 255); background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 5px;">
