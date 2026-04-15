@@ -17,8 +17,8 @@ export const fetchVisits = async (id, page, keyword) => {
 };
 
 // （ページネーションの情報も返す）顧客のリスト取得 - 訪問一覧ページ
-export const fetchClients = async (page, keyword) => {
-    const response = await axios.get(`/api/clients?page=${page}&keyword=${encodeURIComponent(keyword)}`);
+export const fetchClients = async (page = 1, keyword = "", sort = 'updated_at', order = 'desc') => {
+    const response = await axios.get(`/api/clients?page=${page}&keyword=${encodeURIComponent(keyword)}&sort=${sort}&order=${order}`);
     return response.data;
 };
 

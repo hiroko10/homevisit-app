@@ -56,6 +56,30 @@
     </div>
 
 
+    {{-- ソートボタン --}}
+    <div style="margin-bottom: 15px; font-size: 0.9rem; color: #666; display: flex; align-items: center; gap: 10px;">
+        <span>並び替え：</span>
+
+        <button type="button" onclick="changeSort('last_name_kana')" style="background: none; border: 1px solid #ccc; padding: 5px 12px; border-radius: 20px; cursor: pointer;">
+            名前
+        </button>
+
+        <button type="button" onclick="changeSort('updated_at')" style="background: #eee; border: 1px solid #ccc; padding: 5px 12px; border-radius: 20px; cursor: pointer;">
+            最終訪問日
+        </button>
+
+        <button type="button" onclick="changeSort('is_favorite')" style="background: none; border: 1px solid #ccc; padding: 5px 12px; border-radius: 20px; cursor: pointer;">
+            お気に入り
+        </button>
+    </div>
+
+    {{-- 50音フィルター（あかさたな） --}}
+    <div id="syllabary-filter" style="margin-bottom: 20px; font-size: 1.05rem;">
+        表示： <span style="color: #02afe4">あ　か　さ　た　な　は　ま　や　ら　わ　他</span>
+    </div>
+
+
+
 
 
     {{-- JSで使うため（画面非表示） --}}

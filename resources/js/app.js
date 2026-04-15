@@ -6,14 +6,16 @@ import { displayClientInfo, displayVisitList, getCurrentClientId, displayClientL
 
 
 // --- 訪問一覧ページ用 ---
-let currentPage = 1;
+window.currentPage = 1;
+window.currentSort = 'updated_at'; // デフォルトは更新順
+window.currentOrder = 'desc';      // デフォルトは降順
 
 window.getClients = async (page = 1) => {  //デフォルトを１ページにする
     window.currentPage = page;
 
     try {
         const keyword = document.getElementById("search-keyword")?.value || "";
-        const pagination = await fetchClients(page, keyword);
+        const pagination = await fetchClients(page, keyword, window.currentSort, window.currentOrder);
 
         displayClientList(pagination.data);
         renderPaginationCommon(pagination, "pagination-container", (p) => getClients(p));
@@ -21,6 +23,24 @@ window.getClients = async (page = 1) => {  //デフォルトを１ページに�
         console.log("データの取得に失敗しました", error);
     }
 }
+
+// 検索 ---ソートボタンが押された時---
+window.changeSort = (sort) => {
+    // 同じ項目が押されたら昇順・降順を反転させる
+    if (window.currentSort === sort) {
+        window.currentOrder = (window.currentOrder === 'asc') ? 'desc' : 'asc';
+    } else {
+        window.currentSort = sort;
+        // 名前（kana）の時は昇順(asc)、日付の時は降順(desc)をデフォルト
+        window.currentOrder = (sort === 'last_name_kana') ? 'asc' : 'desc';
+    }
+
+    // ソートを変えたら1ページ目から表示し直す
+    getClients(1);
+}
+
+
+
 
 // --お気に入り--
 window.handleToggleFavorite = async (id, currentStatus) => {

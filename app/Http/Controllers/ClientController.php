@@ -21,6 +21,9 @@ class ClientController extends Controller
     {
         $keyword = $request->query('keyword');
 
+        $sort = $request->query('sort', 'last_visit_at');
+        $order = $request->query('order', 'desc');
+
         // クエリビルダを開始
         $query = Client::query();
 
@@ -34,8 +37,20 @@ class ClientController extends Controller
             });
         }
 
+        // 並び替えの実行
+        $allowedSorts = ['last_name_kana', 'updated_at', 'created_at', 'is_favorite'];
+        if (in_array($sort, $allowedSorts)) {
+            $query->orderBy($sort, $order);
+        } else {
+            // 想定外のときはデフォルトの並び順
+            $query->orderBy('last_visit_at', 'desc');
+        }
+
+
+
         // 最後にページネーションを実行
-        $clients = $query->orderBy('last_name_kana', 'asc')->paginate(10);
+        $clients = $query->paginate(10);
+        // $clients = $query->orderBy('last_name_kana', 'asc')->paginate(10);
 
         return response()->json($clients);
     }
