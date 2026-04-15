@@ -68,6 +68,22 @@ window.getClientDetail = async (id, page = 1) => {
 }
 
 
+// 一覧ページ（/clients）に戻ってきたとき、URLに ?page=2 と書いてあれば、自動的に2ページ目を読み込むように設定
+
+window.onload = () => {
+    // 1. URLの「?page=X」の部分をチェックする
+    const urlParams = new URLSearchParams(window.location.search);
+    const pageFromUrl = urlParams.get('page');
+
+    if (document.getElementById("client-list")) {
+        // 2. URLにページ指定があればそのページを、なければ1ページ目を表示
+        const targetPage = pageFromUrl ? parseInt(pageFromUrl) : 1;
+        getClients(targetPage);
+    }
+};
+
+
+
 
 // ===============自動判定===============
 // HTMLの読み込み終了後、URLの中身を確認しJS実行(詳細ページか一覧ページかを自動判定)

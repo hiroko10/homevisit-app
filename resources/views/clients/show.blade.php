@@ -4,9 +4,10 @@
 <div class="container">
 
 
+    {{-- 詳細画面の「<<一覧に戻る」リンクが、URLについている（from_page）を読み取って戻る --}}
     @php
-    // URLの ?from_page=2 を読み取る、なければ 1 ページ目とする
-    $fromPage = request('from_page', 1);
+        // URLの ?from_page=2 を読み取る、なければ 1 ページ目とする
+        $fromPage = request('from_page', 1);
     @endphp
 
     <div style="margin-bottom: 20px;">
@@ -16,8 +17,6 @@
         </a>
     </div>
 
-{{-- 
-    <a href="/clients">一覧に戻る</a> --}}
 
 
 
