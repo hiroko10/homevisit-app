@@ -9,7 +9,7 @@ import { displayClientInfo, displayVisitList, getCurrentClientId, displayClientL
 let currentPage = 1;
 
 window.getClients = async (page = 1) => {  //デフォルトを１ページにする
-    currentPage = page;
+    window.currentPage = page;
 
     try {
         const keyword = document.getElementById("search-keyword")?.value || "";

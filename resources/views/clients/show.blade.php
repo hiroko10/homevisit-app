@@ -3,7 +3,25 @@
 
 <div class="container">
 
-    <h1>個人ページ</h1>
+
+    @php
+    // URLの ?from_page=2 を読み取る、なければ 1 ページ目とする
+    $fromPage = request('from_page', 1);
+    @endphp
+
+    <div style="margin-bottom: 20px;">
+        {{-- 一覧に戻る際、受け取ったページ番号を ?page= として渡す --}}
+        <a href="/clients?page={{ $fromPage }}" style="text-decoration: none; color: #666; font-size: 0.9rem;">
+            <i class="fa-solid fa-chevron-left"></i> 一覧に戻る
+        </a>
+    </div>
+
+{{-- 
+    <a href="/clients">一覧に戻る</a> --}}
+
+
+
+    <h1 style="margin: 60px 20px 10px 20px">個人ページ</h1>
 
     <div id="client-info" style="background: #fff; padding: 20px; border-radius: 8px; border: 1px solid #eee;">
         {{-- 個人名の表示 --}}
@@ -22,21 +40,36 @@
             </button>
         </div>
 
-        {{-- 個人名の編集 --}}
-        <div id="client-edit-mode" style="display: none;">
-            <h2>基本情報を編集</h2>
-            <label>ふりがな：</label><br>
-            <input type="text" id="edit-client-last-name-kana" placeholder="せい" style="font-size:0.7rem; border-radius: 8px;">
-            <input type="text" id="edit-client-first-name-kana" placeholder="めい" style="font-size:0.7rem; border-radius: 8px;"><br>
-            <label>名前：</label><br>
-            <input type="text" id="edit-client-last-name" placeholder="姓" style="font-size:1.2rem; font-weight:bold; border-radius: 8px;">
-            <input type="text" id="edit-client-first-name" placeholder="名" style="font-size:1.2rem; font-weight:bold; border-radius: 8px;"><br>
-            <label>特徴：</label><br>
-            <textarea id="edit-client-memo" style="width:100%; margin-top:10px; border-radius: 8px;"></textarea>
-            
-            <div style="margin-top:10px;">
-                <button type="button" onclick="updateClientInfo()" style="background: #28a745; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer;">保存</button>
-                <button type="button" onclick="cancelClientEdit()" style="background: #6c757d; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer;">キャンセル</button>
+        {{-- 個人情報の編集 --}}
+        <div id="client-edit-mode" style="display: none; background: #fbfeff; padding: 20px; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 30px;">
+            <h2 style="font-size: 1rem; margin-bottom: 20px;">基本情報を編集</h2>
+
+            <div style="margin-bottom: 10px;">
+                <label style="font-size: 0.9rem; color: #555;">名前：</label><br>
+                <div style="display: flex; gap: 10px; margin-top: 5px;">
+                    <input type="text" id="edit-client-last-name" placeholder="姓" style="flex: 1; min-width: 0; font-size:1.2rem; font-weight:bold; border-radius: 4px; border: 1px solid #ccc; padding: 8px;">
+                    <input type="text" id="edit-client-first-name" placeholder="名" style="flex: 1; min-width: 0; font-size:1.2rem; font-weight:bold; border-radius: 4px; border: 1px solid #ccc; padding: 8px;"><br>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 10px;">
+                <label style="font-size: 0.9rem; color: #555;">かな：</label><br>
+                <div style="display: flex; gap: 10px; margin-top: 5px;">
+                    <input type="text" id="edit-client-last-name-kana" placeholder="せい" style="flex: 1; min-width: 0; font-size:0.8rem; border-radius: 4px; border: 1px solid #ccc; padding: 8px;">
+                    <input type="text" id="edit-client-first-name-kana" placeholder="めい" style="flex: 1; min-width: 0; font-size:0.8rem; border-radius: 4px; border: 1px solid #ccc; padding: 8px;"><br>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="font-size: 0.9rem; color: #555;">特徴：</label><br>
+                <div style="display: flex; gap: 10px; margin-top: 5px;">
+                    <textarea id="edit-client-memo" style="width:100%; margin-top:10px; border-radius: 4px; border: 1px solid #ccc; padding: 8px; box-sizing: border-box;"></textarea>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+                <button type="button" onclick="updateClientInfo()" style="flex: 1; background: #009688; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; flex: 1; font-weight: bold;">保存</button>
+                <button type="button" onclick="cancelClientEdit()" style="flex: 1; background: #6c757d; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer;">キャンセル</button>
             </div>
         </div>
     </div>
@@ -46,40 +79,44 @@
 
     {{-- 個人ページ内での訪問履歴の追加 --}}
     {{-- フォーム表示のボタン --}}
-    <div style="display: flex; justify-content: flex-end; margin-bottom: 20px;">
-        <button id="show-add-visit-btn" onclick="enableAddVisit()" style="margin-bottom: 20px; background: #57b8ce; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer;">
+    <div style="display: flex; justify-content: flex-start; margin: 20px;">
+        <button id="show-add-visit-btn" onclick="enableAddVisit()" style="margin-bottom: 20px; background: #009688; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer;">
         ＋新規訪問履歴を追加
         </button>
     </div>
 
     <div id="add-visit-container" style="display:none; background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-        <h3>訪問履歴の追加</h3>
-        <div style="margin-bottom: 10px;">
+        <h3 style="margin: 10px 0px 30px;">訪問履歴の追加</h3>
+        <div style="margin-bottom: 20px;">
             <label>訪問日：</label><br>
             <input type="datetime-local" id="new-visit-at" style="border-radius: 8px;">
         </div>
-        <div style="margin-bottom: 10px;">
-            <label>内容：</label><br>
-            <textarea id="new-visit-content" rows="3" style="width: 100%; border-radius: 8px;" placeholder="訪問した内容をご入力"></textarea>
+        <div style="margin-bottom: 20px;">
+            <label>訪問内容：</label><br>
+            <textarea id="new-visit-content" rows="3" style="width: 100%; border-radius: 8px;" placeholder="訪問した内容をご入力ください..."></textarea>
         </div>
-        <button type="button" onclick="addVisit()" style="background: #57b8ce; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer;">
-            訪問履歴の保存
-        </button>
-        <button type="button" onclick="cancelAddVisit()" style="background: #6c757d; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer;">
-            キャンセル
-        </button>
+        <div style="display: flex; gap: 10px;">
+            <button type="button" onclick="addVisit()" style="flex: 1; background: #009688; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer;">
+                訪問履歴の保存
+            </button>
+            <button type="button" onclick="cancelAddVisit()" style="flex: 1; background: #6c757d; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer;">
+                キャンセル
+            </button>
+        </div>
     </div>
 
 
     {{-- 検索入力欄 --}}
-    <div style="margin-bottom: 20px; display: flex; gap: 8px; width: 100%;">
-        <input type="text" id="visit-search" placeholder="訪問内容を検索..."
-            style="padding: 10px; border: 1px solid #ccc; border-radius: 4px; flex: 1; font-size: 1rem; outline: none;">
+    <div style="display: flex; justify-content: space-between; align-items: center; gap: 20px; margin: 40px 20px;">
+        <div style="position: relative; flex: 1; display: flex; gap: 10px;">
+            <input type="text" id="visit-search" placeholder="訪問内容を検索..."
+                style="padding: 10px; border: 1px solid #ccc; border-radius: 8px; flex: 1; font-size: 1rem; outline: none;">
 
-        <button onclick="getClientDetail(window.location.pathname.split('/').pop())"
-            style="padding: 8px 15px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; white-space: nowrap; font-weight: bold;">
-            検索
-        </button>
+            <button onclick="getClientDetail(window.location.pathname.split('/').pop())"
+                style="padding: 8px 15px; background: #7b7b7b; color: white; border: none; border-radius: 8px; cursor: pointer; white-space: nowrap; font-weight: bold;">
+                検索
+            </button>
+        </div>
     </div>
 
 
@@ -122,14 +159,13 @@
 
 
     {{-- 訪問履歴 --}}
-    <h2>訪問履歴</h2>
-    <div id="visit-list">履歴を読み込み中...</div>
+    <h2 style="margin: 60px 20px 10px 20px">訪問履歴</h2>
+    <div id="visit-list" style="margin: 10px;">履歴を読み込み中...</div>
 
     <div id="visit-pagination-container" style="margin-top: 20px; text-align: center;"></div>
 
     <br>
 
-    <a href="/clients">一覧に戻る</a>
 
 </div>
 
