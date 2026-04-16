@@ -48,6 +48,37 @@ class ClientController extends Controller
 
 
 
+        // 50音フィルター
+        $keyword = $request->query('keyword');
+        $kana = $request->query('kana');
+
+        $query = Client::query();
+
+        if (!empty($kana)) {
+            $kanaMap = [
+                'あ' => ['あ','い','う','え','お'],
+                'か' => ['か','き','く','け','こ','が','ぎ','ぐ','げ','ご'],
+                'さ' => ['さ','し','す','せ','そ','ざ','じ','ず','ぜ','ぞ'],
+                'た' => ['た','ち','つ','て','と','だ','ぢ','づ','で','ど'],
+                'な' => ['な','に','ぬ','ね','の'],
+                'は' => ['は','ひ','ふ','へ','ほ','ば','び','ぶ','べ','ぼ','ぱ','ぴ','ぷ','ぺ','ぽ'],
+                'ま' => ['ま','み','む','め','も'],
+                'や' => ['や','ゆ','よ'],
+                'ら' => ['ら','り','る','れ','ろ'],
+                'わ' => ['わ','を','ん'],
+            ];
+
+            $targets = $kanaMap[$kana] ?? [$kana];
+
+            $query->where(function($q) use ($targets) {
+                foreach ($targets as $char) {
+                    $q->orWhere('last_name_kana', 'like', "{$char}%");
+                }
+            });
+        }
+
+
+
         // 最後にページネーションを実行
         $clients = $query->paginate(10);
         // $clients = $query->orderBy('last_name_kana', 'asc')->paginate(10);

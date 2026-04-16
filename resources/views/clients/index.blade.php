@@ -74,8 +74,18 @@
     </div>
 
     {{-- 50音フィルター（あかさたな） --}}
-    <div id="syllabary-filter" style="margin-bottom: 20px; font-size: 1.05rem;">
-        表示： <span style="color: #02afe4">あ　か　さ　た　な　は　ま　や　ら　わ　他</span>
+    <div id="syllabary-filter" style="margin-bottom: 20px; font-size: 1.05rem; color: #666;">
+        表示：
+        <span class="kana-btn" onclick="filterByKana('あ')" style="cursor: pointer; color: #02afe4; margin-right: 10px;">あ</span>
+        <span class="kana-btn" onclick="filterByKana('か')" style="cursor: pointer; color: #02afe4; margin-right: 10px;">か</span>
+        <span class="kana-btn" onclick="filterByKana('さ')" style="cursor: pointer; color: #02afe4; margin-right: 10px;">さ</span>
+        <span class="kana-btn" onclick="filterByKana('た')" style="cursor: pointer; color: #02afe4; margin-right: 10px;">た</span>
+        <span class="kana-btn" onclick="filterByKana('な')" style="cursor: pointer; color: #02afe4; margin-right: 10px;">な</span>
+        <span class="kana-btn" onclick="filterByKana('は')" style="cursor: pointer; color: #02afe4; margin-right: 10px;">は</span>
+        <span class="kana-btn" onclick="filterByKana('ま')" style="cursor: pointer; color: #02afe4; margin-right: 10px;">ま</span>
+        <span class="kana-btn" onclick="filterByKana('や')" style="cursor: pointer; color: #02afe4; margin-right: 10px;">や</span>
+        <span class="kana-btn" onclick="filterByKana('ら')" style="cursor: pointer; color: #02afe4; margin-right: 10px;">ら</span>
+        <span class="kana-btn" onclick="filterByKana('わ')" style="cursor: pointer; color: #02afe4; margin-right: 10px;">わ</span>
     </div>
 
 
