@@ -1,6 +1,6 @@
-<head>
+{{-- <head>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
+</head> --}}
 
 <x-app-layout>
     <div class="container">

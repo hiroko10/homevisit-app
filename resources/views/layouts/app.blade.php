@@ -27,7 +27,7 @@
                 top: 0;
                 z-index: 50;
                 width: 100%;
-                background-color: rgba(255, 255, 255, 0.8); /* 透明度80% */
+                background-color: rgba(255, 255, 255, 0.1);
                 backdrop-filter: blur(8px); /* 背景ぼかし */
                 border-bottom: 1px solid #e5e7eb;
             }
@@ -46,6 +46,11 @@
                 font-size: 1.25rem;
                 color: #111827;
                 text-decoration: none;
+                cursor: pointer;
+            }
+
+            .logo:hover {
+                opacity: 0.7;
             }
 
             .nav-links {
@@ -93,11 +98,20 @@
         <div class="main-container">
             <header class="custom-header">
                 <div class="header-inner">
-                    <a href="/" class="logo">KATEIHOUMON</a>
+                    <a href="/clients" class="logo">KATEIHOUMON</a>
                     <nav class="nav-links">
                         {{-- <a href="/create" class="nav-item">新規入力</a> --}}
                         <a href="/clients" class="nav-item">訪問一覧</a>
-                        <button class="logout-button">Log Out</button>
+                        
+                        <form id="logout-form" method="POST" action="{{ route('logout') }}" style="display: none;">
+                            @csrf
+                        </form>
+
+                        <button type="button" class="logout-button" 
+                            onclick="event.preventDefault(); 
+                            document.getElementById('logout-form').submit();">
+                            Log Out
+                        </button>
                     </nav>
                 </div>
             </header>

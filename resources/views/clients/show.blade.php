@@ -15,7 +15,7 @@
         <div style="margin-bottom: 20px;">
             {{-- 一覧に戻る際、受け取ったページ番号を ?page= として渡す --}}
             <a href="/clients?page={{ $fromPage }}" style="text-decoration: none; color: #666; font-size: 0.9rem;">
-                <i class="fa-solid fa-chevron-left"></i> 一覧に戻る
+                <i class="fa-solid fa-chevron-left"></i>　一覧に戻る
             </a>
         </div>
 

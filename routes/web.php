@@ -1,39 +1,33 @@
 <?php
 
-use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ClientController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\VisitController;
 
-
-
-
-Route::resource('clients', ClientController::class);
-
-Route::get('/clients/{client}/visits/create', [VisitController::class, 'create']);
-Route::post('/clients/{client}/visits', [VisitController::class, 'store']);
-
-Route::get('/visits/{visit}/edit', [VisitController::class, 'edit']);
-Route::put('/visits/{visit}', [VisitController::class, 'update']);
-Route::delete('/visits/{visit}', [VisitController::class, 'destroy']);
-
-
-Route::get('/clients', function () {
-    return view('clients.index'); // index.blade.php を表示する
-});
-
+// 1. トップページにアクセスしたら、ログインしていれば一覧へ
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/clients');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
+// 2. ログイン（auth）している時だけアクセスできるグループ
 Route::middleware('auth')->group(function () {
+
+    // --- 顧客一覧（Client） ---
+    Route::get('/clients', [ClientController::class, 'Index'])->name('clients.index');
+    Route::get('/api/clients', [ClientController::class, 'apiIndex'])->name('api.clients.index');
+    Route::get('/clients/create', [ClientController::class, 'create'])->name('clients.create');
+    Route::get('/clients/{id}', [ClientController::class, 'show'])->name('clients.show');
+    // 必要に応じて、保存(store)や編集(edit)などのルートもここに追加
+
+    // --- プロフィール（Breeze標準） ---
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+// Breezeが作ったダッシュボード
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
 
 require __DIR__.'/auth.php';
