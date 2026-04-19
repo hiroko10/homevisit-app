@@ -59,36 +59,19 @@
     {{-- ソートボタン --}}
     <div style="margin-bottom: 15px; font-size: 0.9rem; color: #666; display: flex; align-items: center; gap: 10px;">
         <span>並び替え：</span>
+        
+        <button type="button" onclick="changeSort('updated_at')" style="background: none; border: 1px solid #ccc; padding: 5px 12px; border-radius: 20px; cursor: pointer;">
+            更新日
+        </button>
 
         <button type="button" onclick="changeSort('last_name_kana')" style="background: none; border: 1px solid #ccc; padding: 5px 12px; border-radius: 20px; cursor: pointer;">
             名前
-        </button>
-
-        <button type="button" onclick="changeSort('updated_at')" style="background: #eee; border: 1px solid #ccc; padding: 5px 12px; border-radius: 20px; cursor: pointer;">
-            最終訪問日
         </button>
 
         <button type="button" onclick="changeSort('is_favorite')" style="background: none; border: 1px solid #ccc; padding: 5px 12px; border-radius: 20px; cursor: pointer;">
             お気に入り
         </button>
     </div>
-
-    {{-- 50音フィルター（あかさたな） --}}
-    <div id="syllabary-filter" style="margin-bottom: 20px; font-size: 1.05rem; color: #666;">
-        表示：
-        <span class="kana-btn" onclick="filterByKana('あ')" style="cursor: pointer; color: #02afe4; margin-right: 10px;">あ</span>
-        <span class="kana-btn" onclick="filterByKana('か')" style="cursor: pointer; color: #02afe4; margin-right: 10px;">か</span>
-        <span class="kana-btn" onclick="filterByKana('さ')" style="cursor: pointer; color: #02afe4; margin-right: 10px;">さ</span>
-        <span class="kana-btn" onclick="filterByKana('た')" style="cursor: pointer; color: #02afe4; margin-right: 10px;">た</span>
-        <span class="kana-btn" onclick="filterByKana('な')" style="cursor: pointer; color: #02afe4; margin-right: 10px;">な</span>
-        <span class="kana-btn" onclick="filterByKana('は')" style="cursor: pointer; color: #02afe4; margin-right: 10px;">は</span>
-        <span class="kana-btn" onclick="filterByKana('ま')" style="cursor: pointer; color: #02afe4; margin-right: 10px;">ま</span>
-        <span class="kana-btn" onclick="filterByKana('や')" style="cursor: pointer; color: #02afe4; margin-right: 10px;">や</span>
-        <span class="kana-btn" onclick="filterByKana('ら')" style="cursor: pointer; color: #02afe4; margin-right: 10px;">ら</span>
-        <span class="kana-btn" onclick="filterByKana('わ')" style="cursor: pointer; color: #02afe4; margin-right: 10px;">わ</span>
-    </div>
-
-
 
 
 

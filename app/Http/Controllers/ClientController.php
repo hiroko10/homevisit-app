@@ -16,18 +16,19 @@ class ClientController extends Controller
     }
 
 
-    // JSからアクセスしたときにapi.phpから呼ばれる「データ」を返す
+    // JSからアクセスしたときにapi.phpから呼ばれるデータを返す
     public function apiIndex(Request $request)
     {
+        // 1. パラメータの取得
         $keyword = $request->query('keyword');
+        $sort = $request->query('sort');
+        $order = $request->query('order');
 
-        $sort = $request->query('sort', 'last_visit_at');
-        $order = $request->query('order', 'desc');
-
-        // クエリビルダを開始
+        // 2. クエリの開始
         $query = Client::query();
 
-        // もしキーワードがあれば絞り込み
+        // 3. 検索処理
+        // キーワードがある場合のみwhereを追加
         if (!empty($keyword)) {
             $query->where(function($q) use ($keyword) {
                 $q->where('last_name', 'like', "%{$keyword}%")
@@ -37,55 +38,31 @@ class ClientController extends Controller
             });
         }
 
-        // 並び替えの実行
-        $allowedSorts = ['last_name_kana', 'updated_at', 'created_at', 'is_favorite'];
-        if (in_array($sort, $allowedSorts)) {
-            $query->orderBy($sort, $order);
+        // 4. ソート処理（苗字のフリガナを純粋な文字として再定義した上で、指定された方向（昇順か降順か）で並び替え）
+        if ($sort === 'last_name_kana') {
+        // 名前
+            $query->orderByRaw("CAST(last_name_kana AS CHAR) {$order}")
+                ->orderByRaw("CAST(first_name_kana AS CHAR) {$order}");
+            
+        } else if ($sort === 'updated_at') {
+            // 更新日
+            $query->orderBy('updated_at', $order);
+            
+        } else if ($sort === 'is_favorite') {
+            // お気に入り
+            $query->orderBy('is_favorite', $order);
+            
         } else {
-            // 想定外のときはデフォルトの並び順
-            $query->orderBy('last_visit_at', 'desc');
-        }
-
-
-
-        // 50音フィルター
-        $keyword = $request->query('keyword');
-        $kana = $request->query('kana');
-
-        $query = Client::query();
-
-        if (!empty($kana)) {
-            $kanaMap = [
-                'あ' => ['あ','い','う','え','お'],
-                'か' => ['か','き','く','け','こ','が','ぎ','ぐ','げ','ご'],
-                'さ' => ['さ','し','す','せ','そ','ざ','じ','ず','ぜ','ぞ'],
-                'た' => ['た','ち','つ','て','と','だ','ぢ','づ','で','ど'],
-                'な' => ['な','に','ぬ','ね','の'],
-                'は' => ['は','ひ','ふ','へ','ほ','ば','び','ぶ','べ','ぼ','ぱ','ぴ','ぷ','ぺ','ぽ'],
-                'ま' => ['ま','み','む','め','も'],
-                'や' => ['や','ゆ','よ'],
-                'ら' => ['ら','り','る','れ','ろ'],
-                'わ' => ['わ','を','ん'],
-            ];
-
-            $targets = $kanaMap[$kana] ?? [$kana];
-
-            $query->where(function($q) use ($targets) {
-                foreach ($targets as $char) {
-                    $q->orWhere('last_name_kana', 'like', "{$char}%");
-                }
-            });
-        }
-
-
-
-        // 最後にページネーションを実行
-        $clients = $query->paginate(10);
-        // $clients = $query->orderBy('last_name_kana', 'asc')->paginate(10);
-
-        return response()->json($clients);
+            // それ以外（初期表示など）は最新順
+            $query->orderBy('updated_at', 'desc');
     }
 
+
+        // 5. 結果を返却
+        return response()->json($query->paginate(10));
+    }
+
+    
 
 
     // 特定のクライアント内の訪問履歴を検索するAPI
@@ -182,7 +159,7 @@ class ClientController extends Controller
     public function update(Request $request, $id) 
     {
     $client = Client::findOrFail($id);
-        // dd($request->all());
+
     $validated = $request->validate([
         'last_name' => 'required|string',
         'first_name' => 'required|string',

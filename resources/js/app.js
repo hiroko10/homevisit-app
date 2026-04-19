@@ -15,7 +15,8 @@ window.getClients = async (page = 1) => {  //デフォルトを１ページに�
 
     try {
         const keyword = document.getElementById("search-keyword")?.value || "";
-        const pagination = await fetchClients(page, keyword, window.currentSort, window.currentOrder);
+        const pagination = await fetchClients(
+            page, keyword, window.currentSort, window.currentOrder);
 
         displayClientList(pagination.data);
         renderPaginationCommon(pagination, "pagination-container", (p) => getClients(p));
@@ -38,40 +39,6 @@ window.changeSort = (sort) => {
     // ソートを変えたら1ページ目から表示し直す
     getClients(1);
 }
-
-
-// 50音フィルター
-window.currentKana = ""; // 今選んでいる「行」を保持する変数
-
-window.filterByKana = (kana) => {
-    // もし同じ文字をクリックしたらフィルター解除、そうでなければその文字をセット
-    window.currentKana = (window.currentKana === kana) ? "" : kana;
-
-    // 検索窓を空にする
-    document.getElementById("search-keyword").value = "";
-
-    // 1ページ目から再取得
-    getClients(1);
-
-    // UIの見た目を変える
-    // updateKanaUI(kana);
-};
-
-window.updateKanaUI = (selectedKana) => {
-    // すべての「かなボタン」から active クラスを外す、またはスタイルを戻す
-    const buttons = document.querySelectorAll('.kana-btn');
-    buttons.forEach(btn => {
-        if (btn.innerText === selectedKana && window.currentKana !== "") {
-            btn.style.fontWeight = "bold";
-            btn.style.textDecoration = "underline";
-            btn.style.color = "#ff4500"; // 選ばれたら色を変える（例）
-        } else {
-            btn.style.fontWeight = "normal";
-            btn.style.textDecoration = "none";
-            btn.style.color = "#02afe4"; // 元の色に戻す
-        }
-    });
-};
 
 
 // --お気に入り--
