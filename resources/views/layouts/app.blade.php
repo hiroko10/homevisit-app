@@ -5,32 +5,112 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>{{ config('app.name', 'KATEIHOUMON') }}</title>
 
-        <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-        <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+        <style>
+            /* ページ全体の構造：footerを常に下に */
+            .main-container {
+                display: flex;
+                flex-direction: column;
+                min-height: 100vh;
+                background-color: #f9fafb; /* 薄いグレーの背景 */
+            }
+
+            /* 透明ヘッダー（スクロールしても固定） */
+            .custom-header {
+                position: sticky;
+                top: 0;
+                z-index: 50;
+                width: 100%;
+                background-color: rgba(255, 255, 255, 0.8); /* 透明度80% */
+                backdrop-filter: blur(8px); /* 背景ぼかし */
+                border-bottom: 1px solid #e5e7eb;
+            }
+
+            .header-inner {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 1rem 1.5rem;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .logo {
+                font-weight: bold;
+                font-size: 1.25rem;
+                color: #111827;
+                text-decoration: none;
+            }
+
+            .nav-links {
+                display: flex;
+                gap: 1.5rem;
+                align-items: center;
+            }
+
+            .nav-item {
+                text-decoration: none;
+                color: #374151;
+                font-size: 0.95rem;
+            }
+
+            .logout-button {
+                border: 1px solid #374151;
+                background: white;
+                padding: 0.4rem 1.2rem;
+                border-radius: 0.5rem;
+                cursor: pointer;
+                font-size: 0.9rem;
+            }
+
+            /* Main contents */
+            main {
+                flex-grow: 1; /* これでフッターを下に押し出す */
+                width: 100%;
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 2rem 1.5rem;
+            }
+
+            /* Footer */
+            .custom-footer {
+                width: 100%;
+                padding: 1rem 0;
+                background-color: #e5e7eb;
+                text-align: center;
+                color: #6b7280;
+                font-size: 0.875rem;
+            }
+        </style>
     </head>
     <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
-            @include('layouts.navigation')
+        <div class="main-container">
+            <header class="custom-header">
+                <div class="header-inner">
+                    <a href="/" class="logo">KATEIHOUMON</a>
+                    <nav class="nav-links">
+                        {{-- <a href="/create" class="nav-item">新規入力</a> --}}
+                        <a href="/clients" class="nav-item">訪問一覧</a>
+                        <button class="logout-button">Log Out</button>
+                    </nav>
+                </div>
+            </header>
 
-            <!-- Page Heading -->
-            @isset($header)
-                <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endisset
-
-            <!-- Page Content -->
+            {{-- page content --}}
             <main>
                 {{ $slot }}
             </main>
+
+            {{-- Footer --}}
+            <footer class="custom-footer">
+                KATEIHOUMON
+            </footer>
         </div>
     </body>
 </html>
