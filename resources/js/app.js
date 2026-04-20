@@ -82,6 +82,26 @@ window.handleToggleVisitFavorite = async (visitId, currentStatus, clientId) => {
 };
 
 
+// --- 訪問履歴用ソート ---
+window.currentVisitSort = 'visited_at';
+window.currentVisitOrder = 'desc';
+
+window.changeVisitSort = (sort) => {
+    if (window.currentVisitSort === sort) {
+        // 同じボタンが押されたら昇順・降順を反転
+        window.currentVisitOrder = (window.currentVisitOrder === 'asc') ? 'desc' : 'asc';
+    } else {
+        window.currentVisitSort = sort;
+        window.currentVisitOrder = 'desc'; // 切り替え時は降順デフォルト
+    }
+    
+    // 現在のクライアントIDを取得して再読み込み
+    const clientId = getCurrentClientId(); 
+    window.getClientDetail(clientId, 1);
+};
+
+
+
 
 // --- 詳細ページ用 ---
 window.getClientDetail = async (id, page = 1) => {
@@ -90,7 +110,13 @@ window.getClientDetail = async (id, page = 1) => {
 
         // ① データ取得
         const client = await fetchClient(id);
-        const visitData = await fetchVisits(id, page, keyword);
+        const visitData = await fetchVisits(
+            id,
+            page,
+            keyword,
+            window.currentVisitSort || 'visited_at',
+            window.currentVisitOrder || 'desc'
+        );
 
         // ② 顧客情報表示
         displayClientInfo(client);

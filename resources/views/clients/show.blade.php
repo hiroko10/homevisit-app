@@ -122,14 +122,35 @@
 
 
 
-        {{-- JSで使用 --}}
+
+        {{-- 訪問履歴 --}}
+        <h2 style="margin: 60px 20px 30px 20px">訪問履歴</h2>
+        
+
+
+        {{-- 訪問履歴の並び替え --}}
+        <div class="sort-section" style="margin: 16px; display: flex; align-items: center; gap: 10px;">
+            <span style="margin-bottom: 15px; font-size: 0.9rem; color: #666; display: flex; align-items: center; gap: 10px; color: #666;">並び替え：</span>
+            <button type="button" id="sort-date-btn" onclick="changeVisitSort('visited_at')" class="active-sort" style="background: none; border: 1px solid #ccc; padding: 5px 12px; border-radius: 20px; cursor: pointer;">
+                最終訪問日
+            </button>
+            <button type="button" id="sort-fav-btn" onclick="changeVisitSort('is_favorite')" style="background: none; border: 1px solid #ccc; padding: 5px 12px; border-radius: 20px; cursor: pointer;">
+                お気に入り
+            </button>
+        </div>
+
+
+
+
+        {{-- 訪問履歴 --}}
         <template id="visit-template">
+
+
+            {{-- 訪問履歴の箱 --}}
             <div class="visit-item">
                 <div class="visit-row">
 
                     {{-- 表示モード --}}
-
-                    
                         <div class="view-mode">
                             <div class="v-meta" style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
                                 <button type="button" class="fav-visit-btn" style="background: none; border: none; cursor: pointer; font-size: 1.5rem;">
@@ -169,15 +190,11 @@
 
 
 
-
-
         {{-- 訪問履歴 --}}
-        <h2 style="margin: 60px 20px 10px 20px">訪問履歴</h2>
         <div id="visit-list" style="margin: 10px;">履歴を読み込み中...</div>
-
         <div id="visit-pagination-container" style="margin-top: 20px; text-align: center;"></div>
-
         <br>
+
 
 
     </div>

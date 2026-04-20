@@ -8,9 +8,17 @@ export const fetchClient = async (id) => {
     return response.data; // 全体のデータを返す
 };
 
-// (履歴)特定client1名に紐づく複数の訪問履歴リストの取得
-export const fetchVisits = async (id, page, keyword) => {
-    const response = await axios.get(`/api/visits?client_id=${id}&page=${page}&keyword=${encodeURIComponent(keyword)}`);
+// 詳細ページの訪問履歴取得用
+export const fetchVisits = async (clientId, page = 1, keyword = "", sort = 'visited_at', order = 'desc') => {
+    const response = await axios.get(`/api/visits`, {
+        params: {
+            client_id: clientId,
+            page: page,
+            keyword: keyword,
+            sort: sort,
+            order: order
+        }
+    });
     return response.data;
 };
 

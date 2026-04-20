@@ -13,19 +13,30 @@ class VisitController extends Controller
         // JSの axios.get(`/api/visits?client_id=${id}...`) から IDとkeywordを受け取る
         $clientId = $request->query('client_id');
         $keyword = $request->query('keyword');
+        $sort = $request->query('sort', 'visited_at'); // 第2引数はデフォルト値
+        $order = $request->query('order', 'desc');
 
         // その顧客の履歴というベースのクエリ作成
         $query = Visit::where('client_id', $clientId);
 
-        // キーワードがある場合のみ、絞り込み条件を追加
+        // キーワード検索
         if (!empty($keyword)) {
             $query->where('content', 'like', "%{$keyword}%");
         }
 
-        // 並び替えとページネーションを実行して、結果を取得
-        $visits = $query->orderBy('is_favorite', 'desc')
-                        ->orderBy('visited_at', 'desc')
-                        ->paginate(10);
+        // --- 並び替えロジック ---
+        if ($sort === 'is_favorite') {
+            // 「お気に入り順」ボタンが押された場合
+            // まずはお気に入り(1)を上に、さらにお気に入り同士なら新しい順に並べる
+            $query->orderBy('is_favorite', $order)
+                ->orderBy('visited_at', 'desc');
+        } else {
+            // 「最終訪問日順」ボタンが押された場合（またはデフォルト）
+            $query->orderBy($sort, $order);
+        }
+
+        // 結果を取得
+        $visits = $query->paginate(10);
 
         return response()->json($visits);
     }
