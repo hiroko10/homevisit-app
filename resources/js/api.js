@@ -27,10 +27,18 @@ export const fetchClients = async (page = 1, keyword = "", sort = 'updated_at', 
     return response.data;
 };
 
-// お気に入り
+// お気に入り(訪問一覧)
 export const toggleClientFavorite = async (id, isFavorite) => {
     // PUTリクエストでサーバーの値を更新する
     const response = await axios.put(`/api/clients/${id}/favorite`, {
+        is_favorite: isFavorite
+    });
+    return response.data;
+};
+
+// お気に入り(個人ページ・訪問履歴)
+export const toggleVisitFavorite = async (visitId, isFavorite) => {
+    const response = await axios.patch(`/api/visits/${visitId}/favorite`, {
         is_favorite: isFavorite
     });
     return response.data;

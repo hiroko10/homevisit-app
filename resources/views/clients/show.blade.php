@@ -126,10 +126,22 @@
         <template id="visit-template">
             <div class="visit-item">
                 <div class="visit-row">
+
                     {{-- 表示モード --}}
-                    <div class="view-mode">
-                        <div class="v-meta">日時：<span class="v-date"></span></div>
-                        <div class="v-body">内容：<span class="v-content"></span></div>
+
+                    
+                        <div class="view-mode">
+                            <div class="v-meta" style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                                <button type="button" class="fav-visit-btn" style="background: none; border: none; cursor: pointer; font-size: 1.5rem;">
+                                    ☆
+                                </button>
+                                <div class="v-meta">
+                                    日時：<span class="v-date"></span>
+                                </div>
+                            </div>
+                        <div class="v-body" style="margin-bottom: 12px; line-height: 1.5;">
+                            内容：<span class="v-content"></span>
+                        </div>
                         <div class="v-actions">
                             <button type="button" class="edit-btn">編集</button>
                             <button type="button" class="visit-delete-btn">削除</button>

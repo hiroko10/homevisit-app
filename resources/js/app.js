@@ -1,7 +1,7 @@
 // ===============メイン指示===============
 import axios from "axios";
 
-import { fetchClient, fetchVisits, fetchClients, toggleClientFavorite } from "./api";
+import { fetchClient, fetchVisits, fetchClients, toggleClientFavorite, toggleVisitFavorite } from "./api";
 import { displayClientInfo, displayVisitList, getCurrentClientId, displayClientList } from "./ui";
 
 
@@ -41,7 +41,7 @@ window.changeSort = (sort) => {
 }
 
 
-// --お気に入り--
+// --お気に入り(訪問一覧)--
 window.handleToggleFavorite = async (id, currentStatus) => {
     try {
         // サーバー側のデータ更新：現在のステータスを反転させてサーバーに送る (trueならfalse、falseならtrue)
@@ -62,6 +62,25 @@ window.handleToggleFavorite = async (id, currentStatus) => {
         alert("お気に入りの更新に失敗しました");
     }
 };
+
+
+// --- お気に入り (個人ページ・訪問履歴) ---
+window.handleToggleVisitFavorite = async (visitId, currentStatus, clientId) => {
+    try {
+        // 1. サーバー側のデータを更新 (現在のステータスを反転させて送る)
+        // ※ api.js に toggleVisitFavorite を作成・インポートしておく必要あり
+        await toggleVisitFavorite(visitId, !currentStatus);
+
+        // 2. 詳細画面を再読み込みして表示を更新
+        // これにより、displayVisitList が再度走り、新しい星の状態が描画
+        await getClientDetail(clientId, window.currentVisitPage || 1);
+
+    } catch (error) {
+        console.error("訪問履歴のお気に入り更新失敗", error);
+        alert("訪問履歴のお気に入り更新に失敗しました");
+    }
+};
+
 
 
 // --- 詳細ページ用 ---

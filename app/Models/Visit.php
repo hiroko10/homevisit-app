@@ -9,7 +9,13 @@ class Visit extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['client_id', 'visited_at', 'content', 'memo'];
+    protected $fillable = [
+        'client_id',
+        'visited_at',
+        'content',
+        'memo',
+        'is_favorite',
+    ];
 
     public function client(){
     return $this->belongsTo(Client::class);

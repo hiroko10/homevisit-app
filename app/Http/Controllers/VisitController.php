@@ -23,7 +23,8 @@ class VisitController extends Controller
         }
 
         // 並び替えとページネーションを実行して、結果を取得
-        $visits = $query->orderBy('visited_at', 'desc')
+        $visits = $query->orderBy('is_favorite', 'desc')
+                        ->orderBy('visited_at', 'desc')
                         ->paginate(10);
 
         return response()->json($visits);
@@ -95,5 +96,29 @@ class VisitController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+
+
+    // 訪問履歴のお気に入りの状態切り替え
+    public function toggleFavorite(Request $request, $id)
+    {
+        // 1. 該当する履歴を探す
+        $visit = Visit::findOrFail($id);
+
+        // 2. バリデーション（入力チェック）
+        $validated = $request->validate([
+            'is_favorite' => 'required|boolean',
+        ]);
+
+        // 3. データを更新
+        $visit->update([
+            'is_favorite' => $validated['is_favorite'],
+        ]);
+
+        // 4. JSONで「成功」と返す
+        return response()->json(['success' => true, 'visit' => $visit]);
+    }
+
+
+
 
 }

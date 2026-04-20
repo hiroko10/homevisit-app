@@ -141,6 +141,15 @@ export const displayVisitList = (visits, clientId) => {
         const row = template.querySelector(".visit-row");
         row.id = `visit-row-${visit.id}`;
 
+        // お気に入りボタンの制御
+        const favBtn = template.querySelector(".fav-visit-btn");
+        if (favBtn) {
+            favBtn.innerText = visit.is_favorite ? '★' : '☆';
+            favBtn.style.color = visit.is_favorite ? '#ffc107' : '#ccc';
+            // クリック時に app.js で定義する関数を呼び出す
+            favBtn.onclick = () => window.handleToggleVisitFavorite(visit.id, visit.is_favorite, clientId);
+        }
+
         // データの流し込み
         template.querySelector(".v-date").innerText = visit.visited_at;
         template.querySelector(".v-content").innerText = visit.content;

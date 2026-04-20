@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\VisitController;
 use Illuminate\Support\Facades\Route;
 
 // 1. トップページにアクセスしたら、ログインしていれば一覧へ
@@ -17,6 +18,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/api/clients', [ClientController::class, 'apiIndex'])->name('api.clients.index');
     Route::get('/clients/create', [ClientController::class, 'create'])->name('clients.create');
     Route::get('/clients/{id}', [ClientController::class, 'show'])->name('clients.show');
+    Route::patch('/api/visits/{visit}/favorite', [VisitController::class, 'toggleFavorite']);
     // 必要に応じて、保存(store)や編集(edit)などのルートもここに追加
 
     // --- プロフィール（Breeze標準） ---
