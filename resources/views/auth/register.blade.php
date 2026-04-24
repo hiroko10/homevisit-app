@@ -1,4 +1,8 @@
 <x-guest-layout>
+
+    <div class="py-2 mb-8 text-2xl tracking-tight text-black">
+        新規登録
+    </div>
     <form method="POST" action="{{ route('register') }}">
         @csrf
 
