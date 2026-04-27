@@ -129,8 +129,9 @@
 
 
         {{-- 訪問履歴の並び替え --}}
-        <div class="sort-section" style="margin: 16px; display: flex; align-items: center; gap: 10px;">
-            <span style="margin-bottom: 15px; font-size: 0.9rem; color: #666; display: flex; align-items: center; gap: 10px; color: #666;">並び替え：</span>
+        <div class="sort-section" style="margin-left: 20px; margin-bottom: 15px; font-size: 0.9rem; color: #666; display: flex; align-items: center; gap: 10px;">
+            <span>並び替え：</span>
+            {{-- <span style="margin-bottom: 15px; font-size: 0.9rem; color: #666; display: flex; align-items: center; gap: 10px; color: #666;">並び替え：</span> --}}
             <button type="button" id="sort-date-btn" onclick="changeVisitSort('visited_at')" class="active-sort" style="background: none; border: 1px solid #ccc; padding: 5px 12px; border-radius: 20px; cursor: pointer;">
                 最終訪問日
             </button>
@@ -140,6 +141,11 @@
         </div>
 
 
+
+        {{-- 訪問履歴 --}}
+        <div id="visit-list" style="margin: 10px;">履歴を読み込み中...</div>
+        <div id="visit-pagination-container" style="margin-top: 20px; text-align: center;"></div>
+        <br>
 
 
         {{-- 訪問履歴 --}}
@@ -190,10 +196,7 @@
 
 
 
-        {{-- 訪問履歴 --}}
-        <div id="visit-list" style="margin: 10px;">履歴を読み込み中...</div>
-        <div id="visit-pagination-container" style="margin-top: 20px; text-align: center;"></div>
-        <br>
+
 
 
 

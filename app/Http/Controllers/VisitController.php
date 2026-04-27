@@ -10,34 +10,33 @@ class VisitController extends Controller
 {
     public function index(Request $request)
     {
+        // 1. バリデーション(入力)チェック
+        $request->validate([
+        // client_idは必須(required)で、かつclientsテーブルのidに実在すること(exists)
+        'client_id' => 'required|exists:clients,id',
+
+        // sortは任意だが、送るなら 'visited_at' か 'is_favorite' のどちらかであること
+        'sort' => 'nullable|in:visited_at,is_favorite',
+
+        // orderも任意だが、送るなら 'asc' か 'desc' のどちらかであること
+        'order' => 'nullable|in:asc,desc',
+        ]);
+
+
+        // 2. バリテーションチェックを通過したデータのみ使用し処理開始
         // JSの axios.get(`/api/visits?client_id=${id}...`) から IDとkeywordを受け取る
         $clientId = $request->query('client_id');
         $keyword = $request->query('keyword');
         $sort = $request->query('sort', 'visited_at'); // 第2引数はデフォルト値
         $order = $request->query('order', 'desc');
 
-        // その顧客の履歴というベースのクエリ作成
-        $query = Visit::where('client_id', $clientId);
+        // Modelに該当IDのデータを取ってきてと依頼
+        $visits = Visit::where('client_id', $clientId)
+               ->search($keyword)  // Visit.phpのモデルで定義したスコープを呼び出す
+               ->orderBy($sort, $order)
+               ->paginate(10);
 
-        // キーワード検索
-        if (!empty($keyword)) {
-            $query->where('content', 'like', "%{$keyword}%");
-        }
-
-        // --- 並び替えロジック ---
-        if ($sort === 'is_favorite') {
-            // 「お気に入り順」ボタンが押された場合
-            // まずはお気に入り(1)を上に、さらにお気に入り同士なら新しい順に並べる
-            $query->orderBy('is_favorite', $order)
-                ->orderBy('visited_at', 'desc');
-        } else {
-            // 「最終訪問日順」ボタンが押された場合（またはデフォルト）
-            $query->orderBy($sort, $order);
-        }
-
-        // 結果を取得
-        $visits = $query->paginate(10);
-
+        // JSONでフロントエンドに送り返す
         return response()->json($visits);
     }
 

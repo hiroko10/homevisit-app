@@ -129,7 +129,7 @@ window.updateVisit = async (id) => {
 // --訪問履歴リスト表示--
 export const displayVisitList = (visits, clientId) => {
     const visitList = document.getElementById("visit-list");
-    visitList.innerHTML = "";
+    visitList.innerHTML = "";  //前のデータを消して綺麗にする
 
     if (!visits || visits.length === 0) {
         visitList.innerHTML = "訪問履歴はまだありません";
