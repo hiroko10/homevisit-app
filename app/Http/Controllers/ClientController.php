@@ -21,48 +21,24 @@ class ClientController extends Controller
     {
         // 1. パラメータの取得
         $keyword = $request->query('keyword');
-        $sort = $request->query('sort');
-        $order = $request->query('order');
+        $sort = $request->query('sort', 'updated_at'); //デフォルト値
+        $order = $request->query('order', 'desc');
 
-        // 2. クエリの開始
-        $query = Client::query();
+        // 2. クエリの開始・検索
+        $query = Client::search($keyword); //Model呼び出してscope
 
-        // 3. 検索処理
-        // キーワードがある場合のみwhereを追加
-        if (!empty($keyword)) {
-            $query->where(function($q) use ($keyword) {
-                $q->where('last_name', 'like', "%{$keyword}%")
-                ->orWhere('first_name', 'like', "%{$keyword}%")
-                ->orWhere('last_name_kana', 'like', "%{$keyword}%")
-                ->orWhere('first_name_kana', 'like', "%{$keyword}%");
-            });
+        // 3. ソート処理
+        if ($sort === 'last_name_kana') {
+            $query->sortByKana($order); //Model
+        } else {
+            $query->orderBy($sort, $order); //更新日・お気に入り等、普通の並び替え
         }
 
-        // 4. ソート処理（苗字のフリガナを純粋な文字として再定義した上で、指定された方向（昇順か降順か）で並び替え）
-        if ($sort === 'last_name_kana') {
-        // 名前
-            $query->orderByRaw("CAST(last_name_kana AS CHAR) {$order}")
-                ->orderByRaw("CAST(first_name_kana AS CHAR) {$order}");
-            
-        } else if ($sort === 'updated_at') {
-            // 更新日
-            $query->orderBy('updated_at', $order);
-            
-        } else if ($sort === 'is_favorite') {
-            // お気に入り
-            $query->orderBy('is_favorite', $order);
-            
-        } else {
-            // それ以外（初期表示など）は最新順
-            $query->orderBy('updated_at', 'desc');
-    }
-
-
-        // 5. 結果を返却
+        // 4. 結果を返却
         return response()->json($query->paginate(10));
     }
 
-    
+
 
 
     // 特定のクライアント内の訪問履歴を検索するAPI

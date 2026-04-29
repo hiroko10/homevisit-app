@@ -27,7 +27,7 @@ class Visit extends Model
      */
     public function scopeSearch($query, $keyword)
     {
-        // キーワードが空でなければ、検索条件を追加して返す
+        // キーワードが空でなければ、検索条件を追加して返す("%"は部分一致OK)
         if (!empty($keyword)) {
             return $query->where('content', 'like', "%{$keyword}%");
         }
