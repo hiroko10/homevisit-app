@@ -8,8 +8,8 @@ use Illuminate\Http\Request;
 
 class VisitController extends Controller
 {
-    public function index(Request $request)
-    {
+    // ==＝＝index:一覧表示(READ)＝==＝
+    public function index(Request $request) {
         // 1. バリデーション(入力)チェック
         $request->validate([
         // client_idは必須(required)で、かつclientsテーブルのidに実在すること(exists)
@@ -31,7 +31,7 @@ class VisitController extends Controller
         $order = $request->query('order', 'desc');
 
         // Modelに該当IDのデータを取ってきてと依頼
-        $visits = Visit::where('client_id', $clientId)
+        $visits = Visit::query()->where('client_id', $clientId)
                ->search($keyword)  // Visit.phpのモデルで定義したスコープを呼び出す
                ->orderBy($sort, $order)
                ->paginate(10);
@@ -40,61 +40,61 @@ class VisitController extends Controller
         return response()->json($visits);
     }
 
+    // ====create:登録画面(表：入力画面を作る/HTMLを返す) (CREATE:準備)====
     public function create(Client $client){
         return view('visits.create', compact('client'));
     }
 
+    // ====store:保存実行(裏：DBに書き込む) (CREATE:実行)====
     public function store(Request $request){
-    // 1. バリデーション
-    // $request->client_id は、app.jsの axios.post で送っている名前と一致
-    $validated = $request->validate([
-        'client_id'  => 'required|exists:clients,id',
-        'visited_at' => 'required',
-        'content'    => 'required',
-    ]);
+        // 1. バリデーション
+        // $request->client_id は、app.jsの axios.post で送っている名前と一致
+        $validated = $request->validate([
+            'client_id'  => 'required|exists:clients,id',
+            'visited_at' => 'required',
+            'content'    => 'required',
+        ]);
 
-    // 2. 保存
-    // URLからではなく、$requestの中からIDを取り出して保存
-    $visit = Visit::create([
-        'client_id'  => $request->client_id,
-        'visited_at' => $request->visited_at,
-        'content'    => $request->content,
-    ]);
+        // 2. 保存
+        // URLからではなく、$requestの中からIDを取り出して保存
+        $visit = Visit::create([
+            'client_id'  => $request->client_id,
+            'visited_at' => $request->visited_at,
+            'content'    => $request->content,
+        ]);
 
-    // 3. APIへの返事（JSON形式）
-    return response()->json($visit, 201);
+        // 3. APIへの返事（JSON形式）
+        return response()->json($visit, 201);
     }
 
 
 
-    //画面編集
+    // ====edit:画面編集(表：入力画面を作る/HTMLを返す) (UPDATE:準備)====
     public function edit(Visit $visit){
         return view('visits.edit', compact('visit'));
     }
 
-    //更新処理
-    public function update(Request $request, $id)
-    {
-    // 1. 該当する履歴を探す
-    $visit = Visit::findOrFail($id);
+    // ====update:更新処理(裏：DBに書き込む) (UPDATE:実行)====
+    public function update(Request $request, $id) {
+        // 1. 該当する履歴を探す
+        $visit = Visit::findOrFail($id);
 
-    // 2. バリデーション（入力チェック）
-    $validated = $request->validate([
-        'visited_at' => 'required',
-        'content'    => 'required|string',
-    ]);
+        // 2. バリデーション（入力チェック）
+        $validated = $request->validate([
+            'visited_at' => 'required',
+            'content'    => 'required|string',
+        ]);
 
-    // 3. データを更新して保存
-    $visit->update($validated);
+        // 3. データを更新して保存
+        $visit->update($validated);
 
-    // 4. JSONで「成功」と返す
-    return response()->json($visit);
+        // 4. JSONで「成功」と返す
+        return response()->json($visit);
     }
 
 
-    //削除
-    public function destroy($id)
-    {
+    // ====destroy:削除 (DELETE)====
+    public function destroy($id) {
         try {
             // IDで検索（見つからなければ404を出す）
             $visit = Visit::findOrFail($id);
@@ -108,9 +108,8 @@ class VisitController extends Controller
     }
 
 
-    // 訪問履歴のお気に入りの状態切り替え
-    public function toggleFavorite(Request $request, $id)
-    {
+    // 訪問履歴のお気に入りの状態切り替え ====Update====
+    public function toggleFavorite(Request $request, $id) {
         // 1. 該当する履歴を探す
         $visit = Visit::findOrFail($id);
 
@@ -127,8 +126,5 @@ class VisitController extends Controller
         // 4. JSONで「成功」と返す
         return response()->json(['success' => true, 'visit' => $visit]);
     }
-
-
-
 
 }
