@@ -2,8 +2,8 @@
     <div class="flex flex-col flex-grow justify-between">
         <div>
             <div class="flex flex-col items-center mb-8">
-                <h1 class="text-3xl font-extrabold tracking-tight text-black">KATEIHOUMON</h1>
-                <p class="text-3xl font-extrabold tracking-tight text-gray-900 mt-2">Log in</p>
+                <h1 class="text-3xl font-extrabold tracking-tight text-[#00B570]">KATEIHOUMON</h1>
+                <p class="text-3xl font-extrabold tracking-tight text-[#00B570] mt-2">Log in</p>
             </div>
 
 
@@ -36,14 +36,14 @@
                 <div class="block mt-4">
                     <label for="remember_me" class="inline-flex items-center">
                         <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
-                        <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
+                        <span class="ms-2 text-sm text-gray-600">{{ __('ログイン状態を保存する') }}</span>
                     </label>
                 </div>
 
                 <div class="text-right mt-4">
                     @if (Route::has('password.request'))
                         <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
-                            {{ __('Forgot your password?') }}
+                            {{ __('パスワードをお忘れですか?') }}
                         </a>
                     @endif
 
@@ -54,7 +54,7 @@
             </form>
 
             <div class="mt-16">
-                <a href="{{ route('register') }}" class="w-full block text-center py-1 border border-gray-300 rounded-2xl font-semibold text-gray-400 bg-white hover:bg-gray-50 transition">
+                <a href="{{ route('register') }}" class="w-full block text-center py-1 border border-[#00B570] rounded-md font-semibold text-[#00B570] bg-white  hover:bg-[#EAF8F4] transition">
                     新規登録
                 </a>
             </div>

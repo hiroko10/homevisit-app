@@ -5,7 +5,7 @@
 
 
 body {
-    background-color: #f8f9fa;
+    background-color: #EAF8F4;
     color: #333;
     line-height: 1.6;
     margin: 0;
@@ -16,7 +16,7 @@ body {
     max-width: 800px;
     margin: 0 auto;
     padding: 40px 4px;
-    background-color: #ffffff;
+    background-color: #EAF8F4;
     min-height: 100vh;
 }
 
@@ -27,7 +27,7 @@ body {
     padding: 15px;
     border-bottom: 1px solid #eee;
     margin-bottom: 10px;
-    background: #fff;
+    background: #EAF8F4;
     border-radius: 8px;
 }
 
@@ -35,7 +35,7 @@ body {
 .client-avatar {
     width: 45px;
     height: 45px;
-    background-color: #f0f0f0;
+    background-color: #EAF8F4;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -51,7 +51,7 @@ body {
     cursor: pointer;
     font-size: 1.4rem;
     margin: 0 15px; 
-    color: #ccc;
+    color: #EAF8F4;
     transition: transform 0.01s;
     padding: 18px 6px 0 0;
 }
@@ -148,7 +148,7 @@ body {
     gap: 10px;
 }
 .save-btn {
-    background: #009688;
+    background: #0FA69D;
     color: white;
     border: none;
     padding: 5px 15px;

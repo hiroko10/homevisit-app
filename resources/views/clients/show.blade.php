@@ -24,7 +24,7 @@
 
         <h1 style="margin: 60px 20px 10px 20px">個人ページ</h1>
 
-        <div id="client-info" style="background: #fff; padding: 20px; border-radius: 8px; border: 1px solid #eee;">
+        <div id="client-info" style="background: #EAF8F4; padding: 20px; border-radius: 8px; border: 1px solid #eee;">
             {{-- 個人名の表示 --}}
             <div id="client-view-mode">
                 <div style="font-size: 0.8rem; color: #888;" id="client-kana"></div>
@@ -42,7 +42,7 @@
             </div>
 
             {{-- 個人情報の編集 --}}
-            <div id="client-edit-mode" style="display: none; background: #fbfeff; padding: 20px; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 30px;">
+            <div id="client-edit-mode" style="display: none; background: #EAF8F4; padding: 20px; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 30px;">
                 <h2 style="font-size: 1rem; margin-bottom: 20px;">基本情報を編集</h2>
 
                 <div style="margin-bottom: 10px;">
@@ -69,7 +69,7 @@
                 </div>
 
                 <div style="display: flex; gap: 10px;">
-                    <button type="button" onclick="updateClientInfo()" style="flex: 1; background: #009688; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; flex: 1; font-weight: bold;">保存</button>
+                    <button type="button" onclick="updateClientInfo()" style="flex: 1; background: #0FA69D; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; flex: 1; font-weight: bold;">保存</button>
                     <button type="button" onclick="cancelClientEdit()" style="flex: 1; background: #6c757d; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer;">キャンセル</button>
                 </div>
             </div>
@@ -81,12 +81,12 @@
         {{-- 個人ページ内での訪問履歴の追加 --}}
         {{-- フォーム表示のボタン --}}
         <div style="display: flex; justify-content: flex-start; margin: 20px;">
-            <button id="show-add-visit-btn" onclick="enableAddVisit()" style="margin-bottom: 20px; background: #009688; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer;">
+            <button id="show-add-visit-btn" onclick="enableAddVisit()" style="margin-bottom: 20px; background: #0FA69D; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer;">
             ＋新規訪問履歴を追加
             </button>
         </div>
 
-        <div id="add-visit-container" style="display:none; background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+        <div id="add-visit-container" style="display:none; background: #EAF8F4; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
             <h3 style="margin: 10px 0px 30px;">訪問履歴の追加</h3>
             <div style="margin-bottom: 20px;">
                 <label>訪問日：</label><br>
@@ -97,7 +97,7 @@
                 <textarea id="new-visit-content" rows="3" style="width: 100%; border-radius: 8px;" placeholder="訪問した内容をご入力ください..."></textarea>
             </div>
             <div style="display: flex; gap: 10px;">
-                <button type="button" onclick="addVisit()" style="flex: 1; background: #009688; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer;">
+                <button type="button" onclick="addVisit()" style="flex: 1; background: #0FA69D; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer;">
                     訪問履歴の保存
                 </button>
                 <button type="button" onclick="cancelAddVisit()" style="flex: 1; background: #6c757d; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer;">

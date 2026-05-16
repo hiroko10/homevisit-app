@@ -9,13 +9,13 @@
 
         {{-- +新規登録ボタン --}}
         <div style="display: flex; justify-content: flex-start; margin: 20px;">
-            <button id="show-add-client-btn" onclick="enableAddClientForm()" style="background: #009688; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold;">
+            <button id="show-add-client-btn" onclick="enableAddClientForm()" style="background: #0FA69D; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold;">
             ＋ 新規登録
             </button>
         </div>
 
         {{-- +新規登録ボタン内 --}}
-        <div id="add-client-container" style="display: none; background: #fbfeff; padding: 20px; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 30px;">
+        <div id="add-client-container" style="display: none; background: #EAF8F4; padding: 20px; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 30px;">
             <h3 style="font-size: 1rem; margin-bottom: 20px;">新規訪問先登録</h3>
 
             <div style="margin-bottom: 15px;">
@@ -38,7 +38,7 @@
             </div>
 
             <div style="display: flex; gap: 10px;">
-                <button type="button" onclick="addClient()" style="flex: 1; background: #009688; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold;">登録</button>
+                <button type="button" onclick="addClient()" style="flex: 1; background: #0FA69D; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold;">登録</button>
                 <button type="button" onclick="cancelAddClientForm()" style="flex: 1; background: #6c757d; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer;">キャンセル</button>
             </div>
         </div>

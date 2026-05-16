@@ -18,7 +18,7 @@
                 display: flex;
                 flex-direction: column;
                 min-height: 100vh;
-                background-color: #f9fafb; /* 薄いグレーの背景 */
+                background-color: #E8F6EE; /* 薄いグレーの背景 */
             }
 
             /* 透明ヘッダー（スクロールしても固定） */
@@ -67,7 +67,7 @@
 
             .logout-button {
                 border: 1px solid #374151;
-                background: white;
+                background:  rgba(255, 255, 255, 0.1);
                 padding: 0.4rem 1.2rem;
                 border-radius: 0.5rem;
                 cursor: pointer;
@@ -87,7 +87,7 @@
             .custom-footer {
                 width: 100%;
                 padding: 1rem 0;
-                background-color: #e5e7eb;
+                background-color: #CFEDDD;
                 text-align: center;
                 color: #6b7280;
                 font-size: 0.875rem;
