@@ -63,26 +63,35 @@ window.renderPaginationCommon = (data, containerId, onPageClick) => {
 
     container.innerHTML = "";
     container.style.display = "flex";
-    container.style.gap = "10px";
+    container.style.gap = "15px";
     container.style.justifyContent = "center";
+    container.style.alignItems = "center";
+
+    // 共通のTailwindクラス
+    const btnClass = "flex items-center justify-center text-gray-600 text-[0.9rem] bg-white border border-gray-300 py-[5px] px-[15px] rounded-[20px] cursor-pointer hover:bg-[#0FA69D] hover:border-[#0FA69D] hover:text-white transition-colors duration-200 font-bold";
 
     // 「前へ」ボタン
     if (data.prev_page_url) {
         const prevBtn = document.createElement("button");
-        prevBtn.innerText = "前へ";
+        prevBtn.type = "button";
+        prevBtn.className = btnClass;
+        prevBtn.innerHTML = `前へ`;
         prevBtn.onclick = () => onPageClick(data.current_page - 1);
         container.appendChild(prevBtn);
     }
 
-    // ページ情報
+    // ページ情報（「1 / 2」の文字）
     const info = document.createElement("span");
+    info.className = "text-gray-600 text-[0.9rem] font-medium mx-[5px]";
     info.innerText = `${data.current_page} / ${data.last_page}`;
     container.appendChild(info);
 
     // 「次へ」ボタン
     if (data.next_page_url) {
         const nextBtn = document.createElement("button");
-        nextBtn.innerText = "次へ";
+        nextBtn.type = "button";
+        nextBtn.className = btnClass;
+        nextBtn.innerHTML = `次へ`;
         nextBtn.onclick = () => onPageClick(data.current_page + 1);
         container.appendChild(nextBtn);
     }

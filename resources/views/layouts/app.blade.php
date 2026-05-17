@@ -7,122 +7,49 @@
 
         <title>{{ config('app.name', 'KATEIHOUMON') }}</title>
 
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Abel&family=Bitcount+Grid+Single:wght@100..900&family=Noto+Sans+JP:wght@100..900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-        <style>
-            /* ページ全体の構造：footerを常に下に */
-            .main-container {
-                display: flex;
-                flex-direction: column;
-                min-height: 100vh;
-                background-color: #E8F6EE; /* 薄いグレーの背景 */
-            }
-
-            /* 透明ヘッダー（スクロールしても固定） */
-            .custom-header {
-                position: sticky;
-                top: 0;
-                z-index: 50;
-                width: 100%;
-                background-color: rgba(255, 255, 255, 0.1);
-                backdrop-filter: blur(8px); /* 背景ぼかし */
-                border-bottom: 1px solid #e5e7eb;
-            }
-
-            .header-inner {
-                max-width: 1200px;
-                margin: 0 auto;
-                padding: 1rem 1.5rem;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-            }
-
-            .logo {
-                font-weight: bold;
-                font-size: 1.25rem;
-                color: #111827;
-                text-decoration: none;
-                cursor: pointer;
-            }
-
-            .logo:hover {
-                opacity: 0.7;
-            }
-
-            .nav-links {
-                display: flex;
-                gap: 1.5rem;
-                align-items: center;
-            }
-
-            .nav-item {
-                text-decoration: none;
-                color: #374151;
-                font-size: 0.95rem;
-            }
-
-            .logout-button {
-                border: 1px solid #374151;
-                background:  rgba(255, 255, 255, 0.1);
-                padding: 0.4rem 1.2rem;
-                border-radius: 0.5rem;
-                cursor: pointer;
-                font-size: 0.9rem;
-            }
-
-            /* Main contents */
-            main {
-                flex-grow: 1; /* これでフッターを下に押し出す */
-                width: 100%;
-                max-width: 1200px;
-                margin: 0 auto;
-                padding: 2rem 1.5rem;
-            }
-
-            /* Footer */
-            .custom-footer {
-                width: 100%;
-                padding: 1rem 0;
-                background-color: #CFEDDD;
-                text-align: center;
-                color: #6b7280;
-                font-size: 0.875rem;
-            }
-        </style>
     </head>
     <body class="font-sans antialiased">
-        <div class="main-container">
-            <header class="custom-header">
-                <div class="header-inner">
-                    <a href="/clients" class="logo">KATEIHOUMON</a>
-                    <nav class="nav-links">
-                        {{-- <a href="/create" class="nav-item">新規入力</a> --}}
-                        <a href="/clients" class="nav-item">訪問一覧</a>
-                        
+        {{-- main-container --}}
+        <div class="min-h-screen flex flex-col bg-[#E8F6EE]">
+            {{-- header --}}
+            <header class="sticky top-0 z-50 w-full bg-white/10 backdrop-blur-md border-b border-gray-200">
+                {{-- header-inner--}}
+                <div class="max-w-[1200px] mx-auto px-6 py-4 flex justify-between items-center">
+                    {{-- logo --}}
+                    <a href="/clients" class="text-[1.25rem] font-bold text-gray-900 no-underline cursor-pointer hover:text-[#0FA69D]">KATEIHOUMON</a>
+                    {{-- navigation--}}
+                    <nav class="flex items-center gap-6">
+                        {{-- nav-item --}}
+                        <a href="/clients" class="text-[0.95rem] text-gray-700 no-underline hover:text-[#0FA69D]">訪問一覧</a>
                         <form id="logout-form" method="POST" action="{{ route('logout') }}" style="display: none;">
                             @csrf
                         </form>
 
-                        <button type="button" class="logout-button" 
-                            onclick="event.preventDefault(); 
-                            document.getElementById('logout-form').submit();">
+                        {{-- logout-button --}}
+                        <button type="button" 
+                                class="text-[0.9rem] border border-gray-600 text-gray-700 bg-white/10 rounded-[8px] px-[1.2rem] py-[0.4rem] cursor-pointer transition-colors duration-200 hover:bg-[#0FA69D] hover:border-[#0FA69D] hover:text-white" 
+                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                             Log Out
                         </button>
                     </nav>
                 </div>
             </header>
 
-            {{-- page content --}}
-            <main>
+            {{-- main --}}
+            <main class="flex-grow w-full max-w-[1200px] mx-auto px-6 py-8">
                 {{ $slot }}
             </main>
 
-            {{-- Footer --}}
-            <footer class="custom-footer">
+            {{-- footer --}}
+            <footer class="w-full py-4 bg-[#CFEDDD] text-center text-gray-500 text-[0.875rem]">
                 KATEIHOUMON
             </footer>
         </div>

@@ -1,6 +1,6 @@
 <x-guest-layout>
 
-    <div class="py-2 mb-8 text-2xl tracking-tight text-black">
+    <div class="py-2 mb-8 text-2xl font-bold tracking-tight text-[#0FA69D]">
         新規登録
     </div>
     <form method="POST" action="{{ route('register') }}">
@@ -45,11 +45,11 @@
 
         <div class="flex items-center justify-end mt-4">
             <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
-                {{ __('Already registered?') }}
+                {{ __('＞既に登録済の場合（ログイン画面へ戻る）') }}
             </a>
 
             <x-primary-button class="ms-4">
-                {{ __('Register') }}
+                {{ __('登 録') }}
             </x-primary-button>
         </div>
     </form>

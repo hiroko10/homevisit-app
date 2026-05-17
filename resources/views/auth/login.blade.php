@@ -2,8 +2,8 @@
     <div class="flex flex-col flex-grow justify-between">
         <div>
             <div class="flex flex-col items-center mb-8">
-                <h1 class="text-3xl font-extrabold tracking-tight text-[#00B570]">KATEIHOUMON</h1>
-                <p class="text-3xl font-extrabold tracking-tight text-[#00B570] mt-2">Log in</p>
+                <h1 class="text-3xl font-extrabold tracking-tight text-[#0FA69D]">KATEIHOUMON</h1>
+                <p class="text-3xl font-extrabold tracking-tight text-[#0FA69D] mt-2">Log in</p>
             </div>
 
 
@@ -54,7 +54,7 @@
             </form>
 
             <div class="mt-16">
-                <a href="{{ route('register') }}" class="w-full block text-center py-1 border border-[#00B570] rounded-md font-semibold text-[#00B570] bg-white  hover:bg-[#EAF8F4] transition">
+                <a href="{{ route('register') }}" class="w-full block text-center py-1 border border-[#0FA69D] rounded-md font-semibold text-[#0FA69D] bg-white  hover:bg-[#EAF8F4] transition">
                     新規登録
                 </a>
             </div>

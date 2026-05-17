@@ -5,17 +5,20 @@
 <x-app-layout>
     <div class="container">
 
-        <h1 style="margin: 20px 20px 50px 20px;">訪問一覧</h1>
+        <h1 style="margin: 20px 20px 50px 20px;" class="text-[1.5rem] font-extrabold text-[#0FA69D] flex items-center mb-4">
+            <i class="fa-solid fa-users mr-2 text-[1.3rem]"></i>
+            訪問一覧
+        </h1>
 
         {{-- +新規登録ボタン --}}
         <div style="display: flex; justify-content: flex-start; margin: 20px;">
-            <button id="show-add-client-btn" onclick="enableAddClientForm()" style="background: #0FA69D; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold;">
+            <button id="show-add-client-btn" onclick="enableAddClientForm()" class="bg-[#0FA69D] hover:bg-[#13BEB4] duration-200 text-white py-[10px] px-[20px] rounded-[8px] font-bold border-none cursor-pointer">
             ＋ 新規登録
             </button>
         </div>
 
         {{-- +新規登録ボタン内 --}}
-        <div id="add-client-container" style="display: none; background: #EAF8F4; padding: 20px; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 30px;">
+        <div id="add-client-container" style="display: none; background: #ffffff; padding: 20px; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 30px;">
             <h3 style="font-size: 1rem; margin-bottom: 20px;">新規訪問先登録</h3>
 
             <div style="margin-bottom: 15px;">
@@ -38,8 +41,9 @@
             </div>
 
             <div style="display: flex; gap: 10px;">
-                <button type="button" onclick="addClient()" style="flex: 1; background: #0FA69D; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold;">登録</button>
-                <button type="button" onclick="cancelAddClientForm()" style="flex: 1; background: #6c757d; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer;">キャンセル</button>
+                <button type="button" onclick="addClient()" class="flex-1 bg-[#0FA69D] hover:bg-[#13BEB4] duration-200 text-white font-bold py-[10px] px-[20px] rounded-[8px] border-none cursor-pointer">
+                    登録登録</button>
+                <button type="button" onclick="cancelAddClientForm()" class="flex-1 bg-[#6c757d] hover:bg-[#5a6268] duration-200 text-white py-[8px] px-[15px] rounded-[8px] border-none cursor-pointer">キャンセル</button>
             </div>
         </div>
 
@@ -47,10 +51,16 @@
         {{-- 検索 --}}
         <div style="display: flex; justify-content: space-between; align-items: center; gap: 20px; margin: 40px 20px;">
             <div style="position: relative; flex: 1; display: flex; gap: 10px;">
-                <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #aaa;"></i>
 
-                <input type="text" id="search-keyword" placeholder=" 名前やふりがなでご検索ください" style="font-size: 0.8em; width: 100%; flex: 1; padding: 8px; border-radius: 8px; border: 1px solid #ccc;">
-                <button onclick="getClients(1)" type="button" style="background: #7b7b7b; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer;">
+                <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #aaa; pointer-events: none;"></i>
+
+                <input type="text"
+                    id="search-keyword"
+                    placeholder="名前やふりがなでご検索ください"
+                    class="py-[8px] pr-[8px] pl-[38px]"
+                    style="font-size: 0.8em; width: 100%; flex: 1; border-radius: 8px; border: 1px solid #ccc;">
+
+                <button onclick="getClients(1)" type="button" class="bg-[#7b7b7b] hover:bg-[#919191] text-white py-[8px] px-[15px] rounded-[8px] border-none cursor-pointer transition-colors duration-200">
                     検索
                 </button>
             </div>
@@ -58,44 +68,51 @@
 
 
         {{-- ソートボタン --}}
-        <div style="margin-bottom: 15px; font-size: 0.9rem; color: #666; display: flex; align-items: center; gap: 10px;">
+        <div style="margin-bottom: 15px; padding-left: 24px; font-size: 0.9rem; color: #666; display: flex; align-items: center; gap: 10px;">
             <span>並び替え：</span>
 
-            <button type="button" onclick="changeSort('updated_at')" style="background: none; border: 1px solid #ccc; padding: 5px 12px; border-radius: 20px; cursor: pointer;">
+            <button type="button" onclick="changeSort('updated_at')" class="hover:bg-[#0FA69D] hover:border-[#0FA69D] hover:text-white transition-colors duration-200" style="border: 1px solid #ccc; padding: 5px 12px; border-radius: 8px; cursor: pointer;">
                 更新日
             </button>
 
-            <button type="button" onclick="changeSort('last_name_kana')" style="background: none; border: 1px solid #ccc; padding: 5px 12px; border-radius: 20px; cursor: pointer;">
+            <button type="button" onclick="changeSort('last_name_kana')" class="hover:bg-[#0FA69D] hover:border-[#0FA69D] hover:text-white transition-colors duration-200" style="border: 1px solid #ccc; padding: 5px 12px; border-radius: 8px; cursor: pointer;">
                 名前
             </button>
 
-            <button type="button" onclick="changeSort('is_favorite')" style="background: none; border: 1px solid #ccc; padding: 5px 12px; border-radius: 20px; cursor: pointer;">
+            <button type="button" onclick="changeSort('is_favorite')" class="hover:bg-[#0FA69D] hover:border-[#0FA69D] hover:text-white transition-colors duration-200" style="border: 1px solid #ccc; padding: 5px 12px; border-radius: 8px; cursor: pointer;">
                 お気に入り
             </button>
         </div>
 
 
 
-        {{-- JSで使うため（画面非表示） --}}
+        {{-- 訪問一覧ページの顧客一覧：一人分のBOX枠組み --}}
         <template id="client-template">
-            <div class="client-row">
-                {{-- <div class="client-avatar"> //画像つけたい時
-                    <i class="fa-solid fa-user"></i>
-                </div> --}}
+            {{-- 1人分のBOX --}}
+            <div class="client-row flex items-center p-[16px] border-b border-gray-100 mb-[10px] bg-white rounded-[8px] shadow-sm">
 
-                <button type="button" class="fav-btn">☆</button>
+                {{-- お気に入りボタン（星マーク） --}}
+                <button type="button" class="fav-btn border-none bg-transparent cursor-pointer text-[1.4rem] mx-[15px] pt-[18px] pr-[6px] pb-0 pl-0 text-gray-300 hover:scale-110 transition-transform duration-100">
+                    ☆
+                </button>
 
-                <div class="client-info">
-                    <span class="client-kana"></span>
-                    <a href="" class="client-link">
-                        <span class="client-name"></span>
+                {{-- 名前エリア（client-info） --}}
+                <div class="client-info flex flex-col flex-grow">
+                    {{-- ふりがな --}}
+                    <span class="client-kana text-[0.75rem] text-gray-560 mb-[2px]"></span>
+
+                    {{-- 氏名リンク --}}
+                    <a href="" class="client-link no-underline group pr-[10px]">
+                        <span class="client-name text-xl text-gray-560 font-bold group-hover:text-[#0FA69D] group-hover:underline transition-colors duration-200 flex items-center justify-between w-full"></span>
                     </a>
                 </div>
 
-                <button type="button" class="client-delete-btn">削除</button>
+                {{-- 削除ボタン --}}
+                <button type="button" class="client-delete-btn bg-[#ff4d4f] hover:bg-[#e04345] text-white py-[6px] px-[12px] mr-3 rounded-[6px] border-none cursor-pointer text-[0.85rem] ml-[10px] transition-colors duration-200 font-bold">
+                    削除
+                </button>
             </div>
         </template>
-
 
         <hr>
 
