@@ -11,7 +11,7 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Abel&family=Bitcount+Grid+Single:wght@100..900&family=Noto+Sans+JP:wght@100..900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
-
+        <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 

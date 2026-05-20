@@ -68,7 +68,7 @@ window.renderPaginationCommon = (data, containerId, onPageClick) => {
     container.style.alignItems = "center";
 
     // 共通のTailwindクラス
-    const btnClass = "flex items-center justify-center text-gray-600 text-[0.9rem] bg-white border border-gray-300 py-[5px] px-[15px] rounded-[20px] cursor-pointer hover:bg-[#0FA69D] hover:border-[#0FA69D] hover:text-white transition-colors duration-200 font-bold";
+    const btnClass = "flex items-center justify-center text-gray-600 text-[0.9rem] bg-white border border-gray-300 rounded-lg py-[5px] px-[15px] rounded-[20px] cursor-pointer hover:bg-[#0FA69D] hover:border-[#0FA69D] hover:text-white transition-colors duration-200 font-bold";
 
     // 「前へ」ボタン
     if (data.prev_page_url) {
@@ -248,7 +248,7 @@ window.addClient = async () => {
         document.getElementById('new-client-memo').value = "";
 
         // 保存に成功したら、フォームを閉じてボタン表示に戻す
-        cancelAddClientForm();
+        window.cancelAddClientForm();
 
         // 一覧を最新の状態にする（すでに定義されているgetClientsを呼ぶ）
         getClients();
@@ -288,7 +288,7 @@ window.addVisit = async () => {
         document.getElementById('new-visit-content').value = "";
 
         // 保存が成功したらフォームを閉じてボタンを出す
-        cancelAddVisit();
+        window.cancelAddVisit();
 
         // 再描画してリストを更新
         getClientDetail(clientId);
@@ -297,6 +297,28 @@ window.addVisit = async () => {
         alert("保存に失敗しました。");
     }
 };
+
+
+
+// --- 訪問履歴追加フォームの表示制御 ---
+window.enableAddVisit = () => {
+    // ボタンを隠して、フォームを表示する
+    document.getElementById('show-add-visit-btn').style.display = 'none';// ボタンを隠す
+    document.getElementById('add-visit-container').style.display = 'block';// フォームを出す
+};
+
+window.cancelAddVisit = () => {
+    // フォームを隠して、ボタンを再表示
+    document.getElementById('show-add-visit-btn').style.display = 'block';// ボタンを出す
+    document.getElementById('add-visit-container').style.display = 'none';// フォームを隠す
+
+    // 入力欄をクリア
+    document.getElementById('new-visit-at').value = "";
+    document.getElementById('new-visit-content').value = "";
+};
+
+
+
 
 
 // --個人ページの姓名・特徴メモの編集用--
@@ -358,23 +380,4 @@ window.cancelAddClientForm = () => {
     document.getElementById('new-client-memo').value = "";
 };
 
-
-
-
-// --- 訪問履歴追加フォームの表示制御 ---
-window.enableAddVisit = () => {
-    // ボタンを隠して、フォームを表示する
-    document.getElementById('show-add-visit-btn').style.display = 'none';// ボタンを隠す
-    document.getElementById('add-visit-container').style.display = 'block';// フォームを出す
-};
-
-window.cancelAddVisit = () => {
-    // フォームを隠して、ボタンを再表示
-    document.getElementById('show-add-visit-btn').style.display = 'block';// ボタンを出す
-    document.getElementById('add-visit-container').style.display = 'none';// フォームを隠す
-
-    // 入力欄をクリア
-    document.getElementById('new-visit-at').value = "";
-    document.getElementById('new-visit-content').value = "";
-};
 

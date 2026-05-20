@@ -71,15 +71,15 @@
         <div style="margin-bottom: 15px; padding-left: 24px; font-size: 0.9rem; color: #666; display: flex; align-items: center; gap: 10px;">
             <span>並び替え：</span>
 
-            <button type="button" onclick="changeSort('updated_at')" class="hover:bg-[#0FA69D] hover:border-[#0FA69D] hover:text-white transition-colors duration-200" style="border: 1px solid #ccc; padding: 5px 12px; border-radius: 8px; cursor: pointer;">
+            <button type="button" onclick="changeSort('updated_at')" class="hover:bg-[#0FA69D] hover:border-[#0FA69D] hover:text-white transition-colors duration-200" style="border: 1px solid #ccc; padding: 5px 12px; border-radius: 16px; cursor: pointer;">
                 更新日
             </button>
 
-            <button type="button" onclick="changeSort('last_name_kana')" class="hover:bg-[#0FA69D] hover:border-[#0FA69D] hover:text-white transition-colors duration-200" style="border: 1px solid #ccc; padding: 5px 12px; border-radius: 8px; cursor: pointer;">
+            <button type="button" onclick="changeSort('last_name_kana')" class="hover:bg-[#0FA69D] hover:border-[#0FA69D] hover:text-white transition-colors duration-200" style="border: 1px solid #ccc; padding: 5px 12px; border-radius: 16px; cursor: pointer;">
                 名前
             </button>
 
-            <button type="button" onclick="changeSort('is_favorite')" class="hover:bg-[#0FA69D] hover:border-[#0FA69D] hover:text-white transition-colors duration-200" style="border: 1px solid #ccc; padding: 5px 12px; border-radius: 8px; cursor: pointer;">
+            <button type="button" onclick="changeSort('is_favorite')" class="hover:bg-[#0FA69D] hover:border-[#0FA69D] hover:text-white transition-colors duration-200" style="border: 1px solid #ccc; padding: 5px 12px; border-radius: 16px; cursor: pointer;">
                 お気に入り
             </button>
         </div>

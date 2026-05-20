@@ -26,7 +26,7 @@
             <i class="fa-solid fa-user mr-2 text-[1.1rem]"></i>
             個人ページ</h1>
 
-        <div id="client-info" style="background: #ffffff; padding: 20px; border-radius: 8px; border: 1px solid #eee;">
+        <div id="client-info" style="background: #ffffff; padding: 20px; border-radius: 16px; border: 1px solid #eee;">
             {{-- 個人名の表示 --}}
             <div id="client-view-mode">
                 <div style="font-size: 0.8rem; color: #888;" id="client-kana"></div>
@@ -143,10 +143,10 @@
         <div class="sort-section" style="margin-left: 20px; margin-bottom: 15px; font-size: 0.9rem; color: #666; display: flex; align-items: center; gap: 10px;">
             <span>並び替え：</span>
             {{-- <span style="margin-bottom: 15px; font-size: 0.9rem; color: #666; display: flex; align-items: center; gap: 10px; color: #666;">並び替え：</span> --}}
-            <button type="button" id="sort-date-btn" onclick="changeVisitSort('visited_at')" class="active-sort hover:bg-[#0FA69D] hover:border-[#0FA69D] hover:text-white transition-colors duration-200" style="border: 1px solid #ccc; padding: 5px 12px; border-radius: 8px; cursor: pointer;">
+            <button type="button" id="sort-date-btn" onclick="changeVisitSort('visited_at')" class="active-sort hover:bg-[#0FA69D] hover:border-[#0FA69D] hover:text-white transition-colors duration-200" style="border: 1px solid #ccc; padding: 5px 12px; border-radius: 16px; cursor: pointer;">
                 最終訪問日
             </button>
-            <button type="button" id="sort-fav-btn" onclick="changeVisitSort('is_favorite')" class="hover:bg-[#0FA69D] hover:border-[#0FA69D] hover:text-white transition-colors duration-200" style="border: 1px solid #ccc; padding: 5px 12px; border-radius: 8px; cursor: pointer;">
+            <button type="button" id="sort-fav-btn" onclick="changeVisitSort('is_favorite')" class="hover:bg-[#0FA69D] hover:border-[#0FA69D] hover:text-white transition-colors duration-200" style="border: 1px solid #ccc; padding: 5px 12px; border-radius: 16px; cursor: pointer;">
                 お気に入り
             </button>
         </div>
