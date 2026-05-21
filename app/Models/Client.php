@@ -9,10 +9,14 @@ class Client extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['last_name', 'first_name', 'last_name_kana', 'first_name_kana', 'memo', 'is_favorite'];
+    protected $fillable = [ 'user_id', 'last_name', 'first_name', 'last_name_kana', 'first_name_kana', 'memo', 'is_favorite'];
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
 
     public function visits(){
-    return $this->hasMany(Visit::class);
+        return $this->hasMany(Visit::class);
     }
 
 

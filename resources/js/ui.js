@@ -1,6 +1,8 @@
 // 画面表示用(display)
 
 import axios from "axios";
+axios.defaults.withCredentials = true; //ログイン情報を持っていく
+axios.defaults.withXSRFToken = true;   //CSRF対策トークン
 
 // ===============共通ツール===============
 

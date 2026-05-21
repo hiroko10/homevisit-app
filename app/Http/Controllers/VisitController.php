@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Log;
+
 use App\Models\Client;
 use App\Models\Visit;
 use Illuminate\Http\Request;
@@ -30,8 +32,12 @@ class VisitController extends Controller
         $sort = $request->query('sort', 'visited_at'); // 第2引数はデフォルト値
         $order = $request->query('order', 'desc');
 
+        // 【認可対応】指定されたclient_idがログインユーザー自身のものであるか確認
+        // 他人のclient_idを指定された場合、ここで404エラーを投げてシャットアウト
+        $client = $request->user()->clients()->findOrFail($clientId);
+
         // Modelに該当IDのデータを取ってきてと依頼
-        $visits = Visit::query()->where('client_id', $clientId)
+        $visits = $client->visits()
                ->search($keyword)  // Visit.phpのモデルで定義したスコープを呼び出す
                ->orderBy($sort, $order)
                ->paginate(10);
@@ -55,9 +61,13 @@ class VisitController extends Controller
             'content'    => 'required',
         ]);
 
+        // 💡【認可対応】
+        // 保存前に、送られてきたclient_idが本当に自分の顧客のものかチェック
+        $client = $request->user()->clients()->findOrFail($request->input('client_id'));
+
         // 2. 保存
         // URLからではなく、$requestの中からIDを取り出して保存
-        $visit = Visit::create([
+        $visit = $client->visits()->create([
             'client_id'  => $request->client_id,
             'visited_at' => $request->visited_at,
             'content'    => $request->content,
@@ -79,6 +89,11 @@ class VisitController extends Controller
         // 1. 該当する履歴を探す
         $visit = Visit::findOrFail($id);
 
+        // 【認可対応】その訪問履歴の親（顧客）が、ログインユーザーのものであるかチェック
+        if ($visit->client->user_id !== $request->user()->id) {
+            abort(403, 'この操作は許可されていません。');
+        }
+
         // 2. バリデーション（入力チェック）
         $validated = $request->validate([
             'visited_at' => 'required',
@@ -94,16 +109,25 @@ class VisitController extends Controller
 
 
     // ====destroy:削除 (DELETE)====
-    public function destroy($id) {
+    public function destroy(Request $request, $id) {
         try {
             // IDで検索（見つからなければ404を出す）
             $visit = Visit::findOrFail($id);
+
+            // 【認可対応】その訪問履歴の親（顧客）が、ログインユーザーのものであるかチェック
+            if ($visit->client->user_id !== $request->user()->id) {
+                abort(403, 'この操作は許可されていません。');
+            }
+
             $visit->delete();
 
             return response()->json(['success' => true]);
         } catch (\Exception $e) {
-            // エラーの内容をJSONで返して、ブラウザで確認できるようにする
-            return response()->json(['error' => $e->getMessage()], 500);
+            // 内部向け: ログに詳細を残す
+            Log::error('訪問履歴の削除に失敗', ['id' => $id, 'error' => $e->getMessage()]);
+
+            // ユーザー向け: 詳細を隠した汎用メッセージを返す
+            return response()->json(['error' => '削除に失敗しました。'], 500);
         }
     }
 
@@ -112,6 +136,11 @@ class VisitController extends Controller
     public function toggleFavorite(Request $request, $id) {
         // 1. 該当する履歴を探す
         $visit = Visit::findOrFail($id);
+
+        // 【認可対応】その訪問履歴の親（顧客）が、ログインユーザーのものであるかチェック
+        if ($visit->client->user_id !== $request->user()->id) {
+            abort(403, 'この操作は許可されていません。');
+        }
 
         // 2. バリデーション（入力チェック）
         $validated = $request->validate([

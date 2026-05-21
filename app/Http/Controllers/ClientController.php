@@ -18,13 +18,20 @@ class ClientController extends Controller
 
     // JSからアクセスしたときにapi.phpから呼ばれるデータを返す
     public function apiIndex(Request $request) {
+        // バリデーションチェック
+        $validated = $request->validate([
+            'sort' => 'nullable|in:updated_at,last_name_kana,is_favorite',
+            'order' => 'nullable|in:asc,desc',
+        ]);
+
+        // バリデーションチェック通過したデータのみ使用し処理開始
         // 1. パラメータの取得
         $keyword = $request->query('keyword');
-        $sort = $request->query('sort', 'updated_at'); //デフォルト値
-        $order = $request->query('order', 'desc');
+        $sort  = $validated['sort']  ?? 'updated_at'; // 送られてこなければ 'updated_at'
+        $order = $validated['order'] ?? 'desc';       // 送られてこなければ 'desc'
 
-        // 2. クエリの開始・検索
-        $query = Client::search($keyword); //Model呼び出してscope
+        // 一覧: ログインユーザーの顧客のみ取得
+        $query = $request->user()->clients()->search($keyword);
 
         // 3. ソート処理
         if ($sort === 'last_name_kana') {
@@ -45,8 +52,10 @@ class ClientController extends Controller
         $keyword = $request->query('keyword');
 
         // 1. そのクライアントが存在するか確認し、紐づく活動記録のクエリを開始
-        $client = Client::findOrFail($id);
-        $query = $client->activities(); // Clientモデルにactivitiesリレーションがある前提
+        // 更新・削除: ログインユーザーの顧客かどうか確認
+        $client = $request->user()->clients()->findOrFail($id);
+        // Clientモデルにactivitiesリレーションがある前提
+        $query = $client->activities();
 
         // 2. キーワードがあれば絞り込み
         if (!empty($keyword)) {
@@ -70,6 +79,9 @@ class ClientController extends Controller
             'memo' => 'nullable|string',
         ]);
 
+        // ログインユーザーのIDを追加
+        $validated['user_id'] = $request->user()->id;
+
         // 保存
         $client = Client::create($validated);
 
@@ -85,8 +97,9 @@ class ClientController extends Controller
         return view('clients.show');
     }
 
-    public function apiShow($id) {
-        $client = Client::findOrFail($id);
+    public function apiShow(Request $request, $id) {
+        // 更新・削除: ログインユーザーの顧客かどうか確認
+        $client = $request->user()->clients()->findOrFail($id);
 
         return response()->json($client);
     }
@@ -95,7 +108,8 @@ class ClientController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id) {
-        $client = Client::findOrFail($id);
+        // 更新・削除: ログインユーザーの顧客かどうか確認
+        $client = $request->user()->clients()->findOrFail($id);
 
         $validated = $request->validate([
             'last_name' => 'required|string',
@@ -113,8 +127,9 @@ class ClientController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function apiDestroy($id) {
-        $client = Client::findOrFail($id); //IDを元にclientを削除
+    public function apiDestroy(Request $request, $id) {
+        // 更新・削除: ログインユーザーの顧客かどうか確認
+        $client = $request->user()->clients()->findOrFail($id);
         $client->delete();
 
         return response()->json(['message', '削除しました']); //削除成功したことをJSONで返す
@@ -122,8 +137,10 @@ class ClientController extends Controller
 
 
 
-    public function toggleFavorite(Request $request, Client $client)
-    {
+    public function toggleFavorite(Request $request, $id) {
+        // 更新・削除: ログインユーザーの顧客かどうか確認
+        $client = $request->user()->clients()->findOrFail($id);
+
         // JavaScriptから送られてきた boolean (true/false) を受け取る
         $isFavorite = $request->input('is_favorite');
 
