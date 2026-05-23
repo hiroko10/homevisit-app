@@ -9,6 +9,7 @@ import { displayClientInfo, displayVisitList, getCurrentClientId, displayClientL
 window.currentPage = 1;
 window.currentSort = 'updated_at'; // デフォルトは更新順
 window.currentOrder = 'desc';      // デフォルトは降順
+window.currentInitial = ''; // 選択された「あかさたな」の文字を保存する箱
 
 window.getClients = async (page = 1) => {  //デフォルトを１ページにする
     window.currentPage = page;
@@ -16,7 +17,7 @@ window.getClients = async (page = 1) => {  //デフォルトを１ページに�
     try {
         const keyword = document.getElementById("search-keyword")?.value || "";
         const pagination = await fetchClients(
-            page, keyword, window.currentSort, window.currentOrder);
+            page, keyword, window.currentSort, window.currentOrder, window.currentInitial);
 
         displayClientList(pagination.data);
         renderPaginationCommon(pagination, "pagination-container", (p) => getClients(p));
@@ -39,6 +40,38 @@ window.changeSort = (sort) => {
     // ソートを変えたら1ページ目から表示し直す
     getClients(1);
 }
+
+
+
+// あかさたなボタンが押された時の処理
+window.filterByInitial = async (initial, event) => {
+    // 1. 選択された文字（「あ」など）を記憶
+    window.currentInitial = initial;
+
+    // 2. 1ページ目に戻って、新しい頭文字条件でデータを再取得
+    await getClients(1);
+
+    // 3. 見た目の装飾：押されたボタンの色を変える
+    document.querySelectorAll('.initial-btn').forEach(btn => {
+        // 選択時のクラスを削除
+        btn.classList.remove('bg-[#0FA69D]', 'text-white', 'font-bold');
+        // 未選択時のクラスを追加
+        btn.classList.add('bg-transparent', 'text-gray-600');
+    });
+
+    // クリックされたボタンを目立たせる（太字＆ブランドカラーの背景など）
+    if (event && event.target) {
+        const clickedBtn = event.target;
+        // 未選択時のクラスを削除
+        clickedBtn.classList.remove('bg-transparent', 'text-gray-600');
+        // 選択時のクラスを追加
+        clickedBtn.classList.add('bg-[#0FA69D]', 'text-white', 'font-bold');
+    }
+}
+
+
+
+
 
 
 // --お気に入り(訪問一覧)--

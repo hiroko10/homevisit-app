@@ -86,6 +86,31 @@
 
 
 
+
+        {{-- あかさたなナビゲーション --}}
+        <div class="mx-[20px] mb-[25px] text-[0.9rem] text-gray-600 flex items-center gap-[8px] flex-wrap">
+            <span class="font-bold text-[#0FA69D]">表示：</span>
+
+            {{-- 1.「すべて」ボタン（最初から選択状態のTailwindクラスをつけておく） --}}
+            <button type="button" onclick="filterByInitial('', event)" class="initial-btn bg-[#0FA69D] text-white font-bold border-none px-4 py-1 cursor-pointer rounded-[4px] duration-200">
+                すべて</button>
+
+            {{-- 2. その他ボタン：クリックされたら JavaScript の filterByInitial() を呼び出す --}}
+            <button type="button" onclick="filterByInitial('あ', event)" class="initial-btn text-gray-600 border-none bg-transparent px-4 py-1 cursor-pointer rounded-[4px] duration-200">あ</button>
+            <button type="button" onclick="filterByInitial('か', event)" class="initial-btn text-gray-600 border-none bg-transparent px-4 py-1 cursor-pointer rounded-[4px] duration-200">か</button>
+            <button type="button" onclick="filterByInitial('さ', event)" class="initial-btn text-gray-600 border-none bg-transparent px-4 py-1 cursor-pointer rounded-[4px] duration-200">さ</button>
+            <button type="button" onclick="filterByInitial('た', event)" class="initial-btn text-gray-600 border-none bg-transparent px-4 py-1 cursor-pointer rounded-[4px] duration-200">た</button>
+            <button type="button" onclick="filterByInitial('な', event)" class="initial-btn text-gray-600 border-none bg-transparent px-4 py-1 cursor-pointer rounded-[4px] duration-200">な</button>
+            <button type="button" onclick="filterByInitial('は', event)" class="initial-btn text-gray-600 border-none bg-transparent px-4 py-1 cursor-pointer rounded-[4px] duration-200">は</button>
+            <button type="button" onclick="filterByInitial('ま', event)" class="initial-btn text-gray-600 border-none bg-transparent px-4 py-1 cursor-pointer rounded-[4px] duration-200">ま</button>
+            <button type="button" onclick="filterByInitial('や', event)" class="initial-btn text-gray-600 border-none bg-transparent px-4 py-1 cursor-pointer rounded-[4px] duration-200">や</button>
+            <button type="button" onclick="filterByInitial('ら', event)" class="initial-btn text-gray-600 border-none bg-transparent px-4 py-1 cursor-pointer rounded-[4px] duration-200">ら</button>
+            <button type="button" onclick="filterByInitial('わ', event)" class="initial-btn text-gray-600 border-none bg-transparent px-4 py-1 cursor-pointer rounded-[4px] duration-200">わ</button>
+        </div>
+
+
+
+
         {{-- 訪問一覧ページの顧客一覧：一人分のBOX枠組み --}}
         <template id="client-template">
             {{-- 1人分のBOX --}}

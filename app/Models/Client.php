@@ -11,6 +11,22 @@ class Client extends Model
 
     protected $fillable = [ 'user_id', 'last_name', 'first_name', 'last_name_kana', 'first_name_kana', 'memo', 'is_favorite'];
 
+
+    // あかさたなボタン用の翻訳マップ（ひらがな版）
+    const KANA_MAP = [
+        'あ' => ['あ', 'い', 'う', 'え', 'お'],
+        'か' => ['か', 'き', 'く', 'け', 'こ', 'が', 'ぎ', 'ぐ', 'げ', 'ご'], // 濁音も含める
+        'さ' => ['さ', 'し', 'す', 'せ', 'そ', 'ざ', 'じ', 'ず', 'ぜ', 'ぞ'],
+        'た' => ['た', 'ち', 'つ', 'て', 'と', 'だ', 'ぢ', 'づ', 'で', 'ど', 'っ'], // 「っ」なども考慮
+        'な' => ['な', 'に', 'ぬ', 'ね', 'の'],
+        'は' => ['は', 'ひ', 'ふ', 'へ', 'ほ', 'ば', 'び', 'ぶ', 'べ', 'ぼ', 'ぱ', 'ぴ', 'ぷ', 'ぺ', 'ぽ'],
+        'ま' => ['ま', 'み', 'む', 'め', 'も'],
+        'や' => ['や', 'ゆ', 'よ', 'ゃ', 'ゅ', 'ょ'],
+        'ら' => ['ら', 'り', 'る', 'れ', 'ろ'],
+        'わ' => ['わ', 'を', 'ん'],
+    ];
+
+
     public function user(){
         return $this->belongsTo(User::class);
     }
@@ -41,5 +57,32 @@ class Client extends Model
         return $query->orderByRaw("CAST(last_name_kana AS CHAR) {$order}")
                      ->orderByRaw("CAST(first_name_kana AS CHAR) {$order}");
     }
+
+
+
+    /**
+     * あかさたな（頭文字）での絞り込みスコープ
+     */
+    public function scopeSearchByInitial($query, $initial)
+    {
+        // もし「あ」〜「わ」以外の変な文字が来たり、空っぽなら何もせずスルー
+        if (empty($initial) || !array_key_exists($initial, self::KANA_MAP)) {
+            return $query;
+        }
+
+        // 選択された行のひらがなリストを取得（例：「あ」なら ['あ','い','う','え','お']）
+        $targets = self::KANA_MAP[$initial];
+
+        // データベースに対して「どれかに前方一致（LIKE 'あ%'）するもの」を探す命令
+        return $query->where(function ($q) use ($targets) {
+            foreach ($targets as $char) {
+                // OR で条件を繋いでいく (例: last_name_kana LIKE 'あ%' OR last_name_kana LIKE 'い%' ...)
+                $q->orWhere('last_name_kana', 'LIKE', $char . '%');
+            }
+        });
+    }
+
+
+
 }
 

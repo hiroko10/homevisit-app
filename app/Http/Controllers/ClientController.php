@@ -25,16 +25,23 @@ class ClientController extends Controller
         $validated = $request->validate([
             'sort' => 'nullable|in:updated_at,last_name_kana,is_favorite',
             'order' => 'nullable|in:asc,desc',
+            'initial' => 'nullable|string|max:1', //あかさたなボタンからの文字（「あ」など1文字）を許可
         ]);
 
         // バリデーションチェック通過したデータのみ使用し処理開始
         // 1. パラメータの取得
         $keyword = $request->query('keyword');
+        $initial = $request->query('initial'); //画面から送られてきた「あ」などの文字を取得
         $sort  = $validated['sort']  ?? 'updated_at'; // 送られてこなければ 'updated_at'
         $order = $validated['order'] ?? 'desc';       // 送られてこなければ 'desc'
 
-        // 一覧: ログインユーザーの顧客のみ取得
+        // 一覧: ログインユーザーの顧客のみ取得 ＋ キーワード検索
         $query = $request->user()->clients()->search($keyword);
+
+        // 2.「あかさたな」ボタンが押されたら、頭文字検索
+        if (!empty($initial)) {
+            $query->searchByInitial($initial); // Modelに作ったScopeを呼び出す
+        }
 
         // 3. ソート処理
         if ($sort === 'last_name_kana') {

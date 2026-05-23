@@ -5,7 +5,7 @@ import axios from "axios";
 // (人)特定client1名の基本情報を取得 - 個人ページ
 export const fetchClient = async (id) => {
     const response = await axios.get(`/api/clients/${id}`);
-    return response.data; // 全体のデータを返す
+    return response.data.data; // 全体のデータを返す
 };
 
 // 詳細ページの訪問履歴取得用
@@ -23,13 +23,14 @@ export const fetchVisits = async (clientId, page = 1, keyword = "", sort = 'visi
 };
 
 // 顧客のリスト取得（ページネーションの情報も返す） - 訪問一覧ページ
-export const fetchClients = async (page = 1, keyword = "", sort = 'updated_at', order = 'desc') => {
+export const fetchClients = async (page = 1, keyword = "", sort = 'updated_at', order = 'desc', initial = "") => {
     const response = await axios.get('/api/clients', {
         params: {
                 page: page,
                 keyword: keyword,
                 sort: sort,
-                order: order
+                order: order,
+                initial: initial
             }
         });
     return response.data;
