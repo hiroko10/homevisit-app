@@ -53,4 +53,30 @@ class ClientApiTest extends TestCase
         $response->assertStatus(422);
     }
 
+
+    public function test_正しいデータを送ると顧客が登録できる(): void
+    {
+        $user = User::factory()->create();
+
+        $validData = [
+            'last_name' => '山田',
+            'first_name' => '太郎',
+            'last_name_kana' => 'ヤマダ',
+            'first_name_kana' => 'タロウ',
+            'memo' => 'テスト'
+        ];
+
+        /** @var \App\Models\User $user */ //
+        $response = $this->actingAs($user)->postJson('/api/clients', $validData);
+
+        // 201（作成成功）が返ってくるかチェック
+        $response->assertStatus(201);
+
+        // データベースに本当に「山田 太郎」が存在するかチェック
+        $this->assertDatabaseHas('clients', [
+            'last_name' => '山田',
+            'first_name' => '太郎'
+        ]);
+    }
+
 }

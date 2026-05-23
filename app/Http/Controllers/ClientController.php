@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreClientRequest;
+use App\Http\Requests\UpdateClientRequest;
 use App\Models\Client;
 use App\Http\Resources\ClientResource;
 use Illuminate\Http\Request;
@@ -69,16 +71,9 @@ class ClientController extends Controller
     }
 
     // 非同期型の保存
-    public function apiStore(Request $request)
+    public function apiStore(StoreClientRequest $request)
     {
-        // バリデーション
-        $validated = $request->validate([
-            'last_name' => 'required|string|max:255',
-            'first_name' => 'required|string|max:255',
-            'last_name_kana' => 'required|string|max:255',
-            'first_name_kana' => 'required|string|max:255',
-            'memo' => 'nullable|string',
-        ]);
+        $validated = $request->validated();
 
         // ログインユーザーのIDを追加
         $validated['user_id'] = $request->user()->id;
@@ -108,17 +103,11 @@ class ClientController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id) {
+    public function update(UpdateClientRequest $request, $id) {
         // 更新・削除: ログインユーザーの顧客かどうか確認
         $client = $request->user()->clients()->findOrFail($id);
 
-        $validated = $request->validate([
-            'last_name' => 'required|string',
-            'first_name' => 'required|string',
-            'last_name_kana' => 'nullable|string|max:225',
-            'first_name_kana' => 'nullable|string|max:225',
-            'memo' => 'nullable|string',
-        ]);
+        $validated = $request->validated();
 
         $client->update($validated);
 

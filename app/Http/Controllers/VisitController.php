@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreVisitRequest;
+use App\Http\Requests\UpdateVisitRequest;
 use Illuminate\Support\Facades\Log;
 
 use App\Models\Client;
@@ -52,14 +54,9 @@ class VisitController extends Controller
     }
 
     // ====store:保存実行(裏：DBに書き込む) (CREATE:実行)====
-    public function store(Request $request){
+    public function store(StoreVisitRequest $request){
         // 1. バリデーション
-        // $request->client_id は、app.jsの axios.post で送っている名前と一致
-        $validated = $request->validate([
-            'client_id'  => 'required|exists:clients,id',
-            'visited_at' => 'required|date',
-            'content'    => 'required',
-        ]);
+        $validated = $request->validated();
 
         // 💡【認可対応】
         // 保存前に、送られてきたclient_idが本当に自分の顧客のものかチェック
@@ -85,7 +82,7 @@ class VisitController extends Controller
     }
 
     // ====update:更新処理(裏：DBに書き込む) (UPDATE:実行)====
-    public function update(Request $request, $id) {
+    public function update(UpdateVisitRequest $request, $id) {
         // 1. 該当する履歴を探す
         $visit = Visit::findOrFail($id);
 
@@ -95,10 +92,7 @@ class VisitController extends Controller
         }
 
         // 2. バリデーション（入力チェック）
-        $validated = $request->validate([
-            'visited_at' => 'required|date',
-            'content'    => 'required|string',
-        ]);
+        $validated = $request->validated();
 
         // 3. データを更新して保存
         $visit->update($validated);
