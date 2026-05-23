@@ -57,7 +57,7 @@ class VisitController extends Controller
         // $request->client_id は、app.jsの axios.post で送っている名前と一致
         $validated = $request->validate([
             'client_id'  => 'required|exists:clients,id',
-            'visited_at' => 'required',
+            'visited_at' => 'required|date',
             'content'    => 'required',
         ]);
 
@@ -96,7 +96,7 @@ class VisitController extends Controller
 
         // 2. バリデーション（入力チェック）
         $validated = $request->validate([
-            'visited_at' => 'required',
+            'visited_at' => 'required|date',
             'content'    => 'required|string',
         ]);
 

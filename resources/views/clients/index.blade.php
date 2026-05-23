@@ -22,14 +22,14 @@
             <h3 style="font-size: 1rem; margin-bottom: 20px;">新規訪問先登録</h3>
 
             <div style="margin-bottom: 15px;">
-                <label style="font-size: 0.9rem; color: #555;">氏名：</label><br>
+                <label style="font-size: 0.9rem; color: #555;">氏名(*必須)：</label><br>
                 <div style="display: flex; gap: 10px; margin-top: 5px;">
                     <input type="text" id="new-client-last-name" placeholder="姓" style="flex: 1; min-width: 0; font-size:1.1rem; border-radius: 4px; border: 1px solid #ccc; padding: 8px;">
                     <input type="text" id="new-client-first-name" placeholder="名" style="flex: 1; min-width: 0; font-size:1.1rem; border-radius: 4px; border: 1px solid #ccc; padding: 8px;">
                 </div>
             </div>
             <div style="margin-bottom: 15px;">
-                <label style="font-size: 0.9rem; color: #555;">かな：</label><br>
+                <label style="font-size: 0.9rem; color: #555;">かな(*必須)：</label><br>
                 <div style="display: flex; gap: 10px; margin-top: 5px;">
                     <input type="text" id="new-client-last-name-kana" placeholder="せい" style="flex: 1; min-width: 0; font-size:0.8rem; border-radius: 4px; border: 1px solid #ccc; padding: 8px;">
                     <input type="text" id="new-client-first-name-kana" placeholder="めい" style="flex: 1; min-width: 0; font-size:0.8rem; border-radius: 4px; border: 1px solid #ccc; padding: 8px;">

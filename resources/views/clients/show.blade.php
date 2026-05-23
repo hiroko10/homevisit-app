@@ -48,7 +48,7 @@
                 <h2 style="font-size: 1rem; margin-bottom: 20px;">基本情報を編集</h2>
 
                 <div style="margin-bottom: 10px;">
-                    <label style="font-size: 0.9rem; color: #555;">名前：</label><br>
+                    <label style="font-size: 0.9rem; color: #555;">名前(*必須)：</label><br>
                     <div style="display: flex; gap: 10px; margin-top: 5px;">
                         <input type="text" id="edit-client-last-name" placeholder="姓" style="flex: 1; min-width: 0; font-size:1.2rem; font-weight:bold; border-radius: 4px; border: 1px solid #ccc; padding: 8px;">
                         <input type="text" id="edit-client-first-name" placeholder="名" style="flex: 1; min-width: 0; font-size:1.2rem; font-weight:bold; border-radius: 4px; border: 1px solid #ccc; padding: 8px;"><br>
@@ -56,7 +56,7 @@
                 </div>
 
                 <div style="margin-bottom: 10px;">
-                    <label style="font-size: 0.9rem; color: #555;">かな：</label><br>
+                    <label style="font-size: 0.9rem; color: #555;">かな(*必須)：</label><br>
                     <div style="display: flex; gap: 10px; margin-top: 5px;">
                         <input type="text" id="edit-client-last-name-kana" placeholder="せい" style="flex: 1; min-width: 0; font-size:0.8rem; border-radius: 4px; border: 1px solid #ccc; padding: 8px;">
                         <input type="text" id="edit-client-first-name-kana" placeholder="めい" style="flex: 1; min-width: 0; font-size:0.8rem; border-radius: 4px; border: 1px solid #ccc; padding: 8px;"><br>

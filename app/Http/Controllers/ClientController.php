@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Client;
+use App\Http\Resources\ClientResource;
 use Illuminate\Http\Request;
 
 class ClientController extends Controller
@@ -62,8 +63,8 @@ class ClientController extends Controller
             $query->where('content', 'like', "%{$keyword}%");
         }
 
-        // 3. 取得して返却
-        $results = $query->orderBy('created_at', 'desc')->get();
+        // 3. 取得して返却 --ページネーションを追加
+        $results = $query->orderBy('created_at', 'desc')->paginate(20);
         return response()->json($results);
     }
 
@@ -85,8 +86,8 @@ class ClientController extends Controller
         // 保存
         $client = Client::create($validated);
 
-        // JSONで結果を返す
-        return response()->json($client, 201);
+        // 結果を返す
+        return new ClientResource(($client));
     }
 
 
@@ -101,7 +102,7 @@ class ClientController extends Controller
         // 更新・削除: ログインユーザーの顧客かどうか確認
         $client = $request->user()->clients()->findOrFail($id);
 
-        return response()->json($client);
+        return new ClientResource(($client));
     }
 
     /**
@@ -114,14 +115,14 @@ class ClientController extends Controller
         $validated = $request->validate([
             'last_name' => 'required|string',
             'first_name' => 'required|string',
-            'last_name_kana' => 'nullable',
-            'first_name_kana' => 'nullable',
-            'memo' => 'nullable',
+            'last_name_kana' => 'nullable|string|max:225',
+            'first_name_kana' => 'nullable|string|max:225',
+            'memo' => 'nullable|string',
         ]);
 
         $client->update($validated);
 
-        return response()->json($client);
+        return new ClientResource(($client));
     }
 
     /**
@@ -132,7 +133,7 @@ class ClientController extends Controller
         $client = $request->user()->clients()->findOrFail($id);
         $client->delete();
 
-        return response()->json(['message', '削除しました']); //削除成功したことをJSONで返す
+        return response()->json(['message' => '削除しました']); //削除成功したことをJSONで返す
     }
 
 
@@ -144,10 +145,12 @@ class ClientController extends Controller
         // JavaScriptから送られてきた boolean (true/false) を受け取る
         $isFavorite = $request->input('is_favorite');
 
-        // DBを更新
-        $client->update([
-            'is_favorite' => $isFavorite
+        // バリデーション（入力チェック）
+        $validated = $request->validate([
+            'is_favorite' => 'required|boolean',
         ]);
+        // DBを更新
+        $client->update(['is_favorite' => $isFavorite]);
 
         // 結果をJSON形式で返す
         return response()->json([
