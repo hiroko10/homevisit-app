@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateClientRequest;
 use App\Models\Client;
 use App\Http\Resources\ClientResource;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class ClientController extends Controller
 {
@@ -53,6 +54,64 @@ class ClientController extends Controller
         // 4. 結果を返却
         return response()->json($query->paginate(10));
     }
+
+
+
+    // Geminiで訪問履歴を要約するAPI
+    public function summarizeVisits(Request $request, $id) {
+        // 1. ログインユーザーの顧客であることを確認(セキュリティチェック)
+        $client = $request->user()->clients()->findOrFail($id);
+
+        // 2. 特定の顧客に紐づく全ての訪問履歴から詳細テキスト(content)だけを最新順で取得
+        $contents = $client->visits()->orderBy('visited_at', 'desc')->pluck('content')->filter()->toArray();
+
+        // 訪問履歴($contents)が一件も無い場合、メッセージを返して終了
+        if (empty($contents)) {
+            return response()->json(['summary' => 'まだ訪問履歴が登録されていません。']);
+        }
+
+        // 3. 過去の履歴を一つの文章にまとめる(改行とハイフンで挟んで合体)
+        $historyText = implode("\n---\n", $contents);
+
+        // 4. Gemini APIを呼び出す準備
+        $apiKey = config('services.gemini.key') ?? env('GEMINI_API_KEY');
+
+        // Gemini 1.5 Flashを使用（最新の軽量・高速モデル）
+        $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" . $apiKey;
+
+        // AIへのプロンプト (3.で合体させた文章$historyTextを一文にする）
+        $prompt = "あなたは家庭訪問の記録を整理する優秀なアシスタントです。以下の【過去の訪問履歴の詳細】を読み込み、この顧客がどのような状況であるか、重要なポイントを100文字〜150文字程度でわかりやすく簡素な文章、または箇条書きで要約してください。
+
+            【過去の訪問履歴の詳細】". $historyText;
+
+            try {
+            // 5. GoogleのAIサーバーへリクエストを送信
+            $response = Http::withHeaders([
+                'Content-Type' => 'application/json',
+            ])->post($url, ['contents' => [['parts' => [['text' => $prompt]]]]
+            ]);
+
+            // 6. AIから帰って来たテキストを抽出しフロントに返す
+            if ($response->successful()) {
+                $result = $response->json();
+                // 1番目の候補の中の、中身の1番目の要素のテキストを取り出す(AIは複数候補を出してしまうため)
+                $summary = $result['candidates'][0]['content']['parts'][0]['text'] ?? '要約の生成に失敗しました。';
+
+                return response()->json(['summary' => trim($summary)]);
+            }
+
+            return response()->json(['summary' => 'AIの応答に失敗しました。時間をおいて再度お試しください。'], 500);
+            // 例外が起きた時$eの中に一時的に保存
+            } catch (\Exception $e) {
+                return response()->json(['summary' => '通信エラーが発生しました。'], 500);
+            }
+    }
+
+
+
+
+
+
 
 
 

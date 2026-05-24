@@ -13,7 +13,7 @@ class Visit extends Model
         'client_id',
         'visited_at',
         'content',
-        'memo',
+        'memo', //使用しない
         'is_favorite',
     ];
 

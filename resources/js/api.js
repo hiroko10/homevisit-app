@@ -9,30 +9,42 @@ export const fetchClient = async (id) => {
 };
 
 // 詳細ページの訪問履歴取得用
-export const fetchVisits = async (clientId, page = 1, keyword = "", sort = 'visited_at', order = 'desc') => {
+export const fetchVisits = async (
+    clientId,
+    page = 1,
+    keyword = "",
+    sort = "visited_at",
+    order = "desc",
+) => {
     const response = await axios.get(`/api/visits`, {
         params: {
             client_id: clientId,
             page: page,
             keyword: keyword,
             sort: sort,
-            order: order
-        }
+            order: order,
+        },
     });
     return response.data;
 };
 
 // 顧客のリスト取得（ページネーションの情報も返す） - 訪問一覧ページ
-export const fetchClients = async (page = 1, keyword = "", sort = 'updated_at', order = 'desc', initial = "") => {
-    const response = await axios.get('/api/clients', {
+export const fetchClients = async (
+    page = 1,
+    keyword = "",
+    sort = "updated_at",
+    order = "desc",
+    initial = "",
+) => {
+    const response = await axios.get("/api/clients", {
         params: {
-                page: page,
-                keyword: keyword,
-                sort: sort,
-                order: order,
-                initial: initial
-            }
-        });
+            page: page,
+            keyword: keyword,
+            sort: sort,
+            order: order,
+            initial: initial,
+        },
+    });
     return response.data;
 };
 
@@ -40,7 +52,7 @@ export const fetchClients = async (page = 1, keyword = "", sort = 'updated_at', 
 export const toggleClientFavorite = async (id, isFavorite) => {
     // PUTリクエストでサーバーの値を更新する
     const response = await axios.put(`/api/clients/${id}/favorite`, {
-        is_favorite: isFavorite
+        is_favorite: isFavorite,
     });
     return response.data;
 };
@@ -48,7 +60,13 @@ export const toggleClientFavorite = async (id, isFavorite) => {
 // お気に入り(個人ページ・訪問履歴)
 export const toggleVisitFavorite = async (visitId, isFavorite) => {
     const response = await axios.patch(`/api/visits/${visitId}/favorite`, {
-        is_favorite: isFavorite
+        is_favorite: isFavorite,
     });
+    return response.data;
+};
+
+// AI要約データを取得する関数(routes/api.php)
+export const fetchClientSummary = async (clientId) => {
+    const response = await axios.get(`/api/clients/${clientId}/summarize`);
     return response.data;
 };

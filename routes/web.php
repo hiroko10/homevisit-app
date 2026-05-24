@@ -29,6 +29,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/clients', [ClientController::class, 'apiIndex'])->name('api.clients.index'); // 一覧取得
         Route::post('/clients', [ClientController::class, 'apiStore']); // 新規登録
         Route::get('/clients/{id}', [ClientController::class, 'apiShow']); // 詳細取得
+        Route::get('/clients/{id}/summarize', [ClientController::class, 'summarizeVisits']); //AI要約
         Route::put('/clients/{id}', [ClientController::class, 'update']); // 更新
         Route::delete('/clients/{id}', [ClientController::class, 'apiDestroy']); // 削除
         Route::put('/clients/{id}/favorite', [ClientController::class, 'toggleFavorite']); // 顧客お気に入り

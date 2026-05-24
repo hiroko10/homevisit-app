@@ -112,6 +112,24 @@
         </div>
 
 
+        {{-- 訪問履歴 --}}
+        <h2 style="margin: 60px 20px 30px 20px" class="text-xl font-bold text-[#0FA69D] flex items-center mt-8 mb-4">
+            <i class="fa-solid fa-clock-rotate-left mr-2 text-[1.1rem]"></i>
+            訪問履歴</h2>
+
+
+        {{-- AI要約 --}}
+        <div class="mt-4 mb-6">
+            <div class="text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
+                <span>訪問履歴AI要約：</span>
+            </div>
+
+            <div id="ai-summary-text" class="w-full min-h-[80px] p-4 bg-white border border-gray-200 rounded-lg shadow-sm text-sm text-gray-500 leading-relaxed transition-all duration-300">
+                画面を読み込み中...
+            </div>
+        </div>
+
+
         {{-- 検索入力欄 --}}
         <div style="display: flex; justify-content: space-between; align-items: center; gap: 20px; margin: 40px 20px;">
             <div style="position: relative; flex: 1; display: flex; gap: 10px;">
@@ -134,10 +152,7 @@
 
 
 
-        {{-- 訪問履歴 --}}
-        <h2 style="margin: 60px 20px 30px 20px" class="text-xl font-bold text-[#0FA69D] flex items-center mt-8 mb-4">
-            <i class="fa-solid fa-clock-rotate-left mr-2 text-[1.1rem]"></i>
-            訪問履歴</h2>
+
 
         {{-- 訪問履歴の並び替え --}}
         <div class="sort-section" style="margin-left: 20px; margin-bottom: 15px; font-size: 0.9rem; color: #666; display: flex; align-items: center; gap: 10px;">

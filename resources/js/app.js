@@ -1,7 +1,7 @@
 // ===============メイン指示===============
 import axios from "axios";
 
-import { fetchClient, fetchVisits, fetchClients, toggleClientFavorite, toggleVisitFavorite } from "./api";
+import { fetchClient, fetchVisits, fetchClients, toggleClientFavorite, toggleVisitFavorite, fetchClientSummary } from "./api";
 import { displayClientInfo, displayVisitList, getCurrentClientId, displayClientList } from "./ui";
 
 
@@ -136,7 +136,35 @@ window.changeVisitSort = (sort) => {
 
 
 
-// --- 詳細ページ用 ---
+
+// --- 詳細ページ用(AI要約画面に反映)---
+window.loadClientSummary = async (clientId) => {
+    const summaryBox = document.getElementById('ai-summary-text');
+
+    if (!summaryBox) return;
+
+    try {
+        summaryBox.innerText = 'AIが訪問履歴を要約中...';
+        summaryBox.classList.add('text-gray-400', 'italic');
+
+        // api.jsから要約データを取得
+        const data = await fetchClientSummary(clientId);
+
+        // 画面の文字をAIから帰って来た文章に置き換え
+        summaryBox.innerText = data.summary;
+        summaryBox.classList.remove('text-gray-400', 'italic');
+        summaryBox.classList.add('text-gray-700');
+    } catch (error) {
+        summaryBox.innerText = '要約の取得に失敗しました。';
+        console.error(error);
+    }
+};
+
+
+
+
+
+// --- 詳細ページ用(メイン関数) ---
 window.getClientDetail = async (id, page = 1) => {
     try {
         const keyword = document.getElementById("visit-search")?.value || "";
@@ -150,6 +178,11 @@ window.getClientDetail = async (id, page = 1) => {
             window.currentVisitSort || 'visited_at',
             window.currentVisitOrder || 'desc'
         );
+
+        // AI要約を取得して表示(1ページ目の時だけ実行する)
+        if (page === 1) {
+            window.loadClientSummary(id);
+        }
 
         // ② 顧客情報表示
         displayClientInfo(client);
