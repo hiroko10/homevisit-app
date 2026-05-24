@@ -140,13 +140,13 @@
         <div class="px-4 sm:px-6 mt-4 mb-6">
             <div class="mb-2 flex items-center">
                 {{-- タイトル全体を丸みのあるバックグラウンドに --}}
-                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 shadow-sm border border-emerald-200">
+                <button id="summarize-button" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 shadow-sm border border-emerald-200">
                     {{-- バッジの中に収まるようにアイコンのサイズと色を微調整 --}}
                     <svg class="w-3.5 h-3.5 text-emerald-600 animate-pulse" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 21l-.813-5.096L3 15l5.187-.813L9 9l.813 5.187L15 15l-5.187.813ZM18.079 18.625 18 21l-.079-2.375L15.5 18.5l2.421-.079L18 16l.079 2.421 2.375.079-2.375.079Zm1.125-11.813L19 9.5l-.125-2.688L16.125 6.75 19 6.625 19.125 4l.125 2.625 2.688.125-2.688.125Z" />
                     </svg>
                     訪問履歴AI要約
-                </span>
+                </button>
             </div>
 
             {{-- AI要約文章ボックス --}}

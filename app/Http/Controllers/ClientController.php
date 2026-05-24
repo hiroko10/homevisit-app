@@ -76,7 +76,7 @@ class ClientController extends Controller
         // 4. Gemini APIを呼び出す準備
         $apiKey = env('GEMINI_API_KEY');
 
-        // Gemini 1.5 Flashを使用（最新の軽量・高速モデル）
+        // Gemini 2.5 Flashを使用
         $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" . $apiKey;
 
         // AIへのプロンプト (3.で合体させた文章$historyTextを一文にする）

@@ -139,14 +139,24 @@ window.changeVisitSort = (sort) => {
 
 // --- 詳細ページ用(AI要約画面に反映)---
 window.loadClientSummary = async (clientId) => {
+    const summarizeButton = document.getElementById('summarize-button');
     const summaryBox = document.getElementById('ai-summary-text');
 
-    if (!summaryBox) return;
+    if (!summarizeButton || !summaryBox) return;
 
-    try {
+    summaryBox.innerText = "上記の「訪問履歴AI要約」ボタンを押すと、AIが履歴を要約します。";
+    summaryBox.classList.remove('text-gray-400', 'italic');
+
+    // ボタンにクリックされたらAI要約するというイベント
+    summarizeButton.addEventListener('click', async() => {
+
+        // 連打されて何度もgemini呼ぶのを防ぐため、ボタンを一時的に無効化
+        summarizeButton.disabled = true;
+
         summaryBox.innerText = 'AIが訪問履歴を要約中...';
         summaryBox.classList.add('text-gray-400', 'italic');
 
+        try {
         // api.jsから要約データを取得
         const data = await fetchClientSummary(clientId);
 
@@ -154,10 +164,12 @@ window.loadClientSummary = async (clientId) => {
         summaryBox.innerText = data.summary;
         summaryBox.classList.remove('text-gray-400', 'italic');
         summaryBox.classList.add('text-gray-700');
-    } catch (error) {
-        summaryBox.innerText = '要約の取得に失敗しました。';
-        console.error(error);
-    }
+        } catch (error) {
+            summaryBox.innerText = '要約の取得に失敗しました。';
+            console.error(error);
+        }
+
+    });
 };
 
 
@@ -179,11 +191,6 @@ window.getClientDetail = async (id, page = 1) => {
             window.currentVisitOrder || 'desc'
         );
 
-        // AI要約を取得して表示(1ページ目の時だけ実行する)
-        if (page === 1) {
-            window.loadClientSummary(id);
-        }
-
         // ② 顧客情報表示
         displayClientInfo(client);
 
@@ -192,6 +199,11 @@ window.getClientDetail = async (id, page = 1) => {
 
         // ④ ページネーション表示
         renderPaginationCommon(visitData, "visit-pagination-container", (p) => getClientDetail(id, p));
+
+        // ボタンにクリックイベントを登録
+        if (page === 1) {
+            window.loadClientSummary(id);
+        }
     } catch (error) {
         console.error("詳細データの取得に失敗しました", error);
     }
