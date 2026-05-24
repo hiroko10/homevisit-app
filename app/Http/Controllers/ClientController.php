@@ -74,24 +74,31 @@ class ClientController extends Controller
         $historyText = implode("\n---\n", $contents);
 
         // 4. Gemini APIを呼び出す準備
-        $apiKey = config('services.gemini.key') ?? env('GEMINI_API_KEY');
+        $apiKey = env('GEMINI_API_KEY');
 
         // Gemini 1.5 Flashを使用（最新の軽量・高速モデル）
-        $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" . $apiKey;
+        $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" . $apiKey;
 
         // AIへのプロンプト (3.で合体させた文章$historyTextを一文にする）
-        $prompt = "あなたは家庭訪問の記録を整理する優秀なアシスタントです。以下の【過去の訪問履歴の詳細】を読み込み、この顧客がどのような状況であるか、重要なポイントを100文字〜150文字程度でわかりやすく簡素な文章、または箇条書きで要約してください。
+        $prompt = "あなたは家庭訪問の記録を厳密に整理するアシスタントです。
+            以下の【過去の訪問履歴の詳細】に記載されている「明確な事実のみ」を使って、この顧客の状況を100文字〜150文字程度でわかりやすく要約してください。
 
-            【過去の訪問履歴の詳細】". $historyText;
+            【絶対厳守の禁止事項】
+            ・記載されていない内容からの推測、予測、アドバイス（ハルシネーション）は「絶対に」含めないでください。
+            ・書かれている事実の記述のみで要約を構成してください。
+            ・冗長になるのを防ぐため、「〜です」「〜ます」ではなく、体言止めで表現してください。
+
+            【過去の訪問履歴の詳細】\n" . $historyText;
 
             try {
             // 5. GoogleのAIサーバーへリクエストを送信
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
-            ])->post($url, ['contents' => [['parts' => [['text' => $prompt]]]]
+            ])->post($url, [
+                'contents' => [['parts' => [['text' => $prompt]]]]
             ]);
 
-            // 6. AIから帰って来たテキストを抽出しフロントに返す
+            // 6. AIから返って来たテキストを抽出しフロントに返す
             if ($response->successful()) {
                 $result = $response->json();
                 // 1番目の候補の中の、中身の1番目の要素のテキストを取り出す(AIは複数候補を出してしまうため)
@@ -105,9 +112,10 @@ class ClientController extends Controller
             } catch (\Exception $e) {
                 return response()->json(['summary' => '通信エラーが発生しました。'], 500);
             }
+
+
+            
     }
-
-
 
 
 

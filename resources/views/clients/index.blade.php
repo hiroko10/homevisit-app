@@ -89,7 +89,7 @@
 
         {{-- あかさたなナビゲーション --}}
         <div class="mx-[20px] mb-[25px] text-[0.9rem] text-gray-600 flex items-center gap-[8px] flex-wrap">
-            <span class="font-bold text-[#0FA69D]">表示：</span>
+            <span class="text-gray-600 pl-1">表示：</span>
 
             {{-- 1.「すべて」ボタン（最初から選択状態のTailwindクラスをつけておく） --}}
             <button type="button" onclick="filterByInitial('', event)" class="initial-btn bg-[#0FA69D] text-white font-bold border-none px-4 py-1 cursor-pointer rounded-[4px] duration-200">
