@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreVisitRequest;
 use App\Http\Requests\UpdateVisitRequest;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
 
 use App\Models\Client;
 use App\Models\Visit;
@@ -148,6 +149,80 @@ class VisitController extends Controller
 
         // 4. JSONで「成功」と返す
         return response()->json(['success' => true, 'visit' => $visit]);
+    }
+
+
+
+
+
+
+
+
+
+
+    // 音声入力
+    public function speechToText(Request $request){
+        // 1. フロントから送られてきた音声ファイルがあるかチェック
+        if (!$request->hasFile('audio')){
+            return response()->json(['error' => '音声ファイルが見つかりません。'], 400);
+        }
+        try {
+            $audioFile = $request->file('audio');
+
+            // 2. 音声データをGeminiが読める形式(Base64テキスト)へ変換
+            $audioData = base64_encode(file_get_contents($audioFile->getRealPath()));
+            $mimeType = 'audio/webm'; // 'audio/mp3'など
+
+            // 3. Gemini APIの準備
+            $apiKey = env('GEMINI_API_KEY');
+            $model = 'gemini-2.5-flash';
+            $url = "https://generativelanguage.googleapis.com/v1beta/models/{$model}:generateContent?key={$apiKey}";
+
+            // 4. Geminiへ送るリクエストボディの作成
+            $response = Http::withHeaders([
+            'Content-Type' => 'application/json',
+            ])->post($url, [
+                'contents' => [
+                    [
+                        'parts' => [
+                            // 音声データ本体
+                            [
+                                'inlineData' => [
+                                    'mimeType' => $mimeType,
+                                    'data' => $audioData
+                                ]
+                            ],
+                            // Geminiへのプロンプト
+                            [
+                                'text' => "添付された音声を、訪問記録として適切な、聞き取りやすい綺麗な日本語に文字起こししてください。
+                                「あー」、「えっと」、などの不要な言葉（フィラー）は自動で削除し、文章として整えてください。
+                                文字起こしした結果のテキストだけを出力してください。余計な解説や挨拶及びハルシネーションは一切不要です。
+                                また、「〜です」「〜ます」と表現されていても、体言止めで簡潔に表示させてください。ただし、違和感がある場合はその限りではありません。"
+                            ]
+                        ]
+                    ]
+                ]
+            ]);
+
+            // 5. Geminiからの返事を解析
+            if ($response->failed()) {
+                Log::error('Gemini APIエラー：'. $response->body());
+                return response()->json(['error' => 'Geminiの呼び起こしに失敗しました。'], 500);
+            }
+
+            $result = $response->json();
+
+            // 文字起こしテキストを取り出す
+            $transcription = $result['candidates'][0]['content']['parts'][0]['text'] ?? '';
+
+            // 前後の余計な空白を削ってフロントへ返す
+            return response()->json([
+                'text' => trim($transcription)
+            ]);
+        } catch (\Exception $e) {
+            Log::error('音声文字起こしシステムエラー：'. $e->getMessage());
+            return response()->json(['error' => 'システム内部でエラーが発生しました。'], 500);
+        }
     }
 
 }

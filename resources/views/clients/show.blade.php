@@ -98,8 +98,26 @@
             </div>
             <div style="margin-bottom: 20px;">
                 <label>訪問内容：</label><br>
-                <textarea id="new-visit-content" rows="3" style="width: 100%; border-radius: 8px;" placeholder="訪問した内容をご入力ください..."></textarea>
+
+                <div style="position: relative;">
+                    <textarea id="new-visit-content" rows="4" style="width: 100%; border-radius: 8px; border: 1px solid #ddd; padding: 10px; box-sizing: border-box;" placeholder="訪問した内容をご入力ください..."></textarea>
+
+                    {{-- マイクボタン --}}
+                    <button type="button" id="mic-button" class="transition-all duration-200 bg-emerald-100 text-emerald-800"
+                        style="position: absolute; right: 10px; bottom: 15px; width: 42px; height: 42px; border-radius: 50%; border: 1px solid #ddd; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); outline: none;" 
+                        title="音声入力">
+                        {{-- マイクのSVGアイコン --}}
+                        <svg id="mic-icon" style="width: 20px; height: 20px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 0 3-3v-6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Z" />
+                        </svg>
+                    </button>
+                </div>
+
+                {{-- 状態を表示するテキスト（録音中... など） --}}
+                <p id="mic-status" style="font-size: 11px; color: #6c757d; margin: 5px 0 0 5px; display: none;">マイクを許可してください</p>
             </div>
+
+
             <div style="display: flex; gap: 10px;">
                 <button type="button" onclick="addVisit()" type="button" 
                     class="bg-[#0FA69D] hover:bg-[#13BEB4] transition-colors duration-200" style="flex: 1; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer;">
@@ -240,17 +258,123 @@
             </div>
         </template>
 
-
-
-
-
-
-
     </div>
 
     <script>
         const clientId = window.location.pathname.split('/').pop();
         console.log("取得したID：", clientId);
+
+
+
+        // 音声入力
+        document.addEventListener('DOMContentLoaded', () => {
+            const micButton = document.getElementById('mic-button');
+            const micStatus = document.getElementById('mic-status');
+            const textarea = document.getElementById('new-visit-content');
+
+            let mediaRecorder = null;
+            let audioChunks = [];
+            let isRecording = false;
+
+            if (!micButton) return;
+
+            micButton.addEventListener('click', async () => {
+                if (!isRecording) {
+                    // 録音開始
+                    try {
+                        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                        mediaRecorder = new MediaRecorder(stream);
+                        audioChunks = [];
+
+                        mediaRecorder.addEventListener('dataavailable', event => {
+                            audioChunks.push(event.data);
+                        });
+
+                        mediaRecorder.addEventListener('stop', async () => {
+                            const audioBlob = new Blob(audioChunks, { type: 'audio/mp3' });
+                            console.log('録音が完了しました！ファイルサイズ：', audioBlob.size);
+                            micStatus.innerText = "Geminiが文字起こし中...";
+
+                            // Laravelに音声を送信するための準備
+                            const formData = new FormData();
+                            formData.append('audio', audioBlob, 'recording.mp3');
+
+                            try {
+                                // Fetch APIを使用しLaravelの非同期通信
+                                const response = await fetch(`/clients/${clientId}/visits/speech-to-text`, {
+                                    method: 'POST',
+                                    headers: {
+                                        // Laravel セキュリティ対策(CSRFトークン)
+                                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                                    },
+                                    body: formData
+                                });
+
+                                if (!response.ok) throw new Error('サーバーエラーが発生しました');
+
+                                const data = await response.json();
+
+                                //成功したら、返ってきたテキストを入力欄へ流し込む
+                                if (data.text) {
+                                    textarea.value = data.text;
+
+                                    // 現在の日時を自動で取得し訪問日に入力
+                                    const now = new Date();
+                                    // 日本時間に合わせて「YYYY-MM-DDTHH:mm」の形式に変換します
+                                    const localDateTime = now.getFullYear() + '-' + 
+                                        String(now.getMonth() + 1).padStart(2, '0') + '-' + 
+                                        String(now.getDate()).padStart(2, '0') + 'T' + 
+                                        String(now.getHours()).padStart(2, '0') + ':' + 
+                                        String(now.getMinutes()).padStart(2, '0');
+                                    
+                                    // 訪問日のinput要素（id="new-visit-at"）にセット
+                                    document.getElementById('new-visit-at').value = localDateTime;
+
+
+
+                                    micStatus.innerText = "文字起こしが完了しました！";
+                                } else {
+                                    micStatus.innerText = "文字起こしに失敗しました(空のデータ)";
+                                }
+                            } catch (error) {
+                                console.error('エラー：', error);
+                                micStatus.innerText = "通信エラーが発生しました。";
+                            }
+                        });
+
+
+
+                        mediaRecorder.start();
+                        isRecording = true;
+
+                        // 録音中のスタイル
+                        micButton.style.background = '#dc3545';
+                        micButton.style.color = '#ffffff';
+                        micButton.style.borderColor = '#dc3545';
+                        micButton.classList.add('animate-pulse');
+
+                        micStatus.style.display = 'block';
+                        micStatus.innerText = "🛑 録音中... 喋り終わったらもう一度マイクを押してください";
+                    } catch (err) {
+                        alert('マイクの利用が許可されていないか、対応していません。');
+                        console.error(err);
+                    }
+                } else {
+                    // 録音停止
+                    mediaRecorder.stop();
+                    mediaRecorder.stream.getTracks().forEach(track => track.stop());
+                    isRecording = false;
+
+                    // スタイルを戻す
+                    micButton.style.background = '#f8f9fa';
+                    micButton.style.color = '#5a6268';
+                    micButton.style.borderColor = '#ddd';
+                    micButton.classList.remove('animate-pulse');
+                }
+            });
+        });
+
+
     </script>
 
 </x-app-layout>

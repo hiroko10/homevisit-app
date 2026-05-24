@@ -20,8 +20,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/visits/create', [VisitController::class, 'create'])->name('visits.create');
     Route::get('/visits/{visit}/edit', [VisitController::class, 'edit'])->name('visits.edit');
 
+    //音声入力(文字起こし用)
+    Route::post('/clients/{client}/visits/speech-to-text', [VisitController::class, 'speechToText'])->name('visits.speech-to-text');
 
-    // JavaScript（Axios）通信用のルートグループ
+
+    // ===JavaScript（Axios）通信用のルートグループ===
     // prefix('api') をつけることで、この中のURLの頭には自動的に「/api」がつく
     Route::prefix('api')->group(function () {
 
