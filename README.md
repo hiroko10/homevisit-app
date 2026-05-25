@@ -49,7 +49,7 @@
 ## インフラ構成図
 
 <div flex>
-    <img width="431" height="561" alt="Image" src="https://github.com/user-attachments/assets/204f7209-589f-4ee9-aea4-d0314454770d" />
+   <img width="431" height="561" alt="Image" src="https://github.com/user-attachments/assets/25788997-5730-4adf-a214-13c13b565273" />
 </div>
 
 
