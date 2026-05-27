@@ -205,15 +205,12 @@ class ClientController extends Controller
         // 更新・削除: ログインユーザーの顧客かどうか確認
         $client = $request->user()->clients()->findOrFail($id);
 
-        // JavaScriptから送られてきた boolean (true/false) を受け取る
-        $isFavorite = $request->input('is_favorite');
-
         // バリデーション（入力チェック）
         $validated = $request->validate([
             'is_favorite' => 'required|boolean',
         ]);
         // DBを更新
-        $client->update(['is_favorite' => $isFavorite]);
+        $client->update(['is_favorite' => $validated['is_favorite']]);
 
         // 結果をJSON形式で返す
         return response()->json([

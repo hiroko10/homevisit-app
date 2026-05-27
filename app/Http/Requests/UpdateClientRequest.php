@@ -23,8 +23,8 @@ class UpdateClientRequest extends FormRequest
         return [
             'last_name' => 'required|string',
             'first_name' => 'required|string',
-            'last_name_kana' => 'nullable|string|max:225',
-            'first_name_kana' => 'nullable|string|max:225',
+            'last_name_kana' => 'nullable|string|max:255',
+            'first_name_kana' => 'nullable|string|max:255',
             'memo' => 'nullable|string',
         ];
     }
