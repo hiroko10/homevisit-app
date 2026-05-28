@@ -145,7 +145,7 @@
                     <svg class="w-3.5 h-3.5 text-emerald-600 animate-pulse" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 21l-.813-5.096L3 15l5.187-.813L9 9l.813 5.187L15 15l-5.187.813ZM18.079 18.625 18 21l-.079-2.375L15.5 18.5l2.421-.079L18 16l.079 2.421 2.375.079-2.375.079Zm1.125-11.813L19 9.5l-.125-2.688L16.125 6.75 19 6.625 19.125 4l.125 2.625 2.688.125-2.688.125Z" />
                     </svg>
-                    訪問履歴AI要約
+                    訪問履歴
                 </button>
             </div>
 
@@ -310,9 +310,24 @@
                                     body: formData
                                 });
 
-                                if (!response.ok) throw new Error('サーバーエラーが発生しました');
+                                if (!response.ok) {
+                                    // Laravelから返ってきたJSONを取得
+                                    const errorData = await response.json();
 
-                                const data = await response.json();
+                                    // 503の場合
+                                    if (response.status === 503) {
+                                        throw new Error(
+                                            'AIサーバーが混雑しています。少し時間をおいて再度お試しください。'
+                                        );
+                                    }
+
+                                    // その他errorがある場合
+                                    throw new Error(
+                                        '通信エラーが発生しました'
+                                    );
+                                }
+
+
 
                                 //成功したら、返ってきたテキストを入力欄へ流し込む
                                 if (data.text) {
@@ -338,7 +353,8 @@
                                 }
                             } catch (error) {
                                 console.error('エラー：', error);
-                                micStatus.innerText = "通信エラーが発生しました。";
+                                micStatus.innerText =
+                                    error.message || "通信エラーが発生しました。";
                             }
                         });
 

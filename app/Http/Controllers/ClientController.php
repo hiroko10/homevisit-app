@@ -107,14 +107,30 @@ class ClientController extends Controller
                 return response()->json(['summary' => trim($summary)]);
             }
 
-            return response()->json(['summary' => 'AIの応答に失敗しました。時間をおいて再度お試しください。'], 500);
+            if ($response->status() === 429) {
+                return response()->json([
+                    'summary' => 'AI利用上限に達しました。時間をおいて再度お試しください。'
+                ], 429);
+            }
+
+            if ($response->status() === 503) {
+                return response()->json([
+                    'summary' => 'AIサーバーが混雑しています。少し時間をおいて再度お試しください。'
+                ], 503);
+            }
+
+            return response()->json([
+                'summary' => 'AI通信エラーが発生しました。'
+            ], $response->status());
+
             // 例外が起きた時$eの中に一時的に保存
             } catch (\Exception $e) {
-                return response()->json(['summary' => '通信エラーが発生しました。'], 500);
+                return response()->json([
+                    'summary' => $e->getMessage()
+                ], 500);
             }
 
 
-            
     }
 
 

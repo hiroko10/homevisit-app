@@ -165,8 +165,8 @@ window.loadClientSummary = async (clientId) => {
         summaryBox.classList.remove('text-gray-400', 'italic');
         summaryBox.classList.add('text-gray-700');
         } catch (error) {
-            summaryBox.innerText = '要約の取得に失敗しました。';
             console.error(error);
+            summary.value = '要約の取得に失敗しました。';
         }
 
     });

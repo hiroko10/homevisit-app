@@ -180,8 +180,8 @@ class VisitController extends Controller
 
             // 4. Geminiへ送るリクエストボディの作成
             $response = Http::withHeaders([
-            'Content-Type' => 'application/json',
-            ])->post($url, [
+                'Content-Type' => 'application/json',
+            ])->retry(3, 2000)->post($url, [  //最大3回再施行、2秒待つ
                 'contents' => [
                     [
                         'parts' => [
@@ -206,8 +206,18 @@ class VisitController extends Controller
 
             // 5. Geminiからの返事を解析
             if ($response->failed()) {
+                // Gemini側が503を返した場合
+                if ($response->status() === 503) {
+                    return response()->json([
+                        'error' => 'AIサーバーが混雑しています。少し時間をおいて再度お試しください。'
+                    ], 503);
+                }
+
                 Log::error('Gemini APIエラー：'. $response->body());
-                return response()->json(['error' => 'Geminiの呼び起こしに失敗しました。'], 500);
+
+                return response()->json([
+                    'error' => $response->body()
+                    ], $response->status());
             }
 
             $result = $response->json();
@@ -221,7 +231,18 @@ class VisitController extends Controller
             ]);
         } catch (\Exception $e) {
             Log::error('音声文字起こしシステムエラー：'. $e->getMessage());
-            return response()->json(['error' => 'システム内部でエラーが発生しました。'], 500);
+
+            // Gemini混雑時
+            if (str_contains($e->getMessage(), '503')) {
+                return response()->json([
+                    'error' => 'AIサーバーが混雑しています。少し時間をおいて再度お試しください。'
+                ], 503);
+            }
+
+            // その他
+            return response()->json([
+                'error' => '通信エラーが発生しました。'
+            ], 500);
         }
     }
 

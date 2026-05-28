@@ -14,9 +14,9 @@ class DatabaseSeeder extends Seeder
     {
         // 0. ログイン用ユーザーを自動作成
         \App\Models\User::create([
-            'name' => 'ホスト',
+            'name' => 'テストユーザー',
             'email' => 'test@example.com',
-            'password' => bcrypt('password'),
+            'password' => bcrypt('password123'),
         ]);
 
         // 50音を網羅したダミーデータのリスト
