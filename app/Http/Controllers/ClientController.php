@@ -59,8 +59,11 @@ class ClientController extends Controller
 
     // Geminiで訪問履歴を要約するAPI
     public function summarizeVisits(Request $request, $id) {
+        // 1. 誰からのアクセスでも、直接ClientテーブルからIDで検索するように変更
+        $client = \App\Models\Client::findOrFail($id);
+
         // 1. ログインユーザーの顧客であることを確認(セキュリティチェック)
-        $client = $request->user()->clients()->findOrFail($id);
+        // $client = $request->user()->clients()->findOrFail($id);
 
         // 2. 特定の顧客に紐づく全ての訪問履歴から詳細テキスト(content)だけを最新順で取得
         $contents = $client->visits()->orderBy('visited_at', 'desc')->pluck('content')->filter()->toArray();

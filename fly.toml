@@ -32,7 +32,7 @@ console_command = 'php /var/www/html/artisan tinker'
   SESSION_ENCRYPT = 'false'
   SESSION_PATH = '/'
   SESSION_DOMAIN = 'null'
-  GEMINI_API_KEY = 'AIzaSyDeAXxd-p9WyeXd9Bvff1V8qaOp0mKohdc'
+
 
 [http_service]
   internal_port = 8080

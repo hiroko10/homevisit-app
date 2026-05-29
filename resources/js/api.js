@@ -67,6 +67,6 @@ export const toggleVisitFavorite = async (visitId, isFavorite) => {
 
 // AI要約データを取得する関数(routes/api.php)
 export const fetchClientSummary = async (clientId) => {
-    const response = await axios.get(`/api/clients/${clientId}/summarize`);
+    const response = await axios.get(`/api-public/clients/${clientId}/summarize`);
     return response.data;
 };
