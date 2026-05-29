@@ -7,7 +7,7 @@
 
         <h1 style="margin: 20px 20px 50px 20px;" class="text-[1.5rem] font-extrabold text-[#0FA69D] flex items-center mb-4">
             <i class="fa-solid fa-users mr-2 text-[1.3rem]"></i>
-            訪問一覧
+            訪問先一覧
         </h1>
 
         {{-- +新規登録ボタン --}}
@@ -111,7 +111,7 @@
 
 
 
-        {{-- 訪問一覧ページの顧客一覧：一人分のBOX枠組み --}}
+        {{-- 訪問先一覧ページの顧客一覧：一人分のBOX枠組み --}}
         <template id="client-template">
             {{-- 1人分のBOX --}}
             <div class="client-row flex items-center p-[16px] border-b border-gray-100 mb-[10px] bg-white rounded-[8px] shadow-sm">

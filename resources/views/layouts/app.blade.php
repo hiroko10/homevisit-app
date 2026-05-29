@@ -28,7 +28,7 @@
                     {{-- navigation--}}
                     <nav class="flex items-center gap-6">
                         {{-- nav-item --}}
-                        <a href="/clients" class="text-[0.95rem] text-gray-700 no-underline hover:text-[#0FA69D]">訪問一覧</a>
+                        <a href="/clients" class="text-[0.95rem] text-gray-700 no-underline hover:text-[#0FA69D]">訪問先一覧</a>
                         <form id="logout-form" method="POST" action="{{ route('logout') }}" style="display: none;">
                             @csrf
                         </form>
