@@ -236,17 +236,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const detailMatch = path.match(/\/clients\/(\d+)/);
     if (detailMatch) {
         const id = detailMatch[1];
-        console.log("詳細ページを表示します。ID:", id);
+        // console.log("詳細ページを表示します。ID:", id);
         return window.getClientDetail(id, 1); // 実行して終了
     }
 
     // ② 一覧ページの判定
     const isIndexPage = document.getElementById('client-list');
     if (isIndexPage) {
-        console.log("一覧ページを表示します。");
+        // console.log("一覧ページを表示します。");
         return getClients(); // 実行して終了
     }
 
     // ③ それ以外
-    console.log("このページでは専用のJS処理はありません:", path);
+    // console.log("このページでは専用のJS処理はありません:", path);
 });
