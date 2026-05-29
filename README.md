@@ -34,6 +34,11 @@
   
 - **<解決>** 1クリックで瞬時に顧客を絞り込める「頭文字検索ボタン」を設置しました。<br>キーワード検索と組み合わせてもスムーズに利用できるように実装しました。
 
+---
+
+## URL
+
+https://homevisit-app.fly.dev/login
 
 ---
 
@@ -41,15 +46,6 @@
 
 <div flex>
     <img width="1126" height="376" alt="Image" src="https://github.com/user-attachments/assets/f016a760-ff5b-4c07-a7e9-6d8f0566bc1f" />
-</div>
-
-
----
-
-## インフラ構成図
-
-<div flex>
-   <img width="431" height="561" alt="Image" src="https://github.com/user-attachments/assets/25788997-5730-4adf-a214-13c13b565273" />
 </div>
 
 
