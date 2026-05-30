@@ -6,8 +6,8 @@
 家庭訪問時に膨大な紙資料をめくる負担を減らし、対象者の「過去の訪問経緯」や「現在の状況」をその場ですぐ確認できるよう設計しました。
 
 <div flex>
-  <img width="351" height="763" alt="Image" src="https://github.com/user-attachments/assets/b10dea80-3330-411b-9eb4-29d9da7e30fd" />
-  <img width="351" height="763" alt="Image" src="https://github.com/user-attachments/assets/ea1c2acb-a1d7-42b6-9710-33c71add42d2" />
+    <img width="351" height="763" alt="Image" src="https://github.com/user-attachments/assets/2e445083-3706-45ae-9e7c-bc0503a20348" />
+    <img width="351" height="763" alt="Image" src="https://github.com/user-attachments/assets/ce8bb180-2242-4e0c-8825-92dc4fe66bf7" />
 </div>
 
 ---
