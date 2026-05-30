@@ -327,7 +327,9 @@
                                     );
                                 }
 
-
+                                
+                                // AIから返ってきたJSONデータを「data」へ受け取り
+                                const data = await response.json();
 
                                 //成功したら、返ってきたテキストを入力欄へ流し込む
                                 if (data.text) {
